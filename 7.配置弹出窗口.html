@@ -47,15 +47,47 @@
           center: [117.70,28.31] // longitude, latitude
         });
 
-        // 从VS code中运行时，在网页上弹出的对话框中填写ArcGIS Online账号密码之后不能登陆
+        // 从VS code中运行时，在网页上弹出的对话框中填写ArcGIS Online账号密码之后不能登陆，解决办法可以将要素设置为所有人共享
         var zxcqLayer = new FeatureLayer({
           url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/规划中心城区范围/FeatureServer/0"
         });
 
         // map.add(zxcqLayer, 0);
 
+        var popupXZQ = {
+        title: "乡镇",
+        content: [{
+          "type": "fields",
+          "fieldInfos": [
+            {
+              "fieldName": "XZQMC",
+              "label": "乡镇名",
+              "isEditable": true,
+              "tooltip": "",
+              "visible": true,
+              "format": null,
+              "stringFieldOption": "text-box"
+            },
+            {
+              "fieldName": "Shape__Area",
+              "label": "面积（平方米）",
+              "isEditable": true,
+              "tooltip": "",
+              "visible": true,
+              "format": {//格式化数值
+                "places": 2,
+                "digitSeparator": false
+              },
+              "stringFieldOption": "text-box"
+            },
+          ]
+        }]
+      }
+
         var xzxzqLayer = new FeatureLayer({
-          url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
+          url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
+          outFields: ["XZQMC","Shape__Area"],
+          popupTemplate: popupXZQ
         });
 
         map.addMany([xzxzqLayer,zxcqLayer]);
