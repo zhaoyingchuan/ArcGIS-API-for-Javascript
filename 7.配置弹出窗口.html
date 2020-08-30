@@ -55,34 +55,34 @@
         // map.add(zxcqLayer, 0);
 
         var popupXZQ = {
-        title: "乡镇信息",
-        content: [{
-          "type": "fields",
-          "fieldInfos": [
-            {
-              "fieldName": "XZQMC",
-              "label": "乡镇名",
-              "isEditable": true,
-              "tooltip": "",
-              "visible": true,
-              "format": null,
-              "stringFieldOption": "text-box"
-            },
-            {
-              "fieldName": "Shape__Area",
-              "label": "面积（平方米）",
-              "isEditable": true,
-              "tooltip": "",
-              "visible": true,
-              "format": {//格式化数值
-                "places": 2,
-                "digitSeparator": false
+          title: "乡镇信息",
+          content: [{
+            "type": "fields",
+            "fieldInfos": [
+              {
+                "fieldName": "XZQMC",
+                "label": "乡镇名",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": null,
+                "stringFieldOption": "text-box"
               },
-              "stringFieldOption": "text-box"
-            },
-          ]
-        }]
-      }
+              {
+                "fieldName": "Shape__Area",
+                "label": "面积（平方米）",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": {//格式化数值
+                  "places": 2,
+                  "digitSeparator": false
+                },
+                "stringFieldOption": "text-box"
+              },
+            ]
+          }]
+       }
 
         var xzxzqLayer = new FeatureLayer({
           url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
@@ -116,6 +116,14 @@
         view.on(["pointer-down","pointer-move"], function(evt) {
           showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
         });
+        
+        // Editor widget
+        var editor = new Editor({
+          view: view
+        });
+
+        // Add widget to the view
+        view.ui.add(editor, "top-right"); 
       });
     </script>
   </head>

@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ArcGIS API for JavaScript Tutorials: Get map coordinates</title>
+  <title>ArcGIS JavaScript Tutorials: Add, edit, and delete features</title>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -12,52 +12,41 @@
     }
   </style>
   
-  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.16/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.15/"></script>
   
   <script>  
     require([
       "esri/Map",
-      "esri/views/MapView"
-    ], function(Map, MapView) {
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Editor"
+    ], function(Map, MapView, FeatureLayer, Editor) {
 
+      // Reference a feature layer to edit
+      var myPointsFeatureLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
+      });
+      
       var map = new Map({
-        basemap: "topo-vector"
+        basemap: "topo-vector",
+        layers: [myPointsFeatureLayer]
       });
       
       var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-118.80543,34.02700],
+        center: [117.70,28.31],
         zoom: 13
       });
       
-      //*** Add div element to show coordates ***//
-      var coordsWidget = document.createElement("div");
-      coordsWidget.id = "coordsWidget";
-      coordsWidget.className = "esri-widget esri-component";
-      coordsWidget.style.padding = "7px 15px 5px";
-      view.ui.add(coordsWidget, "bottom-right");
-
-      //*** Update lat, lon, zoom and scale ***//
-      function showCoordinates(pt) {
-        var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) + 
-            " | Scale 1:" + Math.round(view.scale * 1) / 1 +
-            " | Zoom " + view.zoom;
-        coordsWidget.innerHTML = coords;
-      }
-      
-      //*** Add event and show center coordinates after the view is finished moving e.g. zoom, pan ***//
-      view.watch(["stationary"], function() {
-        showCoordinates(view.center);
+      // Editor widget
+      var editor = new Editor({
+        view: view
       });
 
-      //*** Add event to show mouse coordinates on click and move ***//
-      view.on(["pointer-down","pointer-move"], function(evt) {
-        showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
-      });
-      
-
+      // Add widget to the view
+      view.ui.add(editor, "top-right");  
       
     });
   </script>
