@@ -15,21 +15,13 @@
   <script>
     require([
       "esri/WebMap",
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/layers/FeatureLayer",
-      "esri/widgets/Editor"
-    ], function(WebMap, Map, MapView, FeatureLayer, Editor) {
-
-      var myFeatureLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
-      });
+      "esri/views/MapView"
+    ], function(WebMap, MapView) {
 
       var webmap = new WebMap({
         portalItem: {
           id: "52f08e7f7f9947b0a6592a284ce816f8"
-        },
-        layers: myFeatureLayer
+        }
       });
 
       var view = new MapView({
@@ -37,13 +29,6 @@
         map: webmap
       });
       
-      // Editor widget
-      var editor = new Editor({
-        view: view
-      });
-
-      // Add widget to the view
-      view.ui.add(editor, "top-right");
     });
   </script>
 </head>
