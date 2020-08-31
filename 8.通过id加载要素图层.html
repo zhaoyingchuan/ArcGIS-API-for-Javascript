@@ -29,39 +29,23 @@
       var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-118.80543,34.02700],
+        center: [117.70,28.31],
         zoom: 13
       });
-      
+
       function addLayer(layerItemPromise, index) {
         return layerItemPromise.then(function(layer){
           map.add(layer, index);
         });
       }
-      
-      // Challenge 
-      
-//      function addLayer(layerItemPromise, index) {
-//        return layerItemPromise.then(function(layer){
-//          layer.when(function(){ 
-//             if (layer.title === "Trails_Styled_Popups") {
-//              layer.definitionExpression = "ELEV_GAIN < 250";
-//             }
-//          });
-//          map.add(layer, index);
-//        });
-//      }
-            
-      // Trailheads
+
       var trailheadsPortalItem = Layer.fromPortalItem({
         portalItem: {
-          id: "a4e16d76bd114fe68ec44a262fd09435"
+          id: "5c6ad3672e484435a9eddd5978e2e32b"
         }
       });
 
-
       addLayer(trailheadsPortalItem, 0)
-
     });
   </script>
 </head>

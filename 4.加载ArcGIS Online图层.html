@@ -32,12 +32,16 @@
             "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
         });
  
-
- 
+        var tiledLayer_poi = new WebTileLayer({
+          urlTemplate:
+            "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
+          subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        });
+        
         var map = new Map({
-            basemap: {
-              baseLayers: [tiledLayer]
-            }
+          basemap: {
+            baseLayers: [tiledLayer, tiledLayer_poi]
+          }
         });
  
         var view = new MapView({

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>谷歌卫星图</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+ 
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.16/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.16/"></script>
+ 
+    <script>
+      require(["esri/Map", "esri/views/MapView","esri/layers/WebTileLayer","esri/layers/FeatureLayer"], function(Map, MapView,WebTileLayer,FeatureLayer) {
+    
+        var tiledLayer = new WebTileLayer({
+          urlTemplate:
+            "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
+        });
+ 
+        var tiledLayer_poi = new WebTileLayer({
+          urlTemplate:
+            "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
+          subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        });
+        
+        var map = new Map({
+          basemap: {
+            baseLayers: [tiledLayer, tiledLayer_poi]
+          }
+        });
+ 
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 13,
+          center: [117.70,28.31] // longitude, latitude
+        });
+
+        // 从VS code中运行时，在网页上弹出的对话框中填写ArcGIS Online账号密码之后不能登陆，解决办法可以将要素设置为所有人共享
+        var zxcqLayer = new FeatureLayer({
+          url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/规划中心城区范围/FeatureServer/0"
+        });
+
+        // map.add(zxcqLayer, 0);
+
+        var popupXZQ = {
+          title: "",
+          content: [{
+            "type": "fields",
+            "fieldInfos": [
+              {
+                "fieldName": "XZQMC",
+                "label": "乡镇名",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": null,
+                "stringFieldOption": "text-box"
+              },
+              {
+                "fieldName": "Shape__Area",
+                "label": "面积（平方米）",
+                "isEditable": true,
+                "tooltip": "",
+                "visible": true,
+                "format": {//格式化数值
+                  "places": 2,
+                  "digitSeparator": false
+                },
+                "stringFieldOption": "text-box"
+              },
+            ]
+          }]
+       }
+
+        var xzxzqLayer = new FeatureLayer({
+          url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
+          outFields: ["XZQMC","Shape__Area"],
+          popupTemplate: popupXZQ
+        });
+
+        map.addMany([xzxzqLayer,zxcqLayer]);
+
+        //*** Add div element to show coordates ***//
+        var coordsWidget = document.createElement("div");
+        coordsWidget.id = "coordsWidget";
+        coordsWidget.className = "esri-widget esri-component";
+        coordsWidget.style.padding = "7px 15px 5px";
+        view.ui.add(coordsWidget, "bottom-right");
+
+        //*** Update lat, lon, zoom and scale ***//
+        function showCoordinates(pt) {
+          var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) + 
+              " | Scale 1:" + Math.round(view.scale * 1) / 1 +
+              " | Zoom " + view.zoom;
+          coordsWidget.innerHTML = coords;
+        }
+        
+        //*** Add event and show center coordinates after the view is finished moving e.g. zoom, pan ***//
+        view.watch(["stationary"], function() {
+          showCoordinates(view.center);
+        });
+
+        //*** Add event to show mouse coordinates on click and move ***//
+        view.on(["pointer-down","pointer-move"], function(evt) {
+          showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+        });
+      });
+    </script>
+  </head>
+ 
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

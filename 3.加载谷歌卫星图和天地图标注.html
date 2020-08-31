@@ -12,17 +12,15 @@
     }
   </style>
   
-  <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.15/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.16/"></script>
   
   <script>  
     require([
       "esri/Map",
       "esri/views/MapView",
       "esri/layers/WebTileLayer",
-      "esri/layers/FeatureLayer",
-      "esri/widgets/Editor"
-    ], function(Map, MapView, WebTileLayer, FeatureLayer, Editor) {
+    ], function(Map, MapView, WebTileLayer) {
 
 
       var tiledLayer = new WebTileLayer({
@@ -35,16 +33,11 @@
           "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
         subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
       });
-      // Reference a feature layer to edit
-      var myFeatureLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
-      });
       
       var map = new Map({
         basemap: {
           baseLayers: [tiledLayer, tiledLayer_poi]
-        },
-        layers: myFeatureLayer
+        }
       });
       
       var view = new MapView({
@@ -53,13 +46,6 @@
         center: [117.70,28.31],
         zoom: 13
       });
-      // Editor widget
-      var editor = new Editor({
-        view: view
-      });
-
-      // Add widget to the view
-      view.ui.add(editor, "top-right"); 
     });
   </script>
 </head>

@@ -32,12 +32,16 @@
             "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
         });
  
-
- 
+        var tiledLayer_poi = new WebTileLayer({
+          urlTemplate:
+            "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
+          subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        });
+        
         var map = new Map({
-            basemap: {
-              baseLayers: [tiledLayer]
-            }
+          basemap: {
+            baseLayers: [tiledLayer, tiledLayer_poi]
+          }
         });
  
         var view = new MapView({
@@ -55,7 +59,7 @@
         // map.add(zxcqLayer, 0);
 
         var popupXZQ = {
-          title: "乡镇信息",
+          title: "",
           content: [{
             "type": "fields",
             "fieldInfos": [
@@ -91,39 +95,6 @@
         });
 
         map.addMany([xzxzqLayer,zxcqLayer]);
-
-        //*** Add div element to show coordates ***//
-        var coordsWidget = document.createElement("div");
-        coordsWidget.id = "coordsWidget";
-        coordsWidget.className = "esri-widget esri-component";
-        coordsWidget.style.padding = "7px 15px 5px";
-        view.ui.add(coordsWidget, "bottom-right");
-
-        //*** Update lat, lon, zoom and scale ***//
-        function showCoordinates(pt) {
-          var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) + 
-              " | Scale 1:" + Math.round(view.scale * 1) / 1 +
-              " | Zoom " + view.zoom;
-          coordsWidget.innerHTML = coords;
-        }
-        
-        //*** Add event and show center coordinates after the view is finished moving e.g. zoom, pan ***//
-        view.watch(["stationary"], function() {
-          showCoordinates(view.center);
-        });
-
-        //*** Add event to show mouse coordinates on click and move ***//
-        view.on(["pointer-down","pointer-move"], function(evt) {
-          showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
-        });
-        
-        // Editor widget
-        var editor = new Editor({
-          view: view
-        });
-
-        // Add widget to the view
-        view.ui.add(editor, "top-right"); 
       });
     </script>
   </head>
