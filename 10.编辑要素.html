@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ArcGIS JavaScript Tutorials: Add, edit, and delete features</title>
+  <title>ArcGIS API for JavaScript Tutorials: Display a Web Map</title>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -11,55 +11,40 @@
       width: 100%;
     }
   </style>
-  
-  <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.15/"></script>
-  
-  <script>  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css">  <script src="https://js.arcgis.com/4.16/"></script>
+  <script>
     require([
-      "esri/Map",
+      "esri/WebMap",
       "esri/views/MapView",
-      "esri/layers/WebTileLayer",
       "esri/layers/FeatureLayer",
       "esri/widgets/Editor"
-    ], function(Map, MapView, WebTileLayer, FeatureLayer, Editor) {
+    ], function(WebMap, MapView, FeatureLayer, Editor) {
 
-
-      var tiledLayer = new WebTileLayer({
-        urlTemplate:
-          "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
-      });
-
-      var tiledLayer_poi = new WebTileLayer({
-        urlTemplate:
-          "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
-        subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
-      });
-      // Reference a feature layer to edit
       var myFeatureLayer = new FeatureLayer({
         url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
       });
-      
-      var map = new Map({
-        basemap: {
-          baseLayers: [tiledLayer, tiledLayer_poi]
+
+      var webmap = new WebMap({
+        portalItem: {
+          id: "52f08e7f7f9947b0a6592a284ce816f8"
         },
         layers: myFeatureLayer
       });
-      
+
       var view = new MapView({
         container: "viewDiv",
-        map: map,
+        map: webmap,
         center: [117.70,28.31],
         zoom: 13
       });
+      
       // Editor widget
       var editor = new Editor({
         view: view
       });
 
       // Add widget to the view
-      view.ui.add(editor, "top-right"); 
+      view.ui.add(editor, "top-right");
     });
   </script>
 </head>
