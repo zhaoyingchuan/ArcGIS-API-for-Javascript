@@ -48,7 +48,7 @@
 					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
 				});
 
-        let editConfigCrimeLayer, editConfigPoliceLayer;
+        let editLayer;
 
         // Create a map frm the referenced webmap item id
         let webmap = new WebMap({
@@ -99,31 +99,20 @@
 
           // Loop through webmap layers and set an EditConfig for each
           view.map.layers.forEach(function (layer) {
-            if (layer.title === "Police routes") {
-              editConfigPoliceLayer = {
-                layer: layer,
-                // Set it so that only one field displays within the form
-                fieldConfig: [
-                  {
-                    name: "PatrolType",
-                    label: "Patrol Type"
-                  }
-                ]
-              };
-            } else {
-              // Specify a few of the fields to edit within the form
-              editConfigCrimeLayer = {
+            if (layer.title === "铅山县乡镇") {
+              editLayer = {
                 layer: layer,
                 fieldConfig: [
                   {
                     name: "XZQMC",
-                    label: "乡镇名",
+                    label: "乡镇名称",
+										editable: true,
+                  },
+                  {
+                    name: "XZQDM",
+                    label: "乡镇代码",
 										editable: false
                   },
-                  // {
-                  //   name: "neighborhood",
-                  //   label: "Neighborhood"
-                  // },
                   // {
                   //   name: "ucrdesc",
                   //   label: "UCR Description"
@@ -138,14 +127,27 @@
                   // }
                 ]
               };
-            }
+            } 
+            // else {
+            //   // Specify a few of the fields to edit within the form
+            //   editConfigPoliceLayer = {
+            //     layer: layer,
+            //     // Set it so that only one field displays within the form
+            //     fieldConfig: [
+            //       {
+            //         name: "PatrolType",
+            //         label: "Patrol Type"
+            //       }
+            //     ]
+            //   };
+            // }
           });
 
           // Create the Editor
           var editor = new Editor({
             view: view,
             // Pass in the configurations created above
-            layerInfos: [editConfigCrimeLayer],
+            layerInfos: [editLayer],
             // Override the default template behavior of the Editor widget
             // supportingWidgetDefaults: {
             //   featureTemplates: {
