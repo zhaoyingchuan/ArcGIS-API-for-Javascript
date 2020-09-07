@@ -34,24 +34,24 @@
         zoom: 13
       });
       
-      // var basemapToggle = new BasemapToggle({
-      //   view: view,
-      //   nextBasemap: "topo-vector"
-      // });
-      
-      // view.ui.add(basemapToggle,"bottom-right");
-      
-      var basemapGallery = new BasemapGallery({
+      var basemapToggle = new BasemapToggle({
         view: view,
-        source: {
-          portal: {
-            url: "http://www.arcgis.com",
-            useVectorBasemaps: false, // Load vector tile basemap group
-          },
-        } 
+        nextBasemap: "topo-vector"
       });
+      
+      view.ui.add(basemapToggle,"bottom-right");
+      
+      // var basemapGallery = new BasemapGallery({
+      //   view: view,
+      //   source: {
+      //     portal: {
+      //       url: "http://www.arcgis.com",
+      //       useVectorBasemaps: false, // Load vector tile basemap group
+      //     },
+      //   } 
+      // });
 
-      view.ui.add(basemapGallery, "top-right"); // Add to the view
+      // view.ui.add(basemapGallery, "top-right"); // Add to the view
       
     });
   </script>

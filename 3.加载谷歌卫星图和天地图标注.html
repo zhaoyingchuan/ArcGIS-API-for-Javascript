@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ArcGIS JavaScript Tutorials: Add, edit, and delete features</title>
+  <title>加载谷歌卫星图和天地图标注</title>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -20,7 +20,8 @@
       "esri/Map",
       "esri/views/MapView",
       "esri/layers/WebTileLayer",
-    ], function(Map, MapView, WebTileLayer) {
+      "esri/widgets/BasemapToggle",
+    ], function(Map, MapView, WebTileLayer, BasemapToggle) {
 
 
       var tiledLayer = new WebTileLayer({
@@ -46,6 +47,13 @@
         center: [117.70,28.31],
         zoom: 13
       });
+
+      var basemapToggle = new BasemapToggle({
+        view: view,
+        nextBasemap: "topo-vector"
+      });
+      
+      view.ui.add(basemapToggle,"bottom-right");
     });
   </script>
 </head>

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -6,7 +5,21 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <title>加载Online上的图层</title>
+    <!--
+  ArcGIS API for JavaScript, https://js.arcgis.com
+  For more information about the popup-editaction sample, read the original sample description at developers.arcgis.com.
+  https://developers.arcgis.com/javascript/latest/sample-code/popup-editaction/index.html
+  -->
+<title>
+      Popup with edit action | Sample | ArcGIS API for JavaScript 4.16
+    </title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.16/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.16/"></script>
+
     <style>
       html,
       body,
@@ -16,52 +29,249 @@
         height: 100%;
         width: 100%;
       }
+
+      #info {
+        padding: 14px;
+        border-radius: 5px;
+        width: 25%;
+      }
     </style>
- 
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.16/esri/themes/light/main.css"
-    />
-    <script src="https://js.arcgis.com/4.16/"></script>
- 
     <script>
-      require(["esri/Map", "esri/views/MapView","esri/layers/WebTileLayer","esri/layers/FeatureLayer"], function(Map, MapView,WebTileLayer,FeatureLayer) {
-    
-        var tiledLayer = new WebTileLayer({
-          urlTemplate:
-            "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
+      require([
+        "esri/Map",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/Editor",
+        "esri/views/MapView",
+        "esri/popup/content/AttachmentsContent",
+        "esri/popup/content/TextContent"
+      ], function (
+        Map,
+        FeatureLayer,
+        Editor,
+        MapView,
+        AttachmentsContent,
+        TextContent
+      ) {
+        // Create the Map
+        const map = new Map({
+          basemap: "topo-vector"
         });
- 
-        var tiledLayer_poi = new WebTileLayer({
-          urlTemplate:
-            "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
-          subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
-        });
-        
-        var map = new Map({
-          basemap: {
-            baseLayers: [tiledLayer, tiledLayer_poi]
+        let editor, features;
+        /*************************************************************
+         * The PopupTemplate content is the text that appears inside the
+         * popup. Bracketed {fieldName} can be used to reference the value
+         * of an attribute of the selected feature. HTML elements can be
+         * used to provide structure and styles within the content.
+         **************************************************************/
+        const editThisAction = {
+          title: "Edit feature",
+          id: "edit-this",
+          className: "esri-icon-edit"
+        };
+
+        // Create a popupTemplate for the featurelayer and pass in a function to set its content and specify an action to handle editing the selected feature
+        const template = {
+          title: "Trail name: {trailName}",
+          content: difficultyLevel,
+          fieldInfos: [
+            {
+              fieldName: "trailName"
+            },
+            {
+              fieldName: "difficulty"
+            }
+          ],
+          actions: [editThisAction]
+        };
+
+        // Function that creates two popup elements for the template: attachments and text
+        function difficultyLevel(feature) {
+          // 1. Set how the attachments should display within the popup
+          const attachmentsElement = new AttachmentsContent({
+            displayType: "list"
+          });
+
+          const textElement = new TextContent();
+
+          const level = feature.graphic.attributes.difficulty;
+          const green =
+            "<b><span style='color:green'>" + level + "</span></b>.";
+          const purple =
+            "<b><span style='color:purple'>" + level + "</span></b>.";
+          const red = "<b><span style='color:red'>" + level + "</span></b>.";
+
+          // If the feature's "difficulty" attribute is a specific value, set it a certain color
+          // "easy" = green
+          // "medium" = purple
+          // "hard" = red
+          switch (level) {
+            case "easy":
+              textElement.text =
+                "The {trailName} trail has a difficulty level of " + green;
+              return [textElement, attachmentsElement];
+              break;
+            case "medium":
+              textElement.text =
+                "The {trailName} trail has a difficulty level of " + purple;
+              return [textElement, attachmentsElement];
+              break;
+            case "hard":
+              textElement.text =
+                "The {trailName} trail has a difficulty level of " + red;
+              return [textElement, attachmentsElement];
           }
+        }
+
+        const featureLayer = new FeatureLayer({
+          url:
+            "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/El_Paso_Recreation_AttributeEditsOnly/FeatureServer/1",
+          outFields: ["*"],
+          popupTemplate: template
         });
- 
-        var view = new MapView({
+        map.add(featureLayer);
+
+        // Create the MapView
+        const view = new MapView({
           container: "viewDiv",
           map: map,
-          zoom: 13,
-          center: [117.70,28.31] // longitude, latitude
+          zoom: 15,
+          center: [-106.48871516310629, 31.7980770813721]
         });
 
-        // 从VS code中运行时，在网页上弹出的对话框中填写ArcGIS Online账号密码之后不能登陆
-        var xzxzqLayer = new FeatureLayer({
-          url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
+        view.when(function () {
+          // Create the Editor with the specified layer and a list of field configurations
+          editor = new Editor({
+            view: view,
+            container: document.createElement("div"),
+            layerInfos: [
+              {
+                layer: featureLayer,
+                fieldConfig: [
+                  {
+                    name: "trailName",
+                    label: "Trail name",
+                    editable: false
+                  },
+                  {
+                    name: "condition",
+                    label: "Condition",
+                    hint: "The overall condition of for running/biking?"
+                  },
+                  {
+                    name: "difficulty",
+                    label: "Difficulty",
+                    hint: "How difficult was this trail to run/bike?"
+                  },
+                  {
+                    name: "trckType",
+                    label: "Track type",
+                    hint: "Running or biking?"
+                  },
+                  {
+                    name: "notes",
+                    label: "Additional comments"
+                  }
+                ]
+              }
+            ]
+          });
+
+          // Execute each time the "Edit feature" action is clicked
+          function editThis() {
+            // If the EditorViewModel's activeWorkflow is null, make the popup not visible
+            if (!editor.viewModel.activeWorkFlow) {
+              view.popup.visible = false;
+              // Call the Editor update feature edit workflow
+
+              editor.startUpdateWorkflowAtFeatureEdit(
+                view.popup.selectedFeature
+              );
+              view.ui.add(editor, "top-right");
+              view.popup.spinnerEnabled = false;
+            }
+
+            // We need to set a timeout to ensure the editor widget is fully rendered. We
+            // then grab it from the DOM stack
+            setTimeout(function () {
+              // Use the editor's back button as a way to cancel out of editing
+              let arrComp = editor.domNode.getElementsByClassName(
+                "esri-editor__back-button esri-interactive"
+              );
+              if (arrComp.length === 1) {
+                // Add a tooltip for the back button
+                arrComp[0].setAttribute(
+                  "title",
+                  "Cancel edits, return to popup"
+                );
+                // Add a listerner to listen for when the editor's back button is clicked
+                arrComp[0].addEventListener("click", function (evt) {
+                  // Prevent the default behavior for the back button and instead remove the editor and reopen the popup
+                  evt.preventDefault();
+                  view.ui.remove(editor);
+                  view.popup.open({
+                    features: features
+                  });
+                });
+              }
+            }, 150);
+          }
+
+          // Event handler that fires each time an action is clicked
+          view.popup.on("trigger-action", function (event) {
+            if (event.action.id === "edit-this") {
+              editThis();
+            }
+          });
         });
 
-        map.add(xzxzqLayer, 0);
+        // Watch when the popup is visible
+        view.popup.watch("visible", function (event) {
+          // Check the Editor's viewModel state, if it is currently open and editing existing features, disable popups
+          if (editor.viewModel.state === "editing-existing-feature") {
+            view.popup.close();
+          } else {
+            // Grab the features of the popup
+            features = view.popup.features;
+          }
+        });
+
+        featureLayer.on("apply-edits", function () {
+          // Once edits are applied to the layer, remove the Editor from the UI
+          view.ui.remove(editor);
+
+          // Iterate through the features
+          features.forEach(function (feature) {
+            // Reset the template for the feature if it was edited
+            feature.popupTemplate = template;
+          });
+
+          // Open the popup again and reset its content after updates were made on the feature
+          if (features) {
+            view.popup.open({
+              features: features
+            });
+          }
+
+          // Cancel the workflow so that once edits are applied, a new popup can be displayed
+          editor.viewModel.cancelWorkflow();
+        });
+
+        view.ui.add("info", {
+          position: "top-left",
+          index: 1
+        });
       });
     </script>
   </head>
- 
+
   <body>
     <div id="viewDiv"></div>
+    <div id="info" class="esri-widget">
+      <h3>Select a feature to display its popup</h3>
+      <h4>
+        Edit the feature by clicking on the "Edit feature" action within the
+        popup.
+      </h4>
+    </div>
   </body>
 </html>
