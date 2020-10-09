@@ -34,6 +34,7 @@
         zoom: 13
       });
       
+      //两个底图之间的切换
       var basemapToggle = new BasemapToggle({
         view: view,
         nextBasemap: "topo-vector"
@@ -41,6 +42,7 @@
       
       view.ui.add(basemapToggle,"bottom-right");
       
+      //ArcGIS Online上所有底图之间的切换
       // var basemapGallery = new BasemapGallery({
       //   view: view,
       //   source: {
