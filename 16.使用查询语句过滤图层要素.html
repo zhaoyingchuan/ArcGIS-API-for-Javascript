@@ -6,7 +6,7 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <title>加载ArcGIS Online图层</title>
+    <title>使用查询语句过滤图层要素</title>
     <style>
       html,
       body,
@@ -51,19 +51,12 @@
           center: [117.70,28.31] // longitude, latitude
         });
 
-        // 从VS code中运行时，在网页上弹出的对话框中填写ArcGIS Online账号密码之后不能登陆
-        var zxcqLayer = new FeatureLayer({
-          url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/规划中心城区范围/FeatureServer/0"
-        });
-
-        // map.add(zxcqLayer, 0);
-
         var xzxzqLayer = new FeatureLayer({
           url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
           definitionExpression: "XZQMC = '河口镇'"
         });
 
-        map.addMany([xzxzqLayer,zxcqLayer]);
+        map.add(xzxzqLayer);
       });
     </script>
   </head>
