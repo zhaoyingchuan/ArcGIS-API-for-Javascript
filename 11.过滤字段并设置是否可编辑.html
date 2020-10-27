@@ -42,7 +42,8 @@
       ], function (WebMap, MapView, FeatureLayer, Editor) {
 
 				var myFeatureLayer = new FeatureLayer({
-					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
+					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划用途分类未定/FeatureServer/0",
+          definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
 				});
 
         let editLayer;
@@ -67,65 +68,45 @@
         view.when(function () {
           view.popup.autoOpenEnabled = false; //disable popups
 
-          // Create a custom group to separate the different areas of crime.
-          // This function takes a 'grouping' object containing a featuretemplate and a feature layer.
-
-          // function customGroup(grouping) {
-          //   // If the layer is 'Police routes', do not group.
-          //   let groupHeading = "Police Routes";
-          //   if (grouping.layer.title.toLowerCase() === "crime map") {
-          //     switch (grouping.template.name) {
-          //       case "Criminal Homicide":
-          //       case "Rape":
-          //       case "Robbery":
-          //       case "Aggravated Assault":
-          //         groupHeading = "Violent Crime";
-          //         break;
-          //       case "Arson":
-          //       case "Burglary":
-          //       case "Larceny":
-          //       case "Motor Vehicle Theft":
-          //         groupHeading = "Property Crime";
-          //         break;
-          //       default:
-          //         groupHeading = "Quality of Life";
-          //     }
-          //   }
-          //   return groupHeading;
-          // }
-
           // Loop through webmap layers and set an EditConfig for each
           view.map.layers.forEach(function (layer) {
-            if (layer.title === "铅山县乡镇") {
+            if (layer.title === "国土空间规划用途分类未定") {
               editLayer = {
                 layer: layer,
                 fieldConfig: [
                   {
-                    name: "XZQMC",
-                    label: "乡镇名称",
-										editable: true,
+                    name: "dlbm",
+                    label: "地类编码",
+										editable: false,
                   },
                   {
-                    name: "XZQDM",
-                    label: "乡镇代码",
+                    name: "dlmc",
+                    label: "地类名称",
 										editable: false
+                  },
+                  {
+                    name: "一级类",
+                    label: "一级类",
+										editable: true
+                  },
+                  {
+                    name: "二级类",
+                    label: "二级类",
+										editable: true
+                  },
+                  {
+                    name: "三级类",
+                    label: "三级类",
+										editable: true
+                  },
+                  {
+                    name: "是否符合转化表",
+                    label: "是否符合转化表",
+										editable: true
                   },
                 ]
               };
-            } 
-            // else {
-            //   // Specify a few of the fields to edit within the form
-            //   editConfigPoliceLayer = {
-            //     layer: layer,
-            //     // Set it so that only one field displays within the form
-            //     fieldConfig: [
-            //       {
-            //         name: "PatrolType",
-            //         label: "Patrol Type"
-            //       }
-            //     ]
-            //   };
-            // }
+            }
           });
 
           // Create the Editor
@@ -133,13 +114,7 @@
             view: view,
             // Pass in the configurations created above
             layerInfos: [editLayer],
-            label:"XZQMC"
-            // Override the default template behavior of the Editor widget
-            // supportingWidgetDefaults: {
-            //   featureTemplates: {
-            //     groupBy: customGroup
-            //   }
-            // }
+            
           });
 
           // Add widget to top-right of the view

@@ -24,7 +24,8 @@
     ], function(WebMap, MapView, FeatureLayer, Editor) {
 
       var myFeatureLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0"
+        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划用途分类未定/FeatureServer/0",
+        definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
       });
 
       var webmap = new WebMap({
