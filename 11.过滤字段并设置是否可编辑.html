@@ -5,12 +5,7 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <!--
-  ArcGIS API for JavaScript, https://js.arcgis.com
-  For more information about the widgets-editor-configurable sample, read the original sample description at developers.arcgis.com.
-  https://developers.arcgis.com/javascript/latest/sample-code/widgets-editor-configurable/index.html
-  -->
-<title>过滤字段并设置是否可编辑</title>
+    <title>过滤字段并设置是否可编辑</title>
 
     <link
       rel="stylesheet"
@@ -75,14 +70,19 @@
                 layer: layer,
                 fieldConfig: [
                   {
+                    name: "zldwmc",
+                    label: "乡镇坐落/权属单位",
+										editable: false
+                  },
+                  {
                     name: "dlbm",
                     label: "地类编码",
-										editable: false,
+										editable: false
                   },
                   {
                     name: "dlmc",
                     label: "地类名称",
-										editable: false
+                    editable: false
                   },
                   {
                     name: "一级类",
@@ -104,6 +104,11 @@
                     label: "是否符合转化表",
 										editable: true
                   },
+                  {
+                    name: "bz",
+                    label: "备注",
+										editable: true
+                  },
                 ]
               };
             }
@@ -114,6 +119,7 @@
             view: view,
             // Pass in the configurations created above
             layerInfos: [editLayer],
+            allowedWorkflows: ["update"],
             
           });
 
