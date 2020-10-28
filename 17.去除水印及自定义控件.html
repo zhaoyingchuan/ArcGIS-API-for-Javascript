@@ -13,8 +13,8 @@
     }
     #zoomWidget{
 			position: absolute;
-			top:200px;
-			right:15px
+			top:15px;
+			left:15px
     }
   </style>
   
@@ -25,8 +25,10 @@
     require([
       "esri/Map",
       "esri/views/MapView",
-      "esri/widgets/Zoom"
-    ], function(Map, MapView, Zoom) {
+			"esri/widgets/Zoom",
+			"esri/widgets/Sketch",
+      "esri/layers/GraphicsLayer",
+    ], function(Map, MapView, Zoom, Sketch, GraphicsLayer) {
       
       var map = new Map({
         basemap: "topo-vector"
@@ -35,16 +37,28 @@
       var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [116.40, 39.90], // longitude, latitude
-      zoom: 13
+        center: [116.40, 39.90],
+      	zoom: 10
       });
 
-      view.ui.components = [ ];
-
+      view.ui.components = [  ];//清除所有控件和属性水印
+			
+			//添加Zoom空间缩放页面
       var zoom = new Zoom({
         view: view
       },zoomWidget);
-      view.ui.add(zoom);
+			view.ui.add(zoom);
+			
+			//添加sketch空控件绘制点线面
+			var layer = new GraphicsLayer();
+			map.add(layer)
+			var sketch = new Sketch({
+				layer: layer,
+				view: view,
+				// graphic will be selected as soon as it is created
+				creationMode: "update"
+			});
+			view.ui.add(sketch, "top-right");
     });
   </script>
 </head>
