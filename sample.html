@@ -1,170 +1,139 @@
-
 <html>
-    <head>
-      <meta charset="utf-8" />
-      <meta
-        name="viewport"
-        content="initial-scale=1,maximum-scale=1,user-scalable=no"
-      />
-      <!--
-    ArcGIS API for JavaScript, https://js.arcgis.com
-    For more information about the widgets-editor-configurable sample, read the original sample description at developers.arcgis.com.
-    https://developers.arcgis.com/javascript/latest/sample-code/widgets-editor-configurable/index.html
-    -->
-  <title>过滤字段并设置是否可编辑</title>
-  
-      <link
-        rel="stylesheet"
-        href="https://js.arcgis.com/4.16/esri/themes/light/main.css"
-      />
-      <script src="https://js.arcgis.com/4.16/"></script>
-  
-      <style>
-        html,
-        body,
-        #viewDiv {
-          padding: 0;
-          margin: 0;
-          height: 100%;
-          width: 100%;
-        }
-  
-        .esri-editor .esri-item-list__scroller {
-          max-height: 350px;
-        }
-      </style>
-  
-      <script>
-        require([
-          "esri/WebMap",
-          "esri/views/MapView",
-                  "esri/layers/FeatureLayer",
-          "esri/widgets/Editor"
-        ], function (WebMap, MapView, FeatureLayer, Editor) {
-  
-                  var myFeatureLayer = new FeatureLayer({
-                      url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划用途分类未定/FeatureServer/0",
-            definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
-                  });
-  
-          let editLayer;
-  
-          // Create a map frm the referenced webmap item id
-          let webmap = new WebMap({
-            portalItem: {
-              id: "52f08e7f7f9947b0a6592a284ce816f8"
-            },
-                      // layers: myFeatureLayer
-          });
-  
-                  webmap.add(myFeatureLayer)
-  
-          let view = new MapView({
-            container: "viewDiv",
-            map: webmap,
-                      center: [117.70,28.31],
-                      zoom: 12
-          });
-  
-          view.when(function () {
-            view.popup.autoOpenEnabled = false; //disable popups
-  
-            // Loop through webmap layers and set an EditConfig for each
-            view.map.layers.forEach(function (layer) {
-              if (layer.title === "国土空间规划用途分类未定") {
-                editLayer = {
-                  layer: layer,
-                  fieldConfig: [
-                    {
-                      name: "dlbm",
-                      label: "地类编码",
-                                          editable: false,
-                    },
-                    {
-                      name: "dlmc",
-                      label: "地类名称",
-                                          editable: false
-                    },
-                    {
-                      name: "一级类",
-                      label: "一级类",
-                                          editable: true
-                    },
-                    {
-                      name: "二级类",
-                      label: "二级类",
-                                          editable: true
-                    },
-                    {
-                      name: "三级类",
-                      label: "三级类",
-                                          editable: true
-                    },
-                    {
-                      name: "是否符合转化表",
-                      label: "是否符合转化表",
-                                          editable: true
-                    },
-                  ]
-                };
-              }
-            });
-  
-            // Create the Editor
-            var editor = new Editor({
-              view: view,
-              // Pass in the configurations created above
-              //layerInfos: [editLayer],
-              
-            });
-  
-            // Add widget to top-right of the view
-            view.ui.add(editor, "top-right");
-          });
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>过滤字段并设置是否可编辑</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.16/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.16/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #editorDiv {
+        position: absolute;
+        top: 10;
+        right: 10;
+        height: 500;
+        width: 20%;
+      }
+
+      /* .esri-editor .esri-item-list__scroller {
+        max-height: 1500;
+      } */
+    </style>
+
+    <script>
+      require([
+        "esri/WebMap",
+        "esri/views/MapView",
+				"esri/layers/FeatureLayer",
+        "esri/widgets/Editor"
+      ], function (WebMap, MapView, FeatureLayer, Editor) {
+
+				var myFeatureLayer = new FeatureLayer({
+					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划用途分类未定/FeatureServer/0",
+          definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+				});
+
+        let editLayer;
+
+        // Create a map frm the referenced webmap item id
+        let webmap = new WebMap({
+          portalItem: {
+            id: "52f08e7f7f9947b0a6592a284ce816f8"
+          },
+					// layers: myFeatureLayer
         });
-      </script>
-    </head>
-  
-    <body>
-      <div id="viewDiv"></div>
-      <div id="editorDiv"></div>
-    <!-- Code injected by live-server -->
-  <script type="text/javascript">
-      // <![CDATA[  <-- For SVG support
-      if ('WebSocket' in window) {
-          (function () {
-              function refreshCSS() {
-                  var sheets = [].slice.call(document.getElementsByTagName("link"));
-                  var head = document.getElementsByTagName("head")[0];
-                  for (var i = 0; i < sheets.length; ++i) {
-                      var elem = sheets[i];
-                      var parent = elem.parentElement || head;
-                      parent.removeChild(elem);
-                      var rel = elem.rel;
-                      if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-                          var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-                          elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-                      }
-                      parent.appendChild(elem);
-                  }
-              }
-              var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-              var address = protocol + window.location.host + window.location.pathname + '/ws';
-              var socket = new WebSocket(address);
-              socket.onmessage = function (msg) {
-                  if (msg.data == 'reload') window.location.reload();
-                  else if (msg.data == 'refreshcss') refreshCSS();
+
+				webmap.add(myFeatureLayer)
+
+        let view = new MapView({
+          container: "viewDiv",
+          map: webmap,
+					center: [117.70,28.31],
+					zoom: 12
+        });
+
+        view.when(function () {
+          view.popup.autoOpenEnabled = false; //disable popups
+
+          // Loop through webmap layers and set an EditConfig for each
+          view.map.layers.forEach(function (layer) {
+            if (layer.title === "国土空间规划用途分类未定") {
+              editLayer = {
+                layer: layer,
+                fieldConfig: [
+                  {
+                    name: "zldwmc",
+                    label: "乡镇坐落/权属单位",
+										editable: false
+                  },
+                  {
+                    name: "dlbm",
+                    label: "地类编码",
+										editable: false
+                  },
+                  {
+                    name: "dlmc",
+                    label: "地类名称",
+                    editable: false
+                  },
+                  {
+                    name: "一级类",
+                    label: "一级类",
+										editable: true
+                  },
+                  {
+                    name: "二级类",
+                    label: "二级类",
+										editable: true
+                  },
+                  {
+                    name: "三级类",
+                    label: "三级类",
+										editable: true
+                  },
+                  {
+                    name: "是否符合转化表",
+                    label: "是否符合转化表",
+										editable: true
+                  },
+                  {
+                    name: "bz",
+                    label: "备注",
+										editable: true
+                  },
+                ]
               };
-              if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-                  console.log('Live reload enabled.');
-                  sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-              }
-          })();
-      }
-      else {
-          console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-      }
-      // ]]>
-  </script></body>
-  </html>
-  
+            }
+          });
+
+          // Create the Editor
+          var editor = new Editor({
+            container: "editorDiv",
+            view: view,
+            // Pass in the configurations created above
+            layerInfos: [editLayer],
+            allowedWorkflows: ["update"],
+            
+          });
+
+          // Add widget to top-right of the view
+          view.ui.add(editor);
+        });
+      });
+    </script>
+  </head>
