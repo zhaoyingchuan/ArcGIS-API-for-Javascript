@@ -22,7 +22,14 @@
         height: 100%;
         width: 100%;
       }
-      
+
+      .esri-ui .esri-editor__scroller {
+        max-height: 900px;
+      }
+
+      .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel, .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel-height-only, .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel, .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
+        max-height: 1200px;
+      }
 
     </style>
 
@@ -39,10 +46,10 @@
           definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
 				});
 
-        let editLayer;
+        var editLayer;
 
         // Create a map frm the referenced webmap item id
-        let webmap = new WebMap({
+        var webmap = new WebMap({
           portalItem: {
             id: "52f08e7f7f9947b0a6592a284ce816f8"
           },
@@ -51,7 +58,7 @@
 
 				webmap.add(myFeatureLayer)
 
-        let view = new MapView({
+        var view = new MapView({
           container: "viewDiv",
           map: webmap,
 					center: [117.70,28.31],
