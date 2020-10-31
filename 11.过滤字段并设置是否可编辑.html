@@ -22,13 +22,7 @@
         height: 100%;
         width: 100%;
       }
-      #editorDiv {
-        position: absolute;
-        top: 10;
-        right: 10;
-        height: 300;
-        width: 20%;
-      }
+      
 
     </style>
 
@@ -76,7 +70,7 @@
                 fieldConfig: [
                   {
                     name: "zldwmc",
-                    label: "乡镇坐落/权属单位",
+                    label: "所属乡镇/权属单位",
 										editable: false
                   },
                   {
@@ -121,7 +115,6 @@
 
           // Create the Editor
           var editor = new Editor({
-            container: "editorDiv",
             view: view,
             // Pass in the configurations created above
             layerInfos: [editLayer],
@@ -130,7 +123,7 @@
           });
 
           // Add widget to top-right of the view
-          view.ui.add(editor);
+          view.ui.add(editor, "top-right");
         });
       });
     </script>
@@ -138,6 +131,5 @@
 
   <body>
     <div id="viewDiv"></div>
-    <div id="editorDiv"></div>
   </body>
 </html>
