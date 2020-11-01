@@ -42,7 +42,7 @@
       ], function (WebMap, MapView, FeatureLayer, Editor) {
 
 				var myFeatureLayer = new FeatureLayer({
-					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划用途分类未定/FeatureServer/0",
+					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划未定地类_含属性域/FeatureServer/0",
           definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
 				});
 
@@ -53,7 +53,6 @@
           portalItem: {
             id: "52f08e7f7f9947b0a6592a284ce816f8"
           },
-					// layers: myFeatureLayer
         });
 
 				webmap.add(myFeatureLayer)
@@ -71,7 +70,7 @@
 
           // Loop through webmap layers and set an EditConfig for each
           view.map.layers.forEach(function (layer) {
-            if (layer.title === "国土空间规划用途分类未定") {
+            if (layer.title === "国土空间规划未定地类_含属性域") {
               editLayer = {
                 layer: layer,
                 fieldConfig: [
