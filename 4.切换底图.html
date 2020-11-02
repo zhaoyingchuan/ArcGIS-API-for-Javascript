@@ -18,38 +18,23 @@
   <script>  
     require([
       "esri/Map",
+      "esri/WebMap",
       "esri/views/MapView",
       "esri/Basemap",
       "esri/layers/WebTileLayer",
       "esri/widgets/BasemapToggle",
-    ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle) {
+    ], function(Map, WebMap, MapView, Basemap, WebTileLayer, BasemapToggle) {
 
-
-      var tiledLayer = new WebTileLayer({
-        urlTemplate:
-          "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
-      });
-
-      var tiledLayer_poi = new WebTileLayer({
-        urlTemplate:
-          "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
-        subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
-      });
-
-      var myBasemap = new Basemap({
-          baseLayers: [tiledLayer, tiledLayer_poi],
-          thumbnailUrl:
-            "https://spdcgeo.maps.arcgis.com/sharing/rest/content/items/71bf794ccc4a44cb99dc26592d114079/data"
-        });
-      
       var map = new Map({
-        basemap: myBasemap,
+        basemap: {
+          portalItem: {id: "52f08e7f7f9947b0a6592a284ce816f8"}
+        }
       });
-      
+
       var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [117.70,28.31],
+        center: [117.70,28.31], // longitude, latitude
         zoom: 13
       });
 
