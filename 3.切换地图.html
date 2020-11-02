@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ArcGIS API for JavaScript Tutorials: Select a basemap</title>
+  <title>加载谷歌卫星图和天地图标注</title>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -19,12 +19,31 @@
     require([
       "esri/Map",
       "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
       "esri/widgets/BasemapToggle",
-      "esri/widgets/BasemapGallery"
-    ], function(Map, MapView, BasemapToggle, BasemapGallery) {
+    ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle) {
 
+
+      var tiledLayer = new WebTileLayer({
+        urlTemplate:
+          "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
+        subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+      });
+
+      var myBasemap = new Basemap({
+          baseLayers: [tiledLayer, tiledLayer_poi],
+          thumbnailUrl:
+            "https://spdcgeo.maps.arcgis.com/sharing/rest/content/items/71bf794ccc4a44cb99dc26592d114079/data"
+        });
+      
       var map = new Map({
-        basemap: "satellite"
+        basemap: myBasemap,
       });
       
       var view = new MapView({
@@ -33,28 +52,13 @@
         center: [117.70,28.31],
         zoom: 13
       });
-      
-      //两个底图之间的切换
+
       var basemapToggle = new BasemapToggle({
         view: view,
         nextBasemap: "topo-vector"
       });
       
       view.ui.add(basemapToggle,"bottom-right");
-      
-      //ArcGIS Online上所有底图之间的切换
-      // var basemapGallery = new BasemapGallery({
-      //   view: view,
-      //   source: {
-      //     portal: {
-      //       url: "http://www.arcgis.com",
-      //       useVectorBasemaps: false, // Load vector tile basemap group
-      //     },
-      //   } 
-      // });
-
-      // view.ui.add(basemapGallery, "top-right"); // Add to the view
-      
     });
   </script>
 </head>
