@@ -10,6 +10,12 @@
       height: 100%;
       width: 100%;
     }
+
+    /* 清除黑框 */
+    .esri-view .esri-view-surface--inset-outline:focus::after {
+      outline: auto 0px Highlight !important;
+      outline: auto 0px -webkit-focus-ring-color !important;
+    }
   </style>
   
   <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
