@@ -20,7 +20,8 @@
         "esri/Map", 
         "esri/views/SceneView",
         "esri/widgets/BasemapToggle",
-    ], function(Map, SceneView, BasemapToggle) {
+        "esri/layers/FeatureLayer"
+    ], function(Map, SceneView, BasemapToggle, FeatureLayer) {
         
       var map = new Map({
         basemap: {
@@ -28,6 +29,13 @@
         },
         ground: "world-elevation"
       });
+
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划未定地类/FeatureServer/0",
+        definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+      });
+
+      map.add(myFeatureLayer);
 
       var view = new SceneView({
         container: "viewDiv",
