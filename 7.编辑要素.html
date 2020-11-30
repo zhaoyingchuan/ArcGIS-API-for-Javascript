@@ -22,19 +22,18 @@
       "esri/layers/FeatureLayer",
       "esri/widgets/Editor"
     ], function(WebMap, MapView, FeatureLayer, Editor) {
-
-      var myFeatureLayer = new FeatureLayer({
-        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划未定地类/FeatureServer/0",
-        definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
-      });
-
+      
       var webmap = new WebMap({
         portalItem: {
-          id: "52f08e7f7f9947b0a6592a284ce816f8"
+          id: "bb328ac19e1343a5903b2a72e57884f2"
         },
         // layers: myFeatureLayer
       });
 
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://192.168.1.100:6443/arcgis/rest/services/高速路/FeatureServer/0",
+        //definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+      });
       webmap.add(myFeatureLayer)
 
       var view = new MapView({
