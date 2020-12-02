@@ -1,0 +1,49 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>加载ArcGIS Server服务</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">  
+  <script src="https://js.arcgis.com/4.17/"></script>
+
+  <script>
+    require([
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Editor"], function(WebMap, MapView, FeatureLayer, Editor) {
+      
+      var webmap = new WebMap({
+        portalItem: {
+          id: "bb328ac19e1343a5903b2a72e57884f2"
+        },
+        // layers: myFeatureLayer
+      });
+
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://zyc-2020.arcgis.cn:6443/arcgis/rest/services/高速路/FeatureServer",
+      });
+      webmap.add(myFeatureLayer)
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap,
+        center: [117.70,28.31],
+        zoom: 12
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
