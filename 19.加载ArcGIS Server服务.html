@@ -30,15 +30,15 @@
       });
 
       var myFeatureLayer = new FeatureLayer({
-        url: "https://localhost:6443/arcgis/rest/services/Hosted/%E5%8E%BF%E5%9F%9F/FeatureServer",
+        url: "https://192.168.1.100:6443/arcgis/rest/services/江西省县域/FeatureServer",
       });
       webmap.add(myFeatureLayer)
 
       var view = new MapView({
         container: "viewDiv",
         map: webmap,
-        center: [117.70,28.31],
-        zoom: 12
+        //center: [117.70,28.31],
+        zoom: 3
       });
     });
   </script>
