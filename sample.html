@@ -1,139 +1,63 @@
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <title>过滤字段并设置是否可编辑</title>
-
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
-    />
-    <script src="https://js.arcgis.com/4.17/"></script>
-
-    <style>
-      html,
-      body,
-      #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
+function(e) {
+  var value = $(e.target).val();
+  //alert(value);
+  $("[name=diji]").empty();
+  if (value == "北京市(京)") {
+    $("[name=diji]").append("<option value='北京市'>北京市</option>");
+  } else if (value == "天津市(津)") {
+    $("[name=diji]").append("<option value='天津市'>天津市</option>");
+  } else if (value == "重庆市(渝)") {
+    $("[name=diji]").append("<option value='重庆市'>重庆市</option>");
+  } else if (value == "上海市(沪)") {
+    $("[name=diji]").append("<option value='上海市'>上海市</option>");
+  } else {
+    $("[name=diji]").append("<option value='-1'>地级市、地区、自治州、盟</option>");
+  }
+  $("[name=xianji]").empty();
+  $("[name=xianji]").append("<option value='-1'>市辖区、县级市、县…</option>");
+  $.ajax({
+    url: "selectJson",
+    type: "POST",
+    dataType: "json",
+    data: "shengji=" + value,
+    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+    success: function(Jsondata) {
+      var jd = Jsondata;
+      for (var j = 0; j < jd.length; j++) {
+        var diji = jd[j];
+        if (value == "北京市(京)" || value == "天津市(津)" || value == "重庆市(渝)" || value == "上海市(沪)") {
+          //$("[name=diji]").append("<option value='" + diji.diji + "' selected>" + diji.diji + "</option>");
+          getzxs(value, diji.diji);
+        } else {
+          $("[name=diji]").append("<option value='" + diji.diji + "' >" + diji.diji + "</option>");
+        }
       }
-      #editorDiv {
-        position: absolute;
-        top: 10;
-        right: 10;
-        height: 500;
-        width: 20%;
+
+    }
+  });
+
+
+}
+
+
+function(e) {
+  var value = $(e.target).val();
+  var sj = $("[name=shengji]").val();
+  $("[name=xianji]").empty();
+  $("[name=xianji]").append("<option value='-1'>市辖区、县级市、县…</option>");
+  $.ajax({
+    url: "selectJson",
+    type: "POST",
+    dataType: "json",
+    data: "shengji=" + sj + "&diji=" + value,
+    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+    success: function(Jsondata) {
+      var jd = Jsondata;
+      for (var j = 0; j < jd.length; j++) {
+        var xianji = jd[j];
+        $("[name=xianji]").append("<option value='" + xianji.xianji + "'>" + xianji.xianji + "</option>");
       }
 
-      /* .esri-editor .esri-item-list__scroller {
-        max-height: 1500;
-      } */
-    </style>
-
-    <script>
-      require([
-        "esri/WebMap",
-        "esri/views/MapView",
-				"esri/layers/FeatureLayer",
-        "esri/widgets/Editor"
-      ], function (WebMap, MapView, FeatureLayer, Editor) {
-
-				var myFeatureLayer = new FeatureLayer({
-					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划用途分类未定/FeatureServer/0",
-          definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
-				});
-
-        let editLayer;
-
-        // Create a map frm the referenced webmap item id
-        let webmap = new WebMap({
-          portalItem: {
-            id: "52f08e7f7f9947b0a6592a284ce816f8"
-          },
-					// layers: myFeatureLayer
-        });
-
-				webmap.add(myFeatureLayer)
-
-        let view = new MapView({
-          container: "viewDiv",
-          map: webmap,
-					center: [117.70,28.31],
-					zoom: 12
-        });
-
-        view.when(function () {
-          view.popup.autoOpenEnabled = false; //disable popups
-
-          // Loop through webmap layers and set an EditConfig for each
-          view.map.layers.forEach(function (layer) {
-            if (layer.title === "国土空间规划用途分类未定") {
-              editLayer = {
-                layer: layer,
-                fieldConfig: [
-                  {
-                    name: "zldwmc",
-                    label: "乡镇坐落/权属单位",
-										editable: false
-                  },
-                  {
-                    name: "dlbm",
-                    label: "地类编码",
-										editable: false
-                  },
-                  {
-                    name: "dlmc",
-                    label: "地类名称",
-                    editable: false
-                  },
-                  {
-                    name: "一级类",
-                    label: "一级类",
-										editable: true
-                  },
-                  {
-                    name: "二级类",
-                    label: "二级类",
-										editable: true
-                  },
-                  {
-                    name: "三级类",
-                    label: "三级类",
-										editable: true
-                  },
-                  {
-                    name: "是否符合转化表",
-                    label: "是否符合转化表",
-										editable: true
-                  },
-                  {
-                    name: "bz",
-                    label: "备注",
-										editable: true
-                  },
-                ]
-              };
-            }
-          });
-
-          // Create the Editor
-          var editor = new Editor({
-            container: "editorDiv",
-            view: view,
-            // Pass in the configurations created above
-            layerInfos: [editLayer],
-            allowedWorkflows: ["update"],
-            
-          });
-
-          // Add widget to top-right of the view
-          view.ui.add(editor);
-        });
-      });
-    </script>
-  </head>
+    }
+  });
+}
