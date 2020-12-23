@@ -51,8 +51,8 @@
       ], function (WebMap, MapView, FeatureLayer, Editor) {
 
 				var myFeatureLayer = new FeatureLayer({
-					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划未定地类/FeatureServer/0",
-          definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+					url: "https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/中心城区和乡镇1223/FeatureServer/0",
+          //definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
 				});
 
         var editLayer;
@@ -60,7 +60,7 @@
         // Create a map frm the referenced webmap item id
         var webmap = new WebMap({
           portalItem: {
-            id: "52f08e7f7f9947b0a6592a284ce816f8"
+            id: "bb328ac19e1343a5903b2a72e57884f2"
           },
 					// layers: myFeatureLayer
         });
@@ -80,22 +80,22 @@
 
           // Loop through webmap layers and set an EditConfig for each
           view.map.layers.forEach(function (layer) {
-            if (layer.title === "国土空间规划未定地类") {
+            if (layer.title === "中心城区和乡镇1223") {
               editLayer = {
                 layer: layer,
                 fieldConfig: [
+                  // {
+                  //   name: "zldwmc",
+                  //   label: "所属乡镇/权属单位",
+									// 	editable: false
+                  // },
                   {
-                    name: "zldwmc",
-                    label: "所属乡镇/权属单位",
-										editable: false
-                  },
-                  {
-                    name: "dlbm",
+                    name: "DLBM",
                     label: "地类编码",
 										editable: false
                   },
                   {
-                    name: "dlmc",
+                    name: "DLMC",
                     label: "地类名称",
                     editable: false
                   },
@@ -114,16 +114,16 @@
                     label: "三级类",
 										editable: true
                   },
-                  {
-                    name: "是否符合转化表",
-                    label: "是否符合转化表",
-										editable: true
-                  },
-                  {
-                    name: "bz",
-                    label: "备注",
-										editable: true
-                  },
+                  // {
+                  //   name: "是否符合转化表",
+                  //   label: "是否符合转化表",
+									// 	editable: true
+                  // },
+                  // {
+                  //   name: "bz",
+                  //   label: "备注",
+									// 	editable: true
+                  // },
                 ]
               };
             }
