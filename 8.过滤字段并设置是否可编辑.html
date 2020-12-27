@@ -47,8 +47,9 @@
         "esri/WebMap",
         "esri/views/MapView",
 				"esri/layers/FeatureLayer",
-        "esri/widgets/Editor"
-      ], function (WebMap, MapView, FeatureLayer, Editor) {
+        "esri/widgets/Editor",
+        "esri/widgets/LayerList",
+      ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
 
 				var myFeatureLayer = new FeatureLayer({
 					url: "https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/中心城区和乡镇1223/FeatureServer/0",
@@ -140,6 +141,17 @@
 
           // Add widget to top-right of the view
           view.ui.add(editor, "top-right");
+
+          view.when(function () {
+            var layerList = new LayerList({
+              view: view
+            });
+
+            // Add widget to the top right corner of the view
+            view.ui.add(layerList, "top-right");
+          });
+
+          
         });
       });
     </script>
