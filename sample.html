@@ -1,63 +1,9 @@
-function(e) {
-  var value = $(e.target).val();
-  //alert(value);
-  $("[name=diji]").empty();
-  if (value == "北京市(京)") {
-    $("[name=diji]").append("<option value='北京市'>北京市</option>");
-  } else if (value == "天津市(津)") {
-    $("[name=diji]").append("<option value='天津市'>天津市</option>");
-  } else if (value == "重庆市(渝)") {
-    $("[name=diji]").append("<option value='重庆市'>重庆市</option>");
-  } else if (value == "上海市(沪)") {
-    $("[name=diji]").append("<option value='上海市'>上海市</option>");
-  } else {
-    $("[name=diji]").append("<option value='-1'>地级市、地区、自治州、盟</option>");
-  }
-  $("[name=xianji]").empty();
-  $("[name=xianji]").append("<option value='-1'>市辖区、县级市、县…</option>");
-  $.ajax({
-    url: "selectJson",
-    type: "POST",
-    dataType: "json",
-    data: "shengji=" + value,
-    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-    success: function(Jsondata) {
-      var jd = Jsondata;
-      for (var j = 0; j < jd.length; j++) {
-        var diji = jd[j];
-        if (value == "北京市(京)" || value == "天津市(津)" || value == "重庆市(渝)" || value == "上海市(沪)") {
-          //$("[name=diji]").append("<option value='" + diji.diji + "' selected>" + diji.diji + "</option>");
-          getzxs(value, diji.diji);
-        } else {
-          $("[name=diji]").append("<option value='" + diji.diji + "' >" + diji.diji + "</option>");
-        }
-      }
-
-    }
-  });
-
-
-}
-
-
-function(e) {
-  var value = $(e.target).val();
-  var sj = $("[name=shengji]").val();
-  $("[name=xianji]").empty();
-  $("[name=xianji]").append("<option value='-1'>市辖区、县级市、县…</option>");
-  $.ajax({
-    url: "selectJson",
-    type: "POST",
-    dataType: "json",
-    data: "shengji=" + sj + "&diji=" + value,
-    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-    success: function(Jsondata) {
-      var jd = Jsondata;
-      for (var j = 0; j < jd.length; j++) {
-        var xianji = jd[j];
-        $("[name=xianji]").append("<option value='" + xianji.xianji + "'>" + xianji.xianji + "</option>");
-      }
-
-    }
-  });
-}
+<html>
+<head>
+  <script>
+    alert('Hello, world');
+  </script>
+</head>
+<body>
+</body>
+</html>

@@ -53,7 +53,7 @@
 
 				var myFeatureLayer = new FeatureLayer({
 					url: "https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/中心城区和乡镇1223/FeatureServer/0",
-          //definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+          definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
 				});
 
         var editLayer;
@@ -150,8 +150,6 @@
             // Add widget to the top right corner of the view
             view.ui.add(layerList, "top-right");
           });
-
-          
         });
       });
     </script>
