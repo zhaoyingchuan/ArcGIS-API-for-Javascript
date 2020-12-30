@@ -7,12 +7,15 @@
     />
     <title>过滤字段并设置是否可编辑</title>
 
+    
+
+    <script src="https://js.arcgis.com/4.17/"></script>
+
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
     />
-    <script src="https://js.arcgis.com/4.17/"></script>
-
+    
     <style>
       html,
       body,
@@ -153,9 +156,34 @@
         });
       });
     </script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+    <script type="text/javascript">
+  　　$(document).ready(function(){  
+　　　　$("select.esri-input.esri-feature-form__input.esri-select").eq(0).change(function(){
+          alert("文本已被修改");
+          // var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
+
+          // var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
+
+          // var oplist=arr2.children;
+
+          // for(var i=oplist.length-1;i>=0;i--){
+          //   if(oplist[i].value.substring(0,2)!=arr1.value.substring(0,2)){
+          //     oplist[i].style.display='none';
+          //   }else {
+          //     oplist[i].style.display='';
+          //   }
+          // }
+　　　　})  
+      })  
+    </script>
   </head>
 
   <body>
     <div id="viewDiv"></div>
+    <!-- <select class="esri-select"></select> -->
   </body>
+  
 </html>
