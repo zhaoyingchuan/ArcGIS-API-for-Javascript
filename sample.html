@@ -1,63 +1,17 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
-    <title>无标题文档</title>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
-    <script type="text/javascript">
-    
-      var provinces = new Array();
-      provinces["湖北"] = ["武汉","襄阳","随州","宜昌","十堰"];
-      provinces["四川"] = ["成都","内江","达州"];
-      provinces["河南"] = ["郑州","南阳","信阳","漯河"];
-      // function changeProvince(){
-      //   var prov = document.getElementById("province").value;
-      //   var city = document.getElementById("city");
-      //   city.options.length =0;
-      //   for(var i in provinces[prov]){
-      //     city.options.add(new Option(provinces[prov][i],provinces[prov][i]));
-      //   }
-      //   alert("文本已被修改");
-      // }
-      window.onload = function(){
-        var province = document.getElementsByClassName("province");
-        
-        for(var index in provinces){
-          //alert(index);
-          province.options.add(new Option(index,index));
-        }
-      };
-    </script>
-
-    <script>
-  　　$(document).ready(function(){  
-　　　　$("#province").change(function(){
-          var prov = document.getElementsByClassName("province").value;
-          var city = document.getElementById("city");
-          city.options.length =0;
-          for(var i in provinces[prov]){
-            city.options.add(new Option(provinces[prov][i],provinces[prov][i]));
-          }
-          alert("文本已被修改");
-          // var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
-
-          // var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
-
-          // var oplist=arr2.children;
-
-          // for(var i=oplist.length-1;i>=0;i--){
-          //   if(oplist[i].value.substring(0,2)!=arr1.value.substring(0,2)){
-          //     oplist[i].style.display='none';
-          //   }else {
-          //     oplist[i].style.display='';
-          //   }
-          // }
-　　　　})  
-      })  
-    </script>
-  </head>
-
-  <body>
-    省份:<select class="province"></select>
-    城市:<select id="city"></select>
-  </body>
+<head>
+  <style>p { color:red; }</style>
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script>
+  $(document).ready(function () {
+  $("p").text("The DOM is now loaded and can be manipulated.");
+});
+  </script>
+ 
+</head>
+<body>
+  <p>Not loaded yet.</p>
+ 
+</body>
 </html>

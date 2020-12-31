@@ -159,52 +159,100 @@
 
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
 
-    <script>  
-  　　　$(document).on("change ready",".esri-input.esri-feature-form__input.esri-select:eq(0)",function(){
-          var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
+    <script>
+      // $(document).ready(function(){
+      //   $(".esri-input esri-feature-form__input esri-select").load(function(){
+      //     var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
 
-          var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
-          arr2.value=''
+      //     var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
+      //     arr2.value=''
 
-          var arr3 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[2];
-          arr3.value=''
+      //     var arr3 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[2];
+      //     arr3.value=''
 
-          var oplist1=arr1.children;
-          var oplist2=arr2.children;
-          var oplist3=arr3.children;
+      //     var oplist1=arr1.children;
+      //     var oplist2=arr2.children;
+      //     var oplist3=arr3.children;
 
-          var x2=0
-          for(var i=oplist2.length-1;i>=0;i--){
-            if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)){
-              oplist2[i].style.display='';
-              x2=x2+1
-            }else {
-              oplist2[i].style.display='none';
-            }
+      //     var x2=0
+      //     for(var i=oplist2.length-1;i>=0;i--){
+      //       if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)){
+      //         oplist2[i].style.display='';
+      //         x2=x2+1
+      //       }else {
+      //         oplist2[i].style.display='none';
+      //       }
+      //     }
+      //     if(x2==0){
+      //       arr2.lastChild.style.display='';
+      //       arr2.value='无'
+      //     }else{
+      //       arr2[0].style.display=''
+      //     }
+
+      //     var x3=0
+      //     for(var i=oplist3.length-1;i>=0;i--){
+      //       if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)){
+      //         oplist3[i].style.display='';
+      //         x3=x3+1
+      //       }else {
+      //         oplist3[i].style.display='none';
+      //       }
+      //     }
+      //     if(x3==0){
+      //       arr3.lastChild.style.display='';
+      //       arr3.value='无'
+      //     }else{
+      //       arr3.firstChild.style.display=''
+      //     }
+      //   });
+      // });
+
+      $(document).on("change click",".esri-input.esri-feature-form__input.esri-select:eq(0)",function(){
+        var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
+
+        var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
+        arr2.value=''
+
+        var arr3 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[2];
+        arr3.value=''
+
+        var oplist1=arr1.children;
+        var oplist2=arr2.children;
+        var oplist3=arr3.children;
+
+        var x2=0
+        for(var i=oplist2.length-1;i>=0;i--){
+          if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)){
+            oplist2[i].style.display='';
+            x2=x2+1
+          }else {
+            oplist2[i].style.display='none';
           }
-          if(x2==0){
-            arr2.lastChild.style.display='';
-            arr2.value='无'
-          }else{
-            arr2[0].style.display=''
-          }
+        }
+        if(x2==0){
+          arr2.lastChild.style.display='';
+          arr2.value='无'
+        }else{
+          arr2[0].style.display=''
+        }
 
-          var x3=0
-          for(var i=oplist3.length-1;i>=0;i--){
-            if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)){
-              oplist3[i].style.display='';
-              x3=x3+1
-            }else {
-              oplist3[i].style.display='none';
-            }
+        var x3=0
+        for(var i=oplist3.length-1;i>=0;i--){
+          if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)){
+            oplist3[i].style.display='';
+            x3=x3+1
+          }else {
+            oplist3[i].style.display='none';
           }
-          if(x3==0){
-            arr3.lastChild.style.display='';
-            arr3.value='无'
-          }else{
-            arr3.firstChild.style.display=''
-          }
-  　　　})
+        }
+        if(x3==0){
+          arr3.lastChild.style.display='';
+          arr3.value='无'
+        }else{
+          arr3.firstChild.style.display=''
+        }
+　　　})
 
       $(document).on("change",".esri-input.esri-feature-form__input.esri-select:eq(1)",function(){
         var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
@@ -237,7 +285,7 @@
             oplist3[i].style.display='none';
           }
         }
-        if(x3==0||x3==1){
+        if(x3==0){
           arr3.lastChild.style.display='';
           arr3.value='无'
         }else{
