@@ -52,12 +52,10 @@
       ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
 
 				var myFeatureLayer = new FeatureLayer({
-					url: "https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/中心城区和乡镇1223/FeatureServer/0",
-          definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
-				});
-
-        var editLayer;
-
+					url: "https://zyc-2020.arcgis.cn/server/rest/services/Hosted/中心城区和乡镇/FeatureServer/0",
+          definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
+        });
+        
         // Create a map frm the referenced webmap item id
         var webmap = new WebMap({
           portalItem: {
@@ -65,7 +63,6 @@
           },
 					// layers: myFeatureLayer
         });
-
 				webmap.add(myFeatureLayer)
 
         var view = new MapView({
@@ -75,28 +72,22 @@
 					zoom: 12
         });
         
-
+        var editLayer;
         view.when(function () {
           view.popup.autoOpenEnabled = false; //disable popups
-
           // Loop through webmap layers and set an EditConfig for each
           view.map.layers.forEach(function (layer) {
-            if (layer.title === "中心城区和乡镇1223") {
+            if (layer.title === "中心城区和乡镇") {
               editLayer = {
                 layer: layer,
                 fieldConfig: [
-                  // {
-                  //   name: "zldwmc",
-                  //   label: "所属乡镇/权属单位",
-									// 	editable: false
-                  // },
                   {
-                    name: "DLBM",
+                    name: "dlbm",
                     label: "地类编码",
 										editable: false
                   },
                   {
-                    name: "DLMC",
+                    name: "dlmc",
                     label: "地类名称",
                     editable: false
                   },
@@ -114,17 +105,7 @@
                     name: "三级类",
                     label: "三级类",
 										editable: true
-                  },
-                  // {
-                  //   name: "是否符合转化表",
-                  //   label: "是否符合转化表",
-									// 	editable: true
-                  // },
-                  // {
-                  //   name: "bz",
-                  //   label: "备注",
-									// 	editable: true
-                  // },
+                  }
                 ]
               };
             }
@@ -146,7 +127,6 @@
             var layerList = new LayerList({
               view: view
             });
-
             // Add widget to the top right corner of the view
             view.ui.add(layerList, "top-right");
           });
@@ -174,7 +154,7 @@
 
         var x2=0
         for(var i=oplist2.length-1;i>=0;i--){
-          if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)){
+          if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
             oplist2[i].style.display='';
             x2=x2+1
           }else {
@@ -190,7 +170,7 @@
 
         var x3=0
         for(var i=oplist3.length-1;i>=0;i--){
-          if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)){
+          if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
             oplist3[i].style.display='';
             x3=x3+1
           }else {
