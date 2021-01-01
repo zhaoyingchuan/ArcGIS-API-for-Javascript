@@ -6,11 +6,6 @@
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
     <title>过滤字段并设置是否可编辑</title>
-
-    
-
-    <script src="https://js.arcgis.com/4.17/"></script>
-
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
@@ -45,6 +40,8 @@
 
     </style>
 
+    <!-- 引用ArcGIS JS API -->
+    <script src="https://js.arcgis.com/4.17/"></script>
     <script>
       require([
         "esri/WebMap",
@@ -157,57 +154,11 @@
       });
     </script>
 
+    <!-- 引用jQuery -->
     <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
-
+    <!-- 绑定change事件 -->
     <script>
-      // $(document).ready(function(){
-      //   $(".esri-input esri-feature-form__input esri-select").load(function(){
-      //     var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
-
-      //     var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
-      //     arr2.value=''
-
-      //     var arr3 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[2];
-      //     arr3.value=''
-
-      //     var oplist1=arr1.children;
-      //     var oplist2=arr2.children;
-      //     var oplist3=arr3.children;
-
-      //     var x2=0
-      //     for(var i=oplist2.length-1;i>=0;i--){
-      //       if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)){
-      //         oplist2[i].style.display='';
-      //         x2=x2+1
-      //       }else {
-      //         oplist2[i].style.display='none';
-      //       }
-      //     }
-      //     if(x2==0){
-      //       arr2.lastChild.style.display='';
-      //       arr2.value='无'
-      //     }else{
-      //       arr2[0].style.display=''
-      //     }
-
-      //     var x3=0
-      //     for(var i=oplist3.length-1;i>=0;i--){
-      //       if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)){
-      //         oplist3[i].style.display='';
-      //         x3=x3+1
-      //       }else {
-      //         oplist3[i].style.display='none';
-      //       }
-      //     }
-      //     if(x3==0){
-      //       arr3.lastChild.style.display='';
-      //       arr3.value='无'
-      //     }else{
-      //       arr3.firstChild.style.display=''
-      //     }
-      //   });
-      // });
-
+      // 为“一级类”绑定change事件
       $(document).on("change",".esri-input.esri-feature-form__input.esri-select:eq(0)",function(){
         var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
 
@@ -253,7 +204,7 @@
           arr3.firstChild.style.display=''
         }
 　　　})
-
+      // 为“二级类”绑定change事件
       $(document).on("change",".esri-input.esri-feature-form__input.esri-select:eq(1)",function(){
         var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
 
@@ -292,7 +243,7 @@
           arr3.firstChild.style.display=''
         }
 　　　})
-
+      // 为“三级类”绑定change事件
       $(document).on("change",".esri-input.esri-feature-form__input.esri-select:eq(2)",function(){
         var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
 
@@ -323,12 +274,10 @@
           }
         }
 　　　})
-
     </script>
   </head>
 
   <body>
     <div id="viewDiv"></div>
   </body>
-  
 </html>
