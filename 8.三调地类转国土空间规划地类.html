@@ -138,14 +138,16 @@
     <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
     <!-- 绑定change事件 -->
     <script>
-      // 为“一级类”绑定change事件
-      $(document).on("change",".esri-input.esri-feature-form__input.esri-select:eq(0)",function(){
-        var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
 
-        var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
+      // 为“一级类”绑定change事件
+      $(document).on("change",".esri-select:eq(0)",function(){
+        
+        var arr1 = $('.esri-select')[0];
+
+        var arr2 = $('.esri-select')[1];
         arr2.value=''
 
-        var arr3 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[2];
+        var arr3 = $('.esri-select')[2];
         arr3.value=''
 
         var oplist1=arr1.children;
@@ -183,14 +185,18 @@
         }else{
           arr3.firstChild.style.display=''
         }
+
+        var errormess=$('.esri-feature-form__field-error-message');
+        errormess.hide()
 　　　})
       // 为“二级类”绑定change事件
-      $(document).on("change",".esri-input.esri-feature-form__input.esri-select:eq(1)",function(){
-        var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
+      $(document).on("change",".esri-select:eq(1)",function(){
 
-        var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
+        var arr1 = $('.esri-select')[0];
 
-        var arr3 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[2];
+        var arr2 = $('.esri-select')[1];
+
+        var arr3 = $('.esri-select')[2];
         arr3.value=''
 
         var oplist1=arr1.children;
@@ -222,14 +228,17 @@
         }else{
           arr3.firstChild.style.display=''
         }
+
+        var errormess=$('.esri-feature-form__field-error-message');
+        errormess.hide()
 　　　})
       // 为“三级类”绑定change事件
-      $(document).on("change",".esri-input.esri-feature-form__input.esri-select:eq(2)",function(){
-        var arr1 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[0];
+      $(document).on("change",".esri-select:eq(2)",function(){
+        var arr1 = $('.esri-select')[0];
 
-        var arr2 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[1];
+        var arr2 = $('.esri-select')[1];
 
-        var arr3 = document.getElementsByClassName('esri-input esri-feature-form__input esri-select')[2];
+        var arr3 = $('.esri-select')[2];
         
 
         var oplist1=arr1.children;
@@ -253,6 +262,9 @@
             // oplist2[i].style.display='none';
           }
         }
+
+        var errormess=$('.esri-feature-form__field-error-message');
+        errormess.hide()
 　　　})
     </script>
   </head>
