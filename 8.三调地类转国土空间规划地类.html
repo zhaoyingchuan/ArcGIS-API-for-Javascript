@@ -52,7 +52,7 @@
       ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
 
 				var myFeatureLayer = new FeatureLayer({
-					url: "https://zyc-2020.arcgis.cn/server/rest/services/Hosted/中心城区和乡镇/FeatureServer/0",
+					url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
           definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
         });
         
@@ -82,12 +82,12 @@
                 layer: layer,
                 fieldConfig: [
                   {
-                    name: "dlbm",
+                    name: "DLBM",
                     label: "地类编码",
 										editable: false
                   },
                   {
-                    name: "dlmc",
+                    name: "DLMC",
                     label: "地类名称",
                     editable: false
                   },
