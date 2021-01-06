@@ -230,6 +230,39 @@
 
         $('.esri-feature-form__field-error-message').hide();
 　　　})
+
+      // 为“二级类”绑定click事件
+      $(document).on("click touchstart",".esri-select:eq(1)",function(){
+
+        var arr1 = $('.esri-select')[0];
+
+        var arr2 = $('.esri-select')[1];
+
+        var arr3 = $('.esri-select')[2];
+
+        var oplist1=arr1.children;
+        var oplist2=arr2.children;
+        var oplist3=arr3.children;
+
+        var x2=0
+        for(var i=oplist2.length-1;i>=0;i--){
+          if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
+            oplist2[i].style.display='';
+            x2=x2+1
+          }else {
+            oplist2[i].style.display='none';
+          }
+        }
+        if(x2==0){
+          arr2.lastChild.style.display='';
+          arr2.value='无'
+        }else{
+          arr2[0].style.display=''
+        }
+        $('.esri-feature-form__field-error-message').hide();
+　　　})
+      
+
       // 为“三级类”绑定change事件
       $(document).on("change",".esri-select:eq(2)",function(){
         var arr1 = $('.esri-select')[0];
@@ -263,6 +296,49 @@
 
         $('.esri-feature-form__field-error-message').hide();
 　　　})
+
+      // 为“三级类”绑定click事件
+      $(document).on("click touchstart",".esri-select:eq(2)",function(){
+        var arr1 = $('.esri-select')[0];
+
+        var arr2 = $('.esri-select')[1];
+
+        var arr3 = $('.esri-select')[2];
+        
+
+        var oplist1=arr1.children;
+        var oplist2=arr2.children;
+        var oplist3=arr3.children;
+        
+        var x3=0
+        if(arr2.value!=''){
+          for(var i=oplist3.length-1;i>=0;i--){
+            if(oplist3[i].value.substring(0,4)==arr2.value.substring(0,4)){
+              oplist3[i].style.display='';
+              x3=x3+1
+            }else {
+              oplist3[i].style.display='none';
+            }
+          }
+        }else{
+          for(var i=oplist3.length-1;i>=0;i--){
+            if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
+              oplist3[i].style.display='';
+              x3=x3+1
+            }else {
+              oplist3[i].style.display='none';
+            }
+          }
+        }
+        if(x3==0||x3==1){
+          arr3.lastChild.style.display='';
+          arr3.value='无'
+        }else{
+          arr3.firstChild.style.display=''
+        }
+        $('.esri-feature-form__field-error-message').hide();
+　　　})
+
     </script>
   </head>
 
