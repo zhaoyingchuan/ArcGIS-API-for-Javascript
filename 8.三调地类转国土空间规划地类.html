@@ -164,10 +164,10 @@
           }
         }
         if(x2==0){
-          arr2.lastChild.style.display='';
+          $('option[value="无"]')[0].style.display='';
           arr2.value='无'
         }else{
-          arr2.firstChild.style.display=''
+          $('option[value=""]')[1].style.display=''
         }
 
         var x3=0
@@ -180,10 +180,10 @@
           }
         }
         if(x3==0){
-          arr3.lastChild.style.display='';
+          $('option[value="无"]')[1].style.display='';
           arr3.value='无'
         }else{
-          arr3.firstChild.style.display=''
+          $('option[value=""]')[2].style.display=''
         }
 
         $('.esri-feature-form__field-error-message').hide();
@@ -222,10 +222,10 @@
           }
         }
         if(x3==0){
-          arr3.lastChild.style.display='';
+          $('option[value="无"]')[1].style.display='';
           arr3.value='无'
         }else{
-          arr3.firstChild.style.display=''
+          $('option[value=""]')[2].style.display=''
         }
 
         $('.esri-feature-form__field-error-message').hide();
@@ -254,10 +254,10 @@
           }
         }
         if(x2==0){
-          arr2.lastChild.style.display='';
+          $('option[value="无"]')[0].style.display='';
           arr2.value='无'
         }else{
-          arr2.firstChild.style.display=''
+          $('option[value=""]')[1].style.display=''
         }
         $('.esri-feature-form__field-error-message').hide();
 　　　})
@@ -331,10 +331,10 @@
           }
         }
         if(x3==0||x3==1){
-          arr3.lastChild.style.display='';
+          $('option[value="无"]')[1].style.display='';
           arr3.value='无'
         }else{
-          arr3.firstChild.style.display=''
+          $('option[value=""]')[2].style.display=''
         }
         $('.esri-feature-form__field-error-message').hide();
 　　　})
