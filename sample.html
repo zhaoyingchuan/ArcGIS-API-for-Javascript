@@ -1,17 +1,30 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <style>p { color:red; }</style>
-  <script src="https://code.jquery.com/jquery-latest.js"></script>
-  <script>
-  $(document).ready(function () {
-  $("p").text("The DOM is now loaded and can be manipulated.");
-});
-  </script>
- 
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>ArcGIS API for JavaScript Tutorials: Create a Starter App</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  
+  <body>
+    <div id="app">
+      {{a}}
+    </div>
+
+    <script>
+      var data = {a:1}
+      var vm = new Vue({
+        el:"#app",
+        data:data
+      })
+      
+      vm.$watch('a',function(newVal,oldVal){
+        console.log(newVal,oldVal)
+      })
+
+      vm.$data.a = "test..."
+    </script>
+  </body>
+  
 </head>
-<body>
-  <p>Not loaded yet.</p>
- 
-</body>
+
 </html>

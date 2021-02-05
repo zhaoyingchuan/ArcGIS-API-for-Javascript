@@ -46,13 +46,13 @@
       require([
         "esri/WebMap",
         "esri/views/MapView",
-				"esri/layers/FeatureLayer",
+        "esri/layers/FeatureLayer",
         "esri/widgets/Editor",
         "esri/widgets/LayerList",
       ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
 
-				var myFeatureLayer = new FeatureLayer({
-					url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
+        var myFeatureLayer = new FeatureLayer({
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
           definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
         });
         
@@ -61,15 +61,15 @@
           portalItem: {
             id: "bd10bb233d17435ca7b0e37e2135a7dd"
           },
-					// layers: myFeatureLayer
+          // layers: myFeatureLayer
         });
-				webmap.add(myFeatureLayer)
+        webmap.add(myFeatureLayer)
 
         var view = new MapView({
           container: "viewDiv",
           map: webmap,
-					center: [117.70,28.31],
-					zoom: 12
+          center: [117.70,28.31],
+          zoom: 12
         });
         
         var editLayer;
@@ -84,7 +84,7 @@
                   {
                     name: "DLBM",
                     label: "地类编码",
-										editable: false
+                    editable: false
                   },
                   {
                     name: "DLMC",
@@ -94,17 +94,17 @@
                   {
                     name: "一级类",
                     label: "一级类",
-										editable: true
+                    editable: true
                   },
                   {
                     name: "二级类",
                     label: "二级类",
-										editable: true
+                    editable: true
                   },
                   {
                     name: "三级类",
                     label: "三级类",
-										editable: true
+                    editable: true
                   }
                 ]
               };
