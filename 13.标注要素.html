@@ -10,7 +10,7 @@
 
     <link
       rel="stylesheet"
-      href="https://js.arcgis.com/4.17/esri/themes/light-green/main.css"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
     />
 
     <style>
@@ -34,6 +34,7 @@
         "esri/layers/FeatureLayer",
         "esri/widgets/Search"
       ], function (WebMap, MapView, FeatureLayer, Search) {
+
         const labelClass = {
           // autocasts as new LabelClass()
           symbol: {
@@ -48,7 +49,7 @@
           },
           labelPlacement: "above-center",
           labelExpressionInfo: {
-            expression: "$feature.MARKER_ACTIVITY"
+            expression: "$feature.name"
           }
         };
 
@@ -61,23 +62,20 @@
             },
             layers: [
               new FeatureLayer({
-                portalItem: {
-                  // autocasts as new PortalItem
-                  id: "6012738cd1c74582a5f98ea30ae9876f"
-                },
+                url:"https://localhost:6443/arcgis/rest/services/江西省市域/FeatureServer",
                 labelingInfo: [labelClass],
-                renderer: {
-                  type: "simple", // autocasts as new SimpleRenderer()
-                  symbol: {
-                    type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
-                    color: "rgba(0,100,0,0.6)",
-                    size: 3,
-                    outline: {
-                      color: [0, 0, 0, 0.1],
-                      width: 0.5
-                    }
-                  }
-                }
+                // renderer: {
+                //   type: "simple", // autocasts as new SimpleRenderer()
+                //   symbol: {
+                //     type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                //     color: "rgba(0,100,0,0.6)",
+                //     size: 3,
+                //     outline: {
+                //       color: [0, 0, 0, 0.1],
+                //       width: 0.5
+                //     }
+                //   }
+                // }
               })
             ]
           }),
