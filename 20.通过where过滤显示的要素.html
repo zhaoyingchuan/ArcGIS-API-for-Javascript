@@ -51,7 +51,6 @@
       font-weight: 60;
       padding-bottom: 10px;
     }
-
   </style>
   
   <script>
@@ -60,9 +59,8 @@
       "esri/Map",
       "esri/layers/FeatureLayer",
       "esri/widgets/Expand"
-    ], function (
-      MapView, Map, FeatureLayer, Expand
-    ) {
+    ], function (MapView, Map, FeatureLayer, Expand) {
+
       let floodLayerView;
 
       // flash flood warnings layer
@@ -70,7 +68,7 @@
         portalItem: {
           id: "f9e348953b3848ec8b69964d5bceae02"
         },
-        outFields: ["SEASON"]
+        outFields: ["SEASON"]//outFields没有起过滤字段的作用
       });
 
       const map = new Map({
@@ -85,36 +83,37 @@
         zoom: 4
       });
 
+      //取到类名为season-item的4个节点，但是这行代码没有作用
       const seasonsNodes = document.querySelectorAll(`.season-item`);
+      //获取到id为seasons-filter的元素
       const seasonsElement = document.getElementById("seasons-filter");
 
-      // click event handler for seasons choices
+      //利用冒泡机制为seasonsElement所有的子元素绑定click事件
       seasonsElement.addEventListener("click", filterBySeason);
-
-      // User clicked on Winter, Spring, Summer or Fall
-      // set an attribute filter on flood warnings layer view
-      // to display the warnings issued in that season
+      
       function filterBySeason(event) {
+        //获取到点击的子元素的data-season属性
         const selectedSeason = event.target.getAttribute("data-season");
+        //将data-season的属性值拼接到where语句中
         floodLayerView.filter = {
           where: "Season = '" + selectedSeason + "'"
         };
       }
 
       view.whenLayerView(layer).then(function (layerView) {
-        // flash flood warnings layer loaded
-        // get a reference to the flood warnings layerview
+        //将layer的视图给floodLayerView，类型为FeatureLayerView
         floodLayerView = layerView;
 
-        // set up UI items
+        // 设置seasons-filter的可见性
         seasonsElement.style.visibility = "visible";
+        // 创建Expand小部件
         const seasonsExpand = new Expand({
           view: view,
           content: seasonsElement,
           expandIconClass: "esri-icon-filter",
           group: "top-left"
         });
-        //clear the filters when user closes the expand widget
+        //清除where语句，重置视图
         seasonsExpand.watch("expanded", function () {
           if (!seasonsExpand.expanded) {
             floodLayerView.filter = null;
