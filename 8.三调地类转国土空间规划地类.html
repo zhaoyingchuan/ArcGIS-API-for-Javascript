@@ -140,8 +140,8 @@
   <script>
 
     // 为“一级类”绑定change事件
-    // document这个位置上的元素必须存在于DOM树中
     // 这里的document作为一种未简写的方式，与on搭配才能为未出现的元素绑定事件
+    // 如果使用简写方式，document这个位置上的元素必须在执行事件前存在于DOM树中
     $(document).on("change", "select:eq(0)", function () {
 
       var arr1 = $('.esri-select')[0];
