@@ -1,348 +1,351 @@
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <title>三调地类转国土空间规划地类</title>
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
-    />
-    
-    <style>
-      html,
-      body,
-      #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-      }
 
-      .esri-ui .esri-editor__scroller {
-        max-height: 600px;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>三调地类转国土空间规划地类</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
 
-      .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel, .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel-height-only, .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel, .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
-        max-height: 1200px;
-      }
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
 
-      .esri-view-height-medium .esri-expand .esri-widget--panel, .esri-view-height-medium .esri-expand .esri-widget--panel-height-only, .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel, .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
-        max-height: 1200px;
-      }
+    .esri-ui .esri-editor__scroller {
+      max-height: 600px;
+    }
 
-      .esri-view .esri-view-surface--inset-outline:focus::after {
-        outline: auto 0px Highlight !important;
-        outline: auto 0px -webkit-focus-ring-color !important;
-      }
+    .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel,
+    .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel-height-only,
+    .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel,
+    .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
+      max-height: 1200px;
+    }
 
-    </style>
+    .esri-view-height-medium .esri-expand .esri-widget--panel,
+    .esri-view-height-medium .esri-expand .esri-widget--panel-height-only,
+    .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel,
+    .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
+      max-height: 1200px;
+    }
 
-    <!-- 引用ArcGIS JS API -->
-    <script src="https://js.arcgis.com/4.17/"></script>
-    <script>
-      require([
-        "esri/WebMap",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer",
-        "esri/widgets/Editor",
-        "esri/widgets/LayerList",
-      ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
+    .esri-view .esri-view-surface--inset-outline:focus::after {
+      outline: auto 0px Highlight !important;
+      outline: auto 0px -webkit-focus-ring-color !important;
+    }
+  </style>
 
-        var myFeatureLayer = new FeatureLayer({
-          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
-          definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
+  <!-- 引用ArcGIS JS API -->
+  <script src="https://js.arcgis.com/4.17/"></script>
+  <script>
+    require([
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Editor",
+      "esri/widgets/LayerList",
+    ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
+
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
+        definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
+      });
+
+      // Create a map frm the referenced webmap item id
+      var webmap = new WebMap({
+        portalItem: {
+          id: "bd10bb233d17435ca7b0e37e2135a7dd"
+        },
+        // layers: myFeatureLayer
+      });
+      webmap.add(myFeatureLayer)
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap,
+        center: [117.70, 28.31],
+        zoom: 12
+      });
+
+      var editLayer;
+      view.when(function () {
+        view.popup.autoOpenEnabled = false; //disable popups
+        // Loop through webmap layers and set an EditConfig for each
+        view.map.layers.forEach(function (layer) {
+          if (layer.title === "中心城区和乡镇") {
+            editLayer = {
+              layer: layer,
+              fieldConfig: [
+                {
+                  name: "DLBM",
+                  label: "地类编码",
+                  editable: false
+                },
+                {
+                  name: "DLMC",
+                  label: "地类名称",
+                  editable: false
+                },
+                {
+                  name: "一级类",
+                  label: "一级类",
+                  editable: true
+                },
+                {
+                  name: "二级类",
+                  label: "二级类",
+                  editable: true
+                },
+                {
+                  name: "三级类",
+                  label: "三级类",
+                  editable: true
+                }
+              ]
+            };
+          }
         });
-        
-        // Create a map frm the referenced webmap item id
-        var webmap = new WebMap({
-          portalItem: {
-            id: "bd10bb233d17435ca7b0e37e2135a7dd"
-          },
-          // layers: myFeatureLayer
-        });
-        webmap.add(myFeatureLayer)
 
-        var view = new MapView({
-          container: "viewDiv",
-          map: webmap,
-          center: [117.70,28.31],
-          zoom: 12
+        // Create the Editor
+        var editor = new Editor({
+          view: view,
+          // Pass in the configurations created above
+          layerInfos: [editLayer],
+          allowedWorkflows: ["update"],
+
         });
-        
-        var editLayer;
+
+        // Add widget to top-right of the view
+        view.ui.add(editor, "top-right");
+
         view.when(function () {
-          view.popup.autoOpenEnabled = false; //disable popups
-          // Loop through webmap layers and set an EditConfig for each
-          view.map.layers.forEach(function (layer) {
-            if (layer.title === "中心城区和乡镇") {
-              editLayer = {
-                layer: layer,
-                fieldConfig: [
-                  {
-                    name: "DLBM",
-                    label: "地类编码",
-                    editable: false
-                  },
-                  {
-                    name: "DLMC",
-                    label: "地类名称",
-                    editable: false
-                  },
-                  {
-                    name: "一级类",
-                    label: "一级类",
-                    editable: true
-                  },
-                  {
-                    name: "二级类",
-                    label: "二级类",
-                    editable: true
-                  },
-                  {
-                    name: "三级类",
-                    label: "三级类",
-                    editable: true
-                  }
-                ]
-              };
-            }
+          var layerList = new LayerList({
+            view: view
           });
-
-          // Create the Editor
-          var editor = new Editor({
-            view: view,
-            // Pass in the configurations created above
-            layerInfos: [editLayer],
-            allowedWorkflows: ["update"],
-            
-          });
-
-          // Add widget to top-right of the view
-          view.ui.add(editor, "top-right");
-
-          view.when(function () {
-            var layerList = new LayerList({
-              view: view
-            });
-            // Add widget to the top right corner of the view
-            view.ui.add(layerList, "top-right");
-          });
+          // Add widget to the top right corner of the view
+          view.ui.add(layerList, "top-right");
         });
       });
-    </script>
+    });
+  </script>
 
-    <!-- 引用jQuery -->
-    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
-    <!-- 绑定change事件 -->
-    <script>
+  <!-- 引用jQuery -->
+  <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+  <!-- 绑定change事件 -->
+  <script>
 
-      // 为“一级类”绑定change事件
-      $(document).on("change",".esri-select:eq(0)",function(){
-        
-        var arr1 = $('.esri-select')[0];
+    // 为“一级类”绑定change事件
+    // document这个位置上的元素必须存在于DOM树中
+    // 这里的document作为一种未简写的方式，与on搭配才能为未出现的元素绑定事件
+    $(document).on("change", "select:eq(0)", function () {
 
-        var arr2 = $('.esri-select')[1];
-        arr2.value=''
+      var arr1 = $('.esri-select')[0];
 
-        var arr3 = $('.esri-select')[2];
-        arr3.value=''
+      var arr2 = $('.esri-select')[1];
+      arr2.value = ''
 
-        var oplist1=arr1.children;
-        var oplist2=arr2.children;
-        var oplist3=arr3.children;
+      var arr3 = $('.esri-select')[2];
+      arr3.value = ''
 
-        var x2=0
-        for(var i=oplist2.length-1;i>=0;i--){
-          if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
-            oplist2[i].style.display='';
-            x2=x2+1
-          }else {
-            oplist2[i].style.display='none';
+      var oplist1 = arr1.children;
+      var oplist2 = arr2.children;
+      var oplist3 = arr3.children;
+
+      var x2 = 0
+      for (var i = oplist2.length - 1; i >= 0; i--) {
+        if (oplist2[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+          oplist2[i].style.display = '';
+          x2 = x2 + 1
+        } else {
+          oplist2[i].style.display = 'none';
+        }
+      }
+      if (x2 == 0) {
+        $('option[value="无"]')[0].style.display = '';
+        arr2.value = '无'
+      } else {
+        $('option[value=""]')[1].style.display = ''
+      }
+
+      var x3 = 0
+      for (var i = oplist3.length - 1; i >= 0; i--) {
+        if (oplist3[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+          oplist3[i].style.display = '';
+          x3 = x3 + 1
+        } else {
+          oplist3[i].style.display = 'none';
+        }
+      }
+      if (x3 == 0) {
+        $('option[value="无"]')[1].style.display = '';
+        arr3.value = '无'
+      } else {
+        $('option[value=""]')[2].style.display = ''
+      }
+
+      $('.esri-feature-form__field-error-message').hide();
+    })
+    // 为“二级类”绑定change事件
+    $(document).on("change", "select:eq(1)", function () {
+
+      var arr1 = $('.esri-select')[0];
+
+      var arr2 = $('.esri-select')[1];
+
+      var arr3 = $('.esri-select')[2];
+      arr3.value = ''
+
+      var oplist1 = arr1.children;
+      var oplist2 = arr2.children;
+      var oplist3 = arr3.children;
+
+
+      for (var i = oplist1.length - 1; i >= 0; i--) {
+        if (oplist1[i].value.substring(0, 2) == arr2.value.substring(0, 2) && arr2.value != '') {
+          // oplist1[i].style.display='';
+          arr1.value = oplist1[i].value
+        } else {
+          // oplist1[i].style.display='none';
+        }
+      }
+
+      var x3 = 0
+      for (var i = oplist3.length - 1; i >= 0; i--) {
+        if (oplist3[i].value.substring(0, 4) == arr2.value.substring(0, 4)) {
+          oplist3[i].style.display = '';
+          x3 = x3 + 1
+        } else {
+          oplist3[i].style.display = 'none';
+        }
+      }
+      if (x3 == 0) {
+        $('option[value="无"]')[1].style.display = '';
+        arr3.value = '无'
+      } else {
+        $('option[value=""]')[2].style.display = ''
+      }
+
+      $('.esri-feature-form__field-error-message').hide();
+    })
+
+    // 为“二级类”绑定click事件
+    $(document).on("click touchstart", "select:eq(1)", function () {
+
+      var arr1 = $('.esri-select')[0];
+
+      var arr2 = $('.esri-select')[1];
+
+      var arr3 = $('.esri-select')[2];
+
+      var oplist1 = arr1.children;
+      var oplist2 = arr2.children;
+      var oplist3 = arr3.children;
+
+      var x2 = 0
+      for (var i = oplist2.length - 1; i >= 0; i--) {
+        if (oplist2[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+          oplist2[i].style.display = '';
+          x2 = x2 + 1
+        } else {
+          oplist2[i].style.display = 'none';
+        }
+      }
+      if (x2 == 0) {
+        $('option[value="无"]')[0].style.display = '';
+        arr2.value = '无'
+      } else {
+        $('option[value=""]')[1].style.display = ''
+      }
+      $('.esri-feature-form__field-error-message').hide();
+    })
+
+
+    // 为“三级类”绑定change事件
+    $(document).on("change", "select:eq(2)", function () {
+      var arr1 = $('.esri-select')[0];
+
+      var arr2 = $('.esri-select')[1];
+
+      var arr3 = $('.esri-select')[2];
+
+
+      var oplist1 = arr1.children;
+      var oplist2 = arr2.children;
+      var oplist3 = arr3.children;
+
+      for (var i = oplist1.length - 1; i >= 0; i--) {
+        if (oplist1[i].value.substring(0, 2) == arr3.value.substring(0, 2) && arr3.value != '' && arr3.value != '无') {
+          // oplist1[i].style.display='';
+          arr1.value = oplist1[i].value
+        } else {
+          // oplist1[i].style.display='none';
+        }
+      }
+
+      for (var i = oplist2.length - 1; i >= 0; i--) {
+        if (oplist2[i].value.substring(0, 4) == arr3.value.substring(0, 4) && arr3.value != '' && arr3.value != '无') {
+          // oplist2[i].style.display='';
+          arr2.value = oplist2[i].value
+        } else {
+          // oplist2[i].style.display='none';
+        }
+      }
+
+      $('.esri-feature-form__field-error-message').hide();
+    })
+
+    // 为“三级类”绑定click事件
+    $(document).on("click touchstart", "select:eq(2)", function () {
+      var arr1 = $('.esri-select')[0];
+
+      var arr2 = $('.esri-select')[1];
+
+      var arr3 = $('.esri-select')[2];
+
+
+      var oplist1 = arr1.children;
+      var oplist2 = arr2.children;
+      var oplist3 = arr3.children;
+
+      var x3 = 0
+      if (arr2.value != '') {
+        for (var i = oplist3.length - 1; i >= 0; i--) {
+          if (oplist3[i].value.substring(0, 4) == arr2.value.substring(0, 4)) {
+            oplist3[i].style.display = '';
+            x3 = x3 + 1
+          } else {
+            oplist3[i].style.display = 'none';
           }
         }
-        if(x2==0){
-          $('option[value="无"]')[0].style.display='';
-          arr2.value='无'
-        }else{
-          $('option[value=""]')[1].style.display=''
-        }
-
-        var x3=0
-        for(var i=oplist3.length-1;i>=0;i--){
-          if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
-            oplist3[i].style.display='';
-            x3=x3+1
-          }else {
-            oplist3[i].style.display='none';
+      } else {
+        for (var i = oplist3.length - 1; i >= 0; i--) {
+          if (oplist3[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+            oplist3[i].style.display = '';
+            x3 = x3 + 1
+          } else {
+            oplist3[i].style.display = 'none';
           }
         }
-        if(x3==0){
-          $('option[value="无"]')[1].style.display='';
-          arr3.value='无'
-        }else{
-          $('option[value=""]')[2].style.display=''
-        }
+      }
+      if (x3 == 0 || x3 == 1) {
+        $('option[value="无"]')[1].style.display = '';
+        arr3.value = '无'
+      } else {
+        $('option[value=""]')[2].style.display = ''
+      }
+      $('.esri-feature-form__field-error-message').hide();
+    })
 
-        $('.esri-feature-form__field-error-message').hide();
-　　　})
-      // 为“二级类”绑定change事件
-      $(document).on("change",".esri-select:eq(1)",function(){
+  </script>
+</head>
 
-        var arr1 = $('.esri-select')[0];
+<body>
+  <div id="viewDiv"></div>
+</body>
 
-        var arr2 = $('.esri-select')[1];
-
-        var arr3 = $('.esri-select')[2];
-        arr3.value=''
-
-        var oplist1=arr1.children;
-        var oplist2=arr2.children;
-        var oplist3=arr3.children;
-
-        
-        for(var i=oplist1.length-1;i>=0;i--){
-          if(oplist1[i].value.substring(0,2)==arr2.value.substring(0,2)&&arr2.value!=''){
-            // oplist1[i].style.display='';
-            arr1.value=oplist1[i].value
-          }else {
-            // oplist1[i].style.display='none';
-          }
-        }
-
-        var x3=0
-        for(var i=oplist3.length-1;i>=0;i--){
-          if(oplist3[i].value.substring(0,4)==arr2.value.substring(0,4)){
-            oplist3[i].style.display='';
-            x3=x3+1
-          }else {
-            oplist3[i].style.display='none';
-          }
-        }
-        if(x3==0){
-          $('option[value="无"]')[1].style.display='';
-          arr3.value='无'
-        }else{
-          $('option[value=""]')[2].style.display=''
-        }
-
-        $('.esri-feature-form__field-error-message').hide();
-　　　})
-
-      // 为“二级类”绑定click事件
-      $(document).on("click touchstart",".esri-select:eq(1)",function(){
-
-        var arr1 = $('.esri-select')[0];
-
-        var arr2 = $('.esri-select')[1];
-
-        var arr3 = $('.esri-select')[2];
-
-        var oplist1=arr1.children;
-        var oplist2=arr2.children;
-        var oplist3=arr3.children;
-
-        var x2=0
-        for(var i=oplist2.length-1;i>=0;i--){
-          if(oplist2[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
-            oplist2[i].style.display='';
-            x2=x2+1
-          }else {
-            oplist2[i].style.display='none';
-          }
-        }
-        if(x2==0){
-          $('option[value="无"]')[0].style.display='';
-          arr2.value='无'
-        }else{
-          $('option[value=""]')[1].style.display=''
-        }
-        $('.esri-feature-form__field-error-message').hide();
-　　　})
-      
-
-      // 为“三级类”绑定change事件
-      $(document).on("change",".esri-select:eq(2)",function(){
-        var arr1 = $('.esri-select')[0];
-
-        var arr2 = $('.esri-select')[1];
-
-        var arr3 = $('.esri-select')[2];
-        
-
-        var oplist1=arr1.children;
-        var oplist2=arr2.children;
-        var oplist3=arr3.children;
-
-        for(var i=oplist1.length-1;i>=0;i--){
-          if(oplist1[i].value.substring(0,2)==arr3.value.substring(0,2)&&arr3.value!=''&&arr3.value!='无'){
-            // oplist1[i].style.display='';
-            arr1.value=oplist1[i].value
-          }else {
-            // oplist1[i].style.display='none';
-          }
-        }
-
-        for(var i=oplist2.length-1;i>=0;i--){
-          if(oplist2[i].value.substring(0,4)==arr3.value.substring(0,4)&&arr3.value!=''&&arr3.value!='无'){
-            // oplist2[i].style.display='';
-            arr2.value=oplist2[i].value
-          }else {
-            // oplist2[i].style.display='none';
-          }
-        }
-
-        $('.esri-feature-form__field-error-message').hide();
-　　　})
-
-      // 为“三级类”绑定click事件
-      $(document).on("click touchstart",".esri-select:eq(2)",function(){
-        var arr1 = $('.esri-select')[0];
-
-        var arr2 = $('.esri-select')[1];
-
-        var arr3 = $('.esri-select')[2];
-        
-
-        var oplist1=arr1.children;
-        var oplist2=arr2.children;
-        var oplist3=arr3.children;
-        
-        var x3=0
-        if(arr2.value!=''){
-          for(var i=oplist3.length-1;i>=0;i--){
-            if(oplist3[i].value.substring(0,4)==arr2.value.substring(0,4)){
-              oplist3[i].style.display='';
-              x3=x3+1
-            }else {
-              oplist3[i].style.display='none';
-            }
-          }
-        }else{
-          for(var i=oplist3.length-1;i>=0;i--){
-            if(oplist3[i].value.substring(0,2)==arr1.value.substring(0,2)||arr1.value==''){
-              oplist3[i].style.display='';
-              x3=x3+1
-            }else {
-              oplist3[i].style.display='none';
-            }
-          }
-        }
-        if(x3==0||x3==1){
-          $('option[value="无"]')[1].style.display='';
-          arr3.value='无'
-        }else{
-          $('option[value=""]')[2].style.display=''
-        }
-        $('.esri-feature-form__field-error-message').hide();
-　　　})
-
-    </script>
-  </head>
-
-  <body>
-    <div id="viewDiv"></div>
-  </body>
 </html>
