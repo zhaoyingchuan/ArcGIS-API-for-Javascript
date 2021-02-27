@@ -17,21 +17,14 @@
     }
 
     .esri-ui .esri-editor__scroller {
-      max-height: 600px;
-    }
-
-    .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel,
-    .esri-view-height-greater-than-medium .esri-expand .esri-widget--panel-height-only,
-    .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel,
-    .esri-view-height-greater-than-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
-      max-height: 1200px;
+      max-height: 500px;
     }
 
     .esri-view-height-medium .esri-expand .esri-widget--panel,
     .esri-view-height-medium .esri-expand .esri-widget--panel-height-only,
     .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel,
     .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
-      max-height: 1200px;
+      max-height: 1000px;
     }
 
     .esri-view .esri-view-surface--inset-outline:focus::after {
@@ -42,6 +35,7 @@
 
   <!-- 引用ArcGIS JS API -->
   <script src="https://js.arcgis.com/4.17/"></script>
+
   <script>
     require([
       "esri/WebMap",
@@ -51,23 +45,21 @@
       "esri/widgets/LayerList",
     ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
 
-      var myFeatureLayer = new FeatureLayer({
+      var myLayer = new FeatureLayer({
         url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
         definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
       });
 
-      // Create a map frm the referenced webmap item id
-      var webmap = new WebMap({
-        portalItem: {
-          id: "bd10bb233d17435ca7b0e37e2135a7dd"
-        },
-        // layers: myFeatureLayer
+      var webMap = new WebMap({
+        // portalItem: {
+        //   id: "bd10bb233d17435ca7b0e37e2135a7dd"
+        // },
+        layers: myLayer
       });
-      webmap.add(myFeatureLayer)
 
       var view = new MapView({
         container: "viewDiv",
-        map: webmap,
+        map: webMap,
         center: [117.70, 28.31],
         zoom: 12
       });
@@ -76,58 +68,50 @@
       view.when(function () {
         view.popup.autoOpenEnabled = false; //disable popups
         // Loop through webmap layers and set an EditConfig for each
-        view.map.layers.forEach(function (layer) {
-          if (layer.title === "中心城区和乡镇") {
-            editLayer = {
-              layer: layer,
-              fieldConfig: [
-                {
-                  name: "DLBM",
-                  label: "地类编码",
-                  editable: false
-                },
-                {
-                  name: "DLMC",
-                  label: "地类名称",
-                  editable: false
-                },
-                {
-                  name: "一级类",
-                  label: "一级类",
-                  editable: true
-                },
-                {
-                  name: "二级类",
-                  label: "二级类",
-                  editable: true
-                },
-                {
-                  name: "三级类",
-                  label: "三级类",
-                  editable: true
-                }
-              ]
-            };
-          }
-        });
-
+        editLayer = {
+          layer: myLayer,
+          fieldConfig: [
+            {
+              name: "DLBM",
+              label: "地类编码",
+              editable: false
+            },
+            {
+              name: "DLMC",
+              label: "地类名称",
+              editable: false
+            },
+            {
+              name: "一级类",
+              label: "一级类",
+              editable: true
+            },
+            {
+              name: "二级类",
+              label: "二级类",
+              editable: true
+            },
+            {
+              name: "三级类",
+              label: "三级类",
+              editable: true
+            },
+          ]
+        };
         // Create the Editor
         var editor = new Editor({
           view: view,
           // Pass in the configurations created above
           layerInfos: [editLayer],
           allowedWorkflows: ["update"],
-
         });
-
         // Add widget to top-right of the view
         view.ui.add(editor, "top-right");
-
+        // Add widget to the top right corner of the view
         view.when(function () {
           var layerList = new LayerList({
             view: view
           });
-          // Add widget to the top right corner of the view
           view.ui.add(layerList, "top-right");
         });
       });
