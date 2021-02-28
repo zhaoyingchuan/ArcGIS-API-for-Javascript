@@ -23,7 +23,7 @@
         padding: 0.5em;
         background-color: #fff;
       }
-      #mainWindow p,
+      /* #mainWindow p, */
       #uploadForm {
         display: block;
         padding: 0.1em;
@@ -63,9 +63,8 @@
           .addEventListener("change", function (event) {
             var fileName = event.target.value.toLowerCase();
 
-            //indexOf方法判断fileName中是否存在.zip字符，不存在时返回-1
             if (fileName.indexOf(".zip") !== -1) {
-              // 条件为真，执行generateFeatureCollection函数
+              //is file a zip - if not notify user
               generateFeatureCollection(fileName);
             } else {
               document.getElementById("upload-status").innerHTML =
@@ -82,9 +81,9 @@
           zoom: 2,
           map: map,
           container: "viewDiv",
-          // popup: {
-          //   defaultPopupTemplateEnabled: true
-          // }
+          popup: {
+            defaultPopupTemplateEnabled: true
+          }
         });
 
         var fileForm = document.getElementById("mainWindow");
@@ -186,29 +185,10 @@
 
   <body>
     <div id="mainWindow">
-      <div>
-        <div style="padding-left: 4px">
-          <p>
-            Download shapefile from
-            <a
-              href="https://bsvensson.github.io/various-tests/shp/drp_county_boundary.zip"
-              >here.</a
-            >
-          </p>
-          <p>Add a zipped shapefile to the map.</p>
-          <p>
-            Visit the
-            <a
-              target="_blank"
-              href="https://doc.arcgis.com/en/arcgis-online/reference/shapefiles.htm"
-              >Shapefiles</a
-            >
-            help topic for information and limitations.
-          </p>
-          <form enctype="multipart/form-data" method="post" id="uploadForm">
+      <form enctype="multipart/form-data" method="post" id="uploadForm">
             <div class="field">
               <label class="file-upload">
-                <span><strong>Add File</strong></span>
+                <!-- <span><strong>Add File</strong></span> -->
                 <input type="file" name="file" id="inFile" />
               </label>
             </div>
@@ -218,9 +198,6 @@
             style="opacity: 1"
             id="upload-status"
           ></span>
-          <div id="fileInfo"></div>
-        </div>
-      </div>
     </div>
     <div id="viewDiv"></div>
   </body>

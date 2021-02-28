@@ -25,34 +25,15 @@
     <script src="https://js.arcgis.com/4.17/"></script>
  
     <script>
-      require(["esri/Map", "esri/views/MapView","esri/layers/WebTileLayer","esri/layers/FeatureLayer"], function(Map, MapView,WebTileLayer,FeatureLayer) {
-    
-        var tiledLayer = new WebTileLayer({
-          urlTemplate:
-            "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
-        });
- 
-        var tiledLayer_poi = new WebTileLayer({
-          urlTemplate:
-            "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
-          subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
-        });
-        
-        var map = new Map({
-          basemap: {
-            baseLayers: [tiledLayer, tiledLayer_poi]
-          }
-        });
- 
-        var view = new MapView({
-          container: "viewDiv",
-          map: map,
-          zoom: 13,
-          center: [117.70,28.31] // longitude, latitude
-        });
-
+      require([
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/layers/WebTileLayer",
+        "esri/layers/FeatureLayer"
+      ], function(Map, MapView,WebTileLayer,FeatureLayer) {
+        // 顺序很重要
         var popupXZQ = {
-          title: "信息",
+          title: "铅山县乡镇",
           content: [{
             "type": "fields",
             "fieldInfos": [
@@ -79,15 +60,24 @@
               },
             ]
           }]
-       }
-
-        var xzxzqLayer = new FeatureLayer({
-          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/%E9%93%85%E5%B1%B1%E5%8E%BF%E4%B9%A1%E9%95%87/FeatureServer",
-          outFields: ["XZQMC","Shape__Area"],
+        }
+        
+        var layer = new FeatureLayer({
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/铅山县乡镇/FeatureServer",
+          // outFields: ["XZQMC","Shape__Area"],
           popupTemplate: popupXZQ
         });
 
-        map.add(xzxzqLayer);
+        var map = new Map({
+          layers:layer
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 13,
+          center: [117.70,28.31] // longitude, latitude
+        });
       });
     </script>
   </head>

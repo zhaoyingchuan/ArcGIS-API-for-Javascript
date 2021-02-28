@@ -26,15 +26,12 @@
       var layer = new FeatureLayer({
         // 使用要素图层的链接而不是portalItem可以使弹窗包含图层名
         // 使用纯文本的链接，避免ASCII码形式的链接使默认的弹窗中内容显示异常
-        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
-        // outFields: ["XZQMC"],
+        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/铅山县乡镇/FeatureServer",
       });
 
-      //图层需要直接放在Map的layers属性中，不能使用add方法加入
       var map = new Map({
         layers: [layer],
       });
-
 
       var view = new MapView({
         container: "viewDiv",
