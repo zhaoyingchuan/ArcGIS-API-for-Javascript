@@ -40,33 +40,29 @@
           container: "viewDiv",
           map: webmap,
           center: [117.70, 28.31],
-          zoom: 12,
-          popup: {
-            defaultPopupTemplateEnabled: true
-          },
+          zoom: 12
         });
 
-        var layer = new FeatureLayer({
+        var layer1 = new FeatureLayer({
           url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/省厅下发城镇开发边界修改/FeatureServer/1",
         });
 
-        webmap.add(layer);
+        // var layer2 = new FeatureLayer({
+        //   url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
+        // });
+
+        webmap.addMany([layer1]);
 
         view.when(function () {
-          // get the first layer in the collection of operational layers in the WebMap
-          // when the resources in the MapView have loaded.
-
           var legend = new Legend({
             view: view,
             layerInfos: [
               {
-                layer: layer,
-                title: "NY Educational Attainment"
+                layer: [layer1],
+                title: "图例"
               }
             ]
           });
-
-          // Add widget to the bottom right corner of the view
           view.ui.add(legend, "bottom-right");
         });
       });
