@@ -1,17 +1,41 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <style>p { color:red; }</style>
-  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>通过id加载WebMap</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
+
   <script>
-  $(document).ready(function () {
-  $("p").text("The DOM is now loaded and can be manipulated.");
-});
+    require([
+      "esri/WebMap",
+      "esri/views/MapView"
+    ], function(WebMap, MapView) {
+
+      var webmap = new WebMap({
+        portalItem: {
+          id: "1d159aa6853848d1ae1bec91a461162f"
+        }
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap
+      });
+      
+    });
   </script>
- 
 </head>
 <body>
-  <p>Not loaded yet.</p>
- 
+  <div id="viewDiv"></div>
 </body>
 </html>
