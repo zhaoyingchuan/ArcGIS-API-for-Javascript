@@ -34,8 +34,8 @@
     
         var webmap = new WebMap({
           portalItem: {
-            id: "bd10bb233d17435ca7b0e37e2135a7dd"
-        }
+            id: "bd10bb233d17435ca7b0e37e2135a7dd"//天地图影像和天地图标注
+          }
         });
 
         var view = new MapView({
@@ -45,21 +45,21 @@
           zoom: 12
         });
 
-        var layer1 = new FeatureLayer({
+        var layer = new FeatureLayer({
           url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/省厅下发城镇开发边界修改/FeatureServer/1",
         });
 
-        webmap.addMany([layer1]);
+        webmap.add(layer);
 
         view.when(function () {
           var legend = new Legend({
             view: view,
-            layerInfos: [
-              {
-                layer: [layer1],
-                title: "图例"
-              }
-            ]
+            // layerInfos: [
+            //   {
+            //     layer: [layer],
+            //     // title: "图例"
+            //   }
+            // ]
           });
           view.ui.add(legend, "bottom-right");
         });
