@@ -6,7 +6,7 @@
       name="viewport"
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <title>加载ArcGIS Online图层</title>
+    <title>创建图例</title>
     <style>
       html,
       body,
@@ -33,7 +33,9 @@
       ], function(WebMap, MapView, Legend, FeatureLayer) {
     
         var webmap = new WebMap({
-          basemap: "dark-gray-vector"
+          portalItem: {
+            id: "bd10bb233d17435ca7b0e37e2135a7dd"
+        }
         });
 
         var view = new MapView({
@@ -46,10 +48,6 @@
         var layer1 = new FeatureLayer({
           url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/省厅下发城镇开发边界修改/FeatureServer/1",
         });
-
-        // var layer2 = new FeatureLayer({
-        //   url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
-        // });
 
         webmap.addMany([layer1]);
 
