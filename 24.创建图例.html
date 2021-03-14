@@ -29,8 +29,9 @@
         "esri/WebMap", 
         "esri/views/MapView",
         "esri/widgets/Legend", 
+        "esri/widgets/Expand",
         "esri/layers/FeatureLayer",
-      ], function(WebMap, MapView, Legend, FeatureLayer) {
+      ], function(WebMap, MapView, Legend, Expand, FeatureLayer) {
     
         var webmap = new WebMap({
           portalItem: {
@@ -46,23 +47,20 @@
         });
 
         var layer = new FeatureLayer({
-          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/省厅下发城镇开发边界修改/FeatureServer/1",
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/修改后城镇开发边界/FeatureServer/1",
         });
 
         webmap.add(layer);
 
-        view.when(function () {
-          var legend = new Legend({
+        const legend = new Expand({
+          content: new Legend({
             view: view,
-            // layerInfos: [
-            //   {
-            //     layer: [layer],
-            //     // title: "图例"
-            //   }
-            // ]
-          });
-          view.ui.add(legend, "bottom-right");
+            // style: "card" // other styles include 'classic'
+          }),
+          view: view,
+          expanded: true
         });
+        view.ui.add(legend, "bottom-right");
       });
     </script>
   </head>
