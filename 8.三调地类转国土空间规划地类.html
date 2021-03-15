@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>三调地类转国土空间规划地类</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
 
   <style>
     html,
@@ -34,7 +34,7 @@
   </style>
 
   <!-- 引用ArcGIS JS API -->
-  <script src="https://js.arcgis.com/4.17/"></script>
+  <script src="https://js.arcgis.com/4.18/"></script>
 
   <script>
     require([
@@ -133,58 +133,64 @@
     // 如果使用简写方式，document这个位置上的元素必须在执行事件前存在于DOM树中
 
     // var father = document.querySelector('#viewDiv');
-    // father.addEventListener('click', function() {
-    //   alert('father');
+    // father.addEventListener('change', function() {
+    //   // alert('father');
     // }, true);
 
-    var father = document.querySelectorAll('#viewDiv')[0];
-    father.addEventListener('change', function() {
-      // alert('father');
-      var arr1 = document.querySelectorAll('.esri-select')[0];
+    var father = document.querySelector('#viewDiv');
+    father.addEventListener('change', function(e) {
+      // alert('son');
+      // console.log(e.target.parentNode);
+      if(e.target.parentNode.firstChild.data=="一级类"){
+        console.log(e.target);
+        var arr1 = document.querySelectorAll('.esri-select')[0];
 
-      var arr2 = document.querySelectorAll('.esri-select')[1];
-      arr2.value = ''
+        var arr2 = document.querySelectorAll('.esri-select')[1];
+        arr2.value = ''
 
-      var arr3 = document.querySelectorAll('.esri-select')[2];
-      arr3.value = ''
+        var arr3 = document.querySelectorAll('.esri-select')[2];
+        arr3.value = ''
 
-      var oplist1 = arr1.children;
-      var oplist2 = arr2.children;
-      var oplist3 = arr3.children;
+        var oplist1 = arr1.children;
+        var oplist2 = arr2.children;
+        var oplist3 = arr3.children;
 
-      var x2 = 0
-      for (var i = oplist2.length - 1; i >= 0; i--) {
-        if (oplist2[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
-          oplist2[i].style.display = '';
-          x2 = x2 + 1
-        } else {
-          oplist2[i].style.display = 'none';
+        var x2 = 0
+        for (var i = oplist2.length - 1; i >= 0; i--) {
+          if (oplist2[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+            oplist2[i].style.display = '';
+            x2 = x2 + 1
+          } else {
+            oplist2[i].style.display = 'none';
+          }
         }
-      }
-      if (x2 == 0) {
-        document.querySelectorAll('option[value="无"]')[0].style.display = '';
-        arr2.value = '无'
-      } else {
-        document.querySelectorAll('option[value=""]')[1].style.display = ''
-      }
-
-      var x3 = 0
-      for (var i = oplist3.length - 1; i >= 0; i--) {
-        if (oplist3[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
-          oplist3[i].style.display = '';
-          x3 = x3 + 1
+        if (x2 == 0) {
+          document.querySelectorAll('option[value="无"]')[0].style.display = '';
+          arr2.value = '无'
         } else {
-          oplist3[i].style.display = 'none';
+          document.querySelectorAll('option[value=""]')[1].style.display = ''
         }
-      }
-      if (x3 == 0) {
-        document.querySelectorAll('option[value="无"]')[1].style.display = '';
-        arr3.value = '无'
-      } else {
+
+        var x3 = 0
+        for (var i = oplist3.length - 1; i >= 0; i--) {
+          if (oplist3[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+            oplist3[i].style.display = '';
+            x3 = x3 + 1
+          } else {
+            oplist3[i].style.display = 'none';
+          }
+        }
+        if (x3 == 0) {
+          document.querySelectorAll('option[value="无"]')[1].style.display = '';
+          arr3.value = '无'
+        } else {
         document.querySelectorAll('option[value=""]')[2].style.display = ''
-      }
+        }
 
-      document.querySelectorAll('.esri-feature-form__field-error-message').style.display='none';
+      // document.querySelectorAll('.esri-feature-form__field-error-message').hide();
+      }
+      
+      
     }, true);
     
     // // 为“二级类”绑定change事件
