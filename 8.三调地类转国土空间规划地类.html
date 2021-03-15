@@ -51,9 +51,9 @@
       });
 
       var webMap = new WebMap({
-        // portalItem: {
-        //   id: "bd10bb233d17435ca7b0e37e2135a7dd"
-        // },
+        portalItem: {
+          id: "bd10bb233d17435ca7b0e37e2135a7dd"
+        },
         layers: [myLayer],
       });
 
@@ -141,7 +141,7 @@
     //原生JS方法
     var father = document.querySelector('#viewDiv');
     father.addEventListener('change', function(e) {
-      
+
       if(e.target.parentNode.firstChild.data=="一级类"){
 
         var arr1 = document.querySelectorAll('.esri-select')[0];
