@@ -121,19 +121,25 @@
   <!-- 引用jQuery -->
   <!-- <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script> -->
   <!-- 绑定change事件 -->
-  <script>
+  
+</head>
 
+<body>
+  <div id="viewDiv"></div>
+
+  <script>
     // 为“一级类”绑定change事件
     // 这里的document作为一种未简写的方式，与on搭配才能为未出现的元素绑定事件
     // 如果使用简写方式，document这个位置上的元素必须在执行事件前存在于DOM树中
 
-    var father = document.querySelector('.esri-overlay-surface');
-    father.addEventListener('click', function() {
-        alert('father');
-    }, true);
+    // var father = document.querySelector('#viewDiv');
+    // father.addEventListener('click', function() {
+    //   alert('father');
+    // }, true);
 
-    var son = document.querySelector('.esri-select');
-    son.addEventListener('click', function() {
+    var father = document.querySelectorAll('#viewDiv')[0];
+    father.addEventListener('change', function() {
+      // alert('father');
       var arr1 = document.querySelectorAll('.esri-select')[0];
 
       var arr2 = document.querySelectorAll('.esri-select')[1];
@@ -333,10 +339,6 @@
     // })
 
   </script>
-</head>
-
-<body>
-  <div id="viewDiv"></div>
 </body>
 
 </html>
