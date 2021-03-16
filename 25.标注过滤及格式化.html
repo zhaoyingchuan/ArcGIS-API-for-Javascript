@@ -31,7 +31,8 @@
         "esri/widgets/Legend", 
         "esri/widgets/Expand",
         "esri/layers/FeatureLayer",
-      ], function(WebMap, MapView, Legend, Expand, FeatureLayer) {
+        "esri/widgets/LayerList",
+      ], function(WebMap, MapView, Legend, Expand, FeatureLayer, LayerList) {
     
         var webmap = new WebMap({
           portalItem: {
@@ -67,12 +68,20 @@
           where: "Shape__Area>10000"
         };
 
-        var layer = new FeatureLayer({
-          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/修改后城镇开发边界2/FeatureServer/1",
-          labelingInfo: [labelClass]
+        var layer1 = new FeatureLayer({
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/修改后城镇开发边界1/FeatureServer/1",
+          labelingInfo: [labelClass],
+          title: "城镇开发边界（低方案）",
         });
 
-        webmap.add(layer);
+        var layer2 = new FeatureLayer({
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/修改后城镇开发边界2/FeatureServer/1",
+          labelingInfo: [labelClass],
+          title: "城镇开发边界（高方案）",
+        });
+        
+
+        webmap.addMany([layer1,layer2]);
 
         const legend = new Expand({
           content: new Legend({
@@ -84,6 +93,13 @@
         });
 
         view.ui.add(legend, "bottom-right");
+
+        var layerList = new LayerList({
+            view: view
+          });
+
+          // Add widget to the top right corner of the view
+          view.ui.add(layerList, "top-right");
       });
     </script>
   </head>
