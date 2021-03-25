@@ -26,8 +26,8 @@
       var layer = new FeatureLayer({
         // 使用要素图层的链接而不是portalItem可以使弹窗包含图层名
         // 使用纯文本的链接，避免ASCII码形式的链接使默认的弹窗中内容显示异常
-        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/铅山县乡镇/FeatureServer",
-        outFields: ["XZQMC","Shape__Area"],
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/省域/FeatureServer/0",
+        // outFields: ["XZQMC","Shape__Area"],
       });
 
       var map = new Map({
@@ -44,24 +44,24 @@
         },
       });
 
-      view.whenLayerView(layer).then(function(layerView){
-        layerView.watch("updating", function(value){
-          // availableFields will become available
-          // once the layer view finishes updating
-          if (!value) {
-            layerView.queryFeatures({
-              outFields: layerView.availableFields,
-              // where: "DEW_POINT > 10"
-            })
-            .then(function(results) {
-              console.log(results.features.length, " features returned");
-            })
-            .catch(function(error) {
-              console.log("query failed: ", error);
-            });
-          }
-        });
-      });
+      // view.whenLayerView(layer).then(function(layerView){
+      //   layerView.watch("updating", function(value){
+      //     // availableFields will become available
+      //     // once the layer view finishes updating
+      //     if (!value) {
+      //       layerView.queryFeatures({
+      //         outFields: layerView.availableFields,
+      //         // where: "DEW_POINT > 10"
+      //       })
+      //       .then(function(results) {
+      //         console.log(results.features.length, " features returned");
+      //       })
+      //       .catch(function(error) {
+      //         console.log("query failed: ", error);
+      //       });
+      //     }
+      //   });
+      // });
 
     });
   </script>
