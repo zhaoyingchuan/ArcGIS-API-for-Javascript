@@ -20,49 +20,33 @@
   <script src="https://js.arcgis.com/4.17/"></script>
 
   <script>
-    require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer"], function (Map, MapView, FeatureLayer) {
+    require([
+      "esri/Map", 
+      "esri/views/MapView", 
+      "esri/layers/FeatureLayer"
+    ], function (Map, MapView, FeatureLayer) {
 
-      //为了自动显示弹框，加载图层需要使用portalItem的方法
+      var webmap = new WebMap({
+        portalItem: {
+          id: "bd10bb233d17435ca7b0e37e2135a7dd"
+        }
+      });
+
       var layer = new FeatureLayer({
-        // 使用要素图层的链接而不是portalItem可以使弹窗包含图层名
-        // 使用纯文本的链接，避免ASCII码形式的链接使默认的弹窗中内容显示异常
         url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/市域/FeatureServer/0",
-        // outFields: ["XZQMC","Shape__Area"],
       });
 
-      var map = new Map({
-        layers: [layer],
-      });
+      webmap.add(layer)
 
       var view = new MapView({
         container: "viewDiv",
-        map: map,
+        map: webmap,
         zoom: 5,
         center: [117.70, 28.31],
         popup: {
           defaultPopupTemplateEnabled: true
         },
       });
-
-      // view.whenLayerView(layer).then(function(layerView){
-      //   layerView.watch("updating", function(value){
-      //     // availableFields will become available
-      //     // once the layer view finishes updating
-      //     if (!value) {
-      //       layerView.queryFeatures({
-      //         outFields: layerView.availableFields,
-      //         // where: "DEW_POINT > 10"
-      //       })
-      //       .then(function(results) {
-      //         console.log(results.features.length, " features returned");
-      //       })
-      //       .catch(function(error) {
-      //         console.log("query failed: ", error);
-      //       });
-      //     }
-      //   });
-      // });
-
     });
   </script>
 </head>
