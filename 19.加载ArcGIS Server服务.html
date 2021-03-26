@@ -21,7 +21,8 @@
       "esri/views/MapView",
       "esri/layers/FeatureLayer",
       "esri/config",
-    ], function(WebMap, MapView, FeatureLayer, esriConfig) {
+      "esri/widgets/Editor",
+    ], function(WebMap, MapView, FeatureLayer, esriConfig, Editor) {
       
       esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
 
@@ -40,11 +41,19 @@
         container: "viewDiv",
         map: webmap,
         center: [117.70,28.31],
-        zoom: 5,
+        zoom: 7,
         popup: {
           defaultPopupTemplateEnabled: true
         },
       });
+
+      var editor = new Editor({
+        view: view,
+        allowedWorkflows: ["update"],
+      });
+
+      // Add widget to the view
+      view.ui.add(editor, "top-right");
     });
   </script>
 </head>
