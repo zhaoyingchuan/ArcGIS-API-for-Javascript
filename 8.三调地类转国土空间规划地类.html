@@ -5,6 +5,8 @@
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>三调地类转国土空间规划地类</title>
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+  <!-- 引用ArcGIS JS API -->
+  <script src="https://js.arcgis.com/4.18/"></script>
 
   <style>
     html,
@@ -33,9 +35,6 @@
     }
   </style>
 
-  <!-- 引用ArcGIS JS API -->
-  <script src="https://js.arcgis.com/4.18/"></script>
-
   <script>
     require([
       "esri/WebMap",
@@ -43,7 +42,8 @@
       "esri/layers/FeatureLayer",
       "esri/widgets/Editor",
       "esri/widgets/LayerList",
-    ], function (WebMap, MapView, FeatureLayer, Editor, LayerList) {
+      "esri/widgets/Compass",
+    ], function (WebMap, MapView, FeatureLayer, Editor, LayerList, Compass) {
 
       var myLayer = new FeatureLayer({
         url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
@@ -115,11 +115,15 @@
           view.ui.add(layerList, "top-right");
         });
       });
+
+      var compassWidget = new Compass({
+        view: view
+      });
+
+      // Add the Compass widget to the top left corner of the view
+      view.ui.add(compassWidget, "top-left");
     });
   </script>
-
-  
-  
 </head>
 
 <body>
