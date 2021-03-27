@@ -1,0 +1,93 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>加载ArcGIS Server服务</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">  
+  <script src="https://js.arcgis.com/4.17/"></script>
+
+  <script>
+    require([
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/config",
+      "esri/widgets/Compass",
+      "esri/widgets/Legend", 
+      "esri/widgets/Expand",
+      "esri/widgets/LayerList",
+      "esri/widgets/ScaleBar",
+    ], function(WebMap, MapView, FeatureLayer, esriConfig, Compass, Legend, Expand, LayerList,ScaleBar) {
+      
+      esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
+
+      var webmap = new WebMap({
+        portalItem: {
+          id: "a3bd4859777046208f079d45c7a38842"
+        }
+      });
+
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/市域/FeatureServer/0",
+      });
+      webmap.add(myFeatureLayer)
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap,
+        center: [117.70,28.31],
+        zoom: 7,
+        popup: {
+          defaultPopupTemplateEnabled: true
+        },
+      });
+
+      var compassWidget = new Compass({
+        view: view
+      });
+
+      // Add the Compass widget to the top left corner of the view
+      view.ui.add(compassWidget, "top-left");
+
+      const legend = new Expand({
+        content: new Legend({
+          view: view,
+          // style: "card" // other styles include 'classic'
+        }),
+        view: view,
+        expanded: true
+      });
+
+      view.ui.add(legend, "bottom-right");
+
+      var layerList = new LayerList({
+        view: view
+      });
+
+      // Add widget to the top right corner of the view
+      view.ui.add(layerList, "top-right");
+
+      var scaleBar = new ScaleBar({
+        view: view,
+        unit: "dual",
+      });
+      // Add widget to the bottom left corner of the view
+      view.ui.add(scaleBar, {
+        position: "bottom-left"
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
