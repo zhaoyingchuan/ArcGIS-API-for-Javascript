@@ -20,21 +20,21 @@
         "esri/Map", 
         "esri/views/SceneView",
         "esri/widgets/BasemapToggle",
-				"esri/layers/SceneLayer"
+				"esri/layers/SceneLayer",
     ], function(Map, SceneView, BasemapToggle, SceneLayer) {
         
       var map = new Map({
         basemap: {
           portalItem: {id: "52f08e7f7f9947b0a6592a284ce816f8"}
         },
-        ground: "world-elevation"
+        ground: "world-elevation",
       });
 
       var sceneLayer = new SceneLayer({
 				portalItem: {
 					id: "2e0761b9a4274b8db52c4bf34356911e"
 				},
-				popupEnabled: false
+				popupEnabled: false,
 			});
 			map.add(sceneLayer);
 
@@ -54,7 +54,7 @@
 			// Add the renderer to sceneLayer
 			sceneLayer.renderer = {
 				type: "simple", // autocasts as new SimpleRenderer()
-				symbol: symbol
+				symbol: symbol,
 			};
 
       var view = new SceneView({
@@ -63,14 +63,14 @@
         camera: {
           position: [-74.0338, 40.6913, 707],
 					tilt: 81,
-					heading: 50
+					heading: 50,
         },
-        zoom: 10
+        zoom: 10,
       });
 
       var basemapToggle = new BasemapToggle({
         view: view,
-        nextBasemap: "topo-vector"
+        nextBasemap: "topo-vector",
       });
 
       view.ui.add(basemapToggle,"bottom-right");

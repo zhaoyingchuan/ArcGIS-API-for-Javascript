@@ -58,7 +58,7 @@
       "esri/views/MapView",
       "esri/Map",
       "esri/layers/FeatureLayer",
-      "esri/widgets/Expand"
+      "esri/widgets/Expand",
     ], function (MapView, Map, FeatureLayer, Expand) {
 
       let floodLayerView;
@@ -73,14 +73,14 @@
 
       const map = new Map({
         basemap: "gray-vector",
-        layers: [layer]
+        layers: [layer],
       });
 
       const view = new MapView({
         map: map,
         container: "viewDiv",
         center: [-98, 40],
-        zoom: 4
+        zoom: 4,
       });
 
       //取到类名为season-item的4个节点，但是这行代码没有作用

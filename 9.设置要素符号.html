@@ -38,7 +38,7 @@
         "esri/WebMap",
         "esri/views/MapView",
 				"esri/layers/FeatureLayer",
-        "esri/widgets/Editor"
+        "esri/widgets/Editor",
       ], function (WebMap, MapView, FeatureLayer, Editor) {
 
         var trailheadsLabels = {
@@ -57,7 +57,7 @@
           labelPlacement: "above-center",
           labelExpressionInfo: {
             expression: "$feature.XZQMC"
-          }
+          },
         };
 
         // Add parks with a class breaks renderer and unique symbols
@@ -71,10 +71,10 @@
               "outline": {
                 color: color,
                 width: 2
-              }
-            }
+              },
+            },
           };
-        }
+        };
 
         var uniquevalueRenderer = {
           type: "unique-value",
@@ -84,19 +84,19 @@
             createFillSymbol("鹅湖镇", "#A7C636"),
             createFillSymbol("永平镇", "#149ECE"),
             createFillSymbol("*", "#000000")
-          ]
+          ],
         };
 
 				var myFeatureLayer = new FeatureLayer({
-					url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
+					url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/ArcGIS/rest/services/铅山县乡镇/FeatureServer/0",
           renderer: uniquevalueRenderer,
-          labelingInfo: trailheadsLabels
+          labelingInfo: trailheadsLabels,
 				});
 
         // Create a map frm the referenced webmap item id
         let webmap = new WebMap({
           portalItem: {
-            id: "52f08e7f7f9947b0a6592a284ce816f8"
+            id: "bd10bb233d17435ca7b0e37e2135a7dd"
           },
 					// layers: myFeatureLayer
         });
@@ -107,7 +107,7 @@
           container: "viewDiv",
           map: webmap,
 					center: [117.70,28.31],
-					zoom: 12
+					zoom: 12,
         });
       });
     </script>

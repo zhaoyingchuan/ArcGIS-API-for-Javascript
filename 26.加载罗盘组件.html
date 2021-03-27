@@ -26,7 +26,7 @@
 
       var myLayer = new FeatureLayer({
         url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
-        definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
+        definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL",
       });
 
       var webMap = new WebMap({
@@ -40,11 +40,11 @@
         container: "viewDiv",
         map: webMap,
         center: [117.70, 28.31],
-        zoom: 12
+        zoom: 12,
       });
 
       var compassWidget = new Compass({
-        view: view
+        view: view,
       });
 
       // Add the Compass widget to the top left corner of the view

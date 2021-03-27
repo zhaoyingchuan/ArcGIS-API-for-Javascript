@@ -19,7 +19,7 @@
     require([
       "esri/WebMap",
       "esri/views/MapView",
-      "esri/config"
+      "esri/config",
     ], function(WebMap, MapView, esriConfig) {
 
       esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
@@ -27,12 +27,12 @@
       var webmap = new WebMap({
         portalItem: {
           id: "a3bd4859777046208f079d45c7a38842"
-        }
+        },
       });
 
       var view = new MapView({
         container: "viewDiv",
-        map: webmap
+        map: webmap,
       });
       
     });

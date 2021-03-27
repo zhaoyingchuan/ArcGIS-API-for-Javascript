@@ -34,13 +34,13 @@
         url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/省域/FeatureServer/0",
         //definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
       });
-      webmap.add(myFeatureLayer)
+      webmap.add(myFeatureLayer);
 
       var view = new MapView({
         container: "viewDiv",
         map: webmap,
         center: [117.70,28.31],
-        zoom: 6
+        zoom: 6,
       });
       
       // Editor widget

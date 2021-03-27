@@ -32,7 +32,7 @@
         "esri/WebMap",
         "esri/views/MapView",
         "esri/layers/FeatureLayer",
-        "esri/widgets/Search"
+        "esri/widgets/Search",
       ], function (WebMap, MapView, FeatureLayer, Search) {
 
         const labelClass = {
@@ -80,15 +80,14 @@
             ]
           }),
           center: [-116.925, 34.2501],
-          zoom: 13
+          zoom: 13,
         });
 
         // Adds the search widget to the top right corner of the view
         view.ui.add(
           new Search({
             view: view
-          }),
-          "top-right"
+          }), "top-right"
         );
       });
     </script>

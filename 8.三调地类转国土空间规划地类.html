@@ -45,23 +45,23 @@
       "esri/widgets/Compass",
     ], function (WebMap, MapView, FeatureLayer, Editor, LayerList, Compass) {
 
-      var myLayer = new FeatureLayer({
-        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
-        definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL"
+      var layer = new FeatureLayer({
+        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/ArcGIS/rest/services/中心城区和乡镇0121/FeatureServer/0",
+        definitionExpression: "一级类 = '' OR 一级类 IS NULL",
       });
 
       var webMap = new WebMap({
         portalItem: {
           id: "bd10bb233d17435ca7b0e37e2135a7dd"
         },
-        layers: [myLayer],
+        layers: [layer],
       });
 
       var view = new MapView({
         container: "viewDiv",
         map: webMap,
         center: [117.70, 28.31],
-        zoom: 12
+        zoom: 12,
       });
 
       var editLayer;
@@ -69,7 +69,7 @@
         view.popup.autoOpenEnabled = false; //disable popups
         // Loop through webmap layers and set an EditConfig for each
         editLayer = {
-          layer: myLayer,
+          layer: layer,
           fieldConfig: [
             {
               name: "DLBM",
@@ -96,7 +96,7 @@
               label: "三级类",
               editable: true
             },
-          ]
+          ],
         };
         // Create the Editor
         var editor = new Editor({
@@ -117,7 +117,7 @@
       });
 
       var compassWidget = new Compass({
-        view: view
+        view: view,
       });
 
       // Add the Compass widget to the top left corner of the view
@@ -151,10 +151,10 @@
         var arr1 = document.querySelectorAll('.esri-select')[0];
 
         var arr2 = document.querySelectorAll('.esri-select')[1];
-        arr2.value = ''
+        arr2.value = '';
 
         var arr3 = document.querySelectorAll('.esri-select')[2];
-        arr3.value = ''
+        arr3.value = '';
 
         var oplist1 = arr1.children;
         var oplist2 = arr2.children;
@@ -200,7 +200,7 @@
         var arr2 = document.querySelectorAll('.esri-select')[1];
 
         var arr3 = document.querySelectorAll('.esri-select')[2];
-        arr3.value = ''
+        arr3.value = '';
 
         var oplist1 = arr1.children;
         var oplist2 = arr2.children;

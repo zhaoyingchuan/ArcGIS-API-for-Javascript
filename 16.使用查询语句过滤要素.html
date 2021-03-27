@@ -25,7 +25,12 @@
     <script src="https://js.arcgis.com/4.17/"></script>
  
     <script>
-      require(["esri/Map", "esri/views/MapView","esri/layers/WebTileLayer","esri/layers/FeatureLayer"], function(Map, MapView,WebTileLayer,FeatureLayer) {
+      require([
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/layers/WebTileLayer",
+        "esri/layers/FeatureLayer",
+      ], function(Map, MapView,WebTileLayer,FeatureLayer) {
     
         var tiledLayer = new WebTileLayer({
           urlTemplate:

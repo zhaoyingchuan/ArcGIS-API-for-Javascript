@@ -21,10 +21,10 @@
       require([
         "esri/Map",
         "esri/views/MapView",
-        "esri/layers/FeatureLayer"
+        "esri/layers/FeatureLayer",
       ], function (Map, MapView, FeatureLayer) {
         const map = new Map({
-          basemap: "dark-gray-vector"
+          basemap: "dark-gray-vector",
         });
 
         const view = new MapView({
@@ -33,8 +33,8 @@
           center: [-73.95, 40.702],
           zoom: 12,
           padding: {
-            right: 300
-          }
+            right: 300,
+          },
         });
 
         // 创建了一个ul标签，里面包含li标签列表
