@@ -1,10 +1,13 @@
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>WebGIS的通用模板</title>
   <style>
-    html, body, #viewDiv {
+    html,
+    body,
+    #viewDiv {
       padding: 0;
       margin: 0;
       height: 100%;
@@ -12,7 +15,7 @@
     }
   </style>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.17/"></script>
 
   <script>
@@ -22,12 +25,12 @@
       "esri/layers/FeatureLayer",
       "esri/config",
       "esri/widgets/Compass",
-      "esri/widgets/Legend", 
+      "esri/widgets/Legend",
       "esri/widgets/Expand",
       "esri/widgets/LayerList",
       "esri/widgets/ScaleBar",
-    ], function(WebMap, MapView, FeatureLayer, esriConfig, Compass, Legend, Expand, LayerList, ScaleBar) {
-      
+    ], function (WebMap, MapView, FeatureLayer, esriConfig, Compass, Legend, Expand, LayerList, ScaleBar) {
+
       esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
 
       var webmap = new WebMap({
@@ -45,7 +48,7 @@
       var view = new MapView({
         container: "viewDiv",
         map: webmap,
-        center: [117.70,27.50],
+        center: [117.70, 27.50],
         zoom: 7,
         popup: {
           defaultPopupTemplateEnabled: true
@@ -86,7 +89,9 @@
     });
   </script>
 </head>
+
 <body>
   <div id="viewDiv"></div>
 </body>
+
 </html>
