@@ -23,9 +23,7 @@ require([
 "esri/layers/TileLayer",
 "dojo/domReady!"
 ], function(Map, MapView, Home, TileLayer) {
-        var map = new Map({
-          basemap: "topo-vector",
-        });
+        var map = new Map();
         var view = new MapView({
           container: "viewDiv",
           map: map
