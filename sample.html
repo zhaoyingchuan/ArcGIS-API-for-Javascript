@@ -1,49 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>加载ArcGIS Server服务</title>
-  <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-
-  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">  
-  <script src="https://js.arcgis.com/4.17/"></script>
-
-  <script>
-    require([
-      "esri/WebMap",
-      "esri/views/MapView",
-      "esri/layers/FeatureLayer"], 
-      function(WebMap, MapView, FeatureLayer) {
-      
-      var webmap = new WebMap({
-        portalItem: {
-          id: "bd10bb233d17435ca7b0e37e2135a7dd"
-        },
-        // layers: myFeatureLayer
-      });
-
-      var myFeatureLayer = new FeatureLayer({
-        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/市域/FeatureServer/0",
-      });
-      webmap.add(myFeatureLayer)
-
-      var view = new MapView({
-        container: "viewDiv",
-        map: webmap,
-        center: [117.70,28.31],
-        zoom: 5
-      });
+<title>ArcGIS API for JavaScript: Hosted/G50H063023_tif</title>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+<!-- Favorite Bookmark Icon -->
+<link rel="shortcut icon" type="image/ico" href="//www.esri.com/favicon.ico" />
+<link rel="icon" type="image/ico" href="//www.esri.com/favicon.ico" />
+<!-- End Favorite Bookmark Icon --> <link href="/server/rest/static/main.css" rel="stylesheet" type="text/css"/>
+<link href="https://js.arcgis.com/4.5/esri/css/main.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://js.arcgis.com/4.5/"></script>
+<style>
+html,
+body,
+#viewDiv {padding: 0;margin: 0;height: 98%;width: 100%;}
+</style>
+<script type="text/javascript">
+require([
+"esri/Map",
+"esri/views/MapView",
+"esri/widgets/Home",
+"esri/layers/TileLayer",
+"dojo/domReady!"
+], function(Map, MapView, Home, TileLayer) {
+        var map = new Map({
+          basemap: "topo-vector",
+        });
+        var view = new MapView({
+          container: "viewDiv",
+          map: map
+        });
+        var homeBtn = new Home({
+            view: view
+        });
+        view.ui.add(homeBtn, "top-left");
+        var layer = null,
+        layerUrl = "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/G50H063023_tif/MapServer",
+        layer = new TileLayer(layerUrl, null);
+        map.layers.add(layer);
     });
-  </script>
+</script>
 </head>
 <body>
-  <div id="viewDiv"></div>
+<table class="navTable" style="width:100%">
+<tbody>
+<tr valign="top">
+<td class="breadcrumbs">ArcGIS JavaScript API: Hosted/G50H063023_tif (MapServer)</td>
+<td align="right" id="help">Built using the <a target="sdkView" href="//developers.arcgis.com/javascript">ArcGIS API for JavaScript</a></td>
+</tr>
+</tbody>
+</table>
+<div id="viewDiv">
+</div>
 </body>
 </html>
