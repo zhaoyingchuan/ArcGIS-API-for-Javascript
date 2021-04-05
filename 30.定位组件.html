@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+  <title>Locate button | Sample | ArcGIS API for JavaScript 4.18</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <script src="https://js.arcgis.com/4.18/"></script>
+  <script>
+    require([
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/widgets/Locate",
+      "esri/config",
+    ], function (WebMap, MapView, Locate, esriConfig) {
+      esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
+
+      var webmap = new WebMap({
+        portalItem: {
+          id: "a3bd4859777046208f079d45c7a38842"
+        },
+      });
+      // var map = new Map({
+      //   basemap: "topo-vector"
+      // });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap,
+        center: [-56.049, 38.485, 78],
+        zoom: 3
+      });
+
+      var locateBtn = new Locate({
+        view: view
+      });
+
+      // Add the locate widget to the top left corner of the view
+      view.ui.add(locateBtn, "top-left");
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
