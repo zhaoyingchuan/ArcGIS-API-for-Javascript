@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>加载栅格影像</title>
+  <title>加载地图影像</title>
   <style>
     html,
     body,
@@ -35,6 +35,7 @@
       });
       view.ui.add(homeBtn, "top-left");
 
+      //网络传输很慢
       var layer = new MapImageLayer({
         url: "https://zyc.dongtaiyuming.net/server/rest/services/G50H063023_tif2/MapServer"
       });
