@@ -31,28 +31,30 @@
       "esri/widgets/ScaleBar",
     ], function (WebMap, MapView, FeatureLayer, esriConfig, Compass, Legend, Expand, LayerList, ScaleBar) {
 
-      esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
-
       var webmap = new WebMap({
         portalItem: {
-          id: "a3bd4859777046208f079d45c7a38842"
-        },
+          id: "cf65099e04e645b1ac13c0de90a536cc"
+        }
       });
 
       var myFeatureLayer = new FeatureLayer({
-        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/市域/FeatureServer/0",
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/地铁线路/FeatureServer/0",
       });
 
       webmap.add(myFeatureLayer);
+      
 
       var view = new MapView({
         container: "viewDiv",
         map: webmap,
-        center: [117.70, 27.50],
-        zoom: 7,
         popup: {
           defaultPopupTemplateEnabled: true
         },
+      });
+
+      //视图缩放到图层
+      myFeatureLayer.when(function(){
+        view.extent = myFeatureLayer.fullExtent;
       });
 
       var compassWidget = new Compass({
