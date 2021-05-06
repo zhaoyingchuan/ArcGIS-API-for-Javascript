@@ -30,37 +30,16 @@
         ground: "world-elevation"
       });
 
-      // var myFeatureLayer = new FeatureLayer({
-      //   url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划未定地类/FeatureServer/0",
-      //   definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
-      // });
-
-      // map.add(myFeatureLayer);
-
+      //Tile Layer 需要针对全球场景采用 Web Mercator 或 WGS84 GCS
       var layer = new TileLayer({
-        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/G50H063023_tif_%E5%88%87%E7%89%87/MapServer"
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/G50H063023_ProjectRaster/MapServer"
       });
 
       map.layers.add(layer);
 
-      // var layer = new MapImageLayer({
-      //   url: "https://zyc.dongtaiyuming.net/server/rest/services/G50H063023_tif/MapServer"
-      // });
-
-      // map.layers.add(layer);
-
       var view = new SceneView({
         container: "viewDiv",
         map: map,
-        camera: {
-          position: {
-            x: 117.70,
-            y: 28.15,
-            z: 10000 // meters
-          },
-          tilt: 60
-        },
-        zoom: 10
       });
     });
   </script>
