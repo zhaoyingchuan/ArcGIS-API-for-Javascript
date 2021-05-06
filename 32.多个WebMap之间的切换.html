@@ -100,8 +100,10 @@
               var node = nodes[idx];
               var mapIndex = node.getAttribute("data-id");
               if (mapIndex === id) {
+                //对应的data-id的class变为"btn-switch active-map"
                 node.classList.add("active-map");
               } else {
+                //对应的data-id的class变为"btn-switch"
                 node.classList.remove("active-map");
               }
             }
@@ -113,6 +115,7 @@
 
   <body>
     <section class="header esri-widget">
+      //多一层嵌套可以实现事件监听的冒泡并且设置三个data-id横排
       <div class="btns">
         <div class="btn-switch active-map" data-id="0">Missing Migrants</div>
         <div class="btn-switch" data-id="1">Refugee Routes</div>
