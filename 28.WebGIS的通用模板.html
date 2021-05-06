@@ -42,7 +42,7 @@
       });
 
       webmap.add(myFeatureLayer);
-      
+
 
       var view = new MapView({
         container: "viewDiv",
@@ -53,7 +53,7 @@
       });
 
       //视图缩放到图层
-      myFeatureLayer.when(function(){
+      myFeatureLayer.when(function () {
         view.extent = myFeatureLayer.fullExtent;
       });
 
