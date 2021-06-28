@@ -1,60 +1,44 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>编辑要素</title>
-  <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-
-  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">  
+  <meta charset="UTF-8">
+  <title>筛选行政区</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/css/esri.css">
   <script src="https://js.arcgis.com/4.17/"></script>
-
+  <style>
+      html,
+      body,
+      #map {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+  </style>
   <script>
     require([
-      "esri/WebMap",
-      "esri/views/MapView",
+      "esri/Map",
+      // "esri/layers/ArcGISDynamicMapServiceLayer",
+      "esri/tasks/QueryTask",
+      "esri/tasks/support/Query",
+      // "dojo/domReady!",
       "esri/layers/FeatureLayer",
-      "esri/widgets/Editor",
-    ], function(WebMap, MapView, FeatureLayer, Editor) {
-      
-      var webmap = new WebMap({
-        // portalItem: {
-        //   id: "bd10bb233d17435ca7b0e37e2135a7dd"
-        // },
-        // layers: myFeatureLayer
+    ], function (Map,QueryTask,Query, FeatureLayer) {
+      var query=new Query();
+      // query.outFields = ["*"];
+      query.where = "1=1";
+      // query.returnGeometry = true;
+      //实例化查询对象
+      var queryTask = new QueryTask("https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省县域/FeatureServer");
+      //进行查询
+      queryTask.execute(query).then(function(results){
+        console.log(results.Feature);
       });
-
-      var myFeatureLayer = new FeatureLayer({
-        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省县域/FeatureServer",
-        //definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
-      });
-      webmap.add(myFeatureLayer);
-
-      var view = new MapView({
-        container: "viewDiv",
-        map: webmap,
-        center: [117.70,28.31],
-        zoom: 6,
-      });
-      
-      // Editor widget
-      var editor = new Editor({
-        view: view,
-        // allowedWorkflows: ["update"],
-      });
-
-      // Add widget to the view
-      view.ui.add(editor, "top-right");
     });
   </script>
 </head>
 <body>
-  <div id="viewDiv"></div>
+    <div id="map"></div>
+    
 </body>
 </html>
