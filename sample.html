@@ -1,46 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://js.arcgis.com/3.26/esri/css/esri.css">
-    <script src="https://js.arcgis.com/3.26/"></script>
-    <style>
-        html,
-        body,
-        #map {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
-    <script>
-      require([
-        "esri/map",
-        "esri/layers/ArcGISDynamicMapServiceLayer",
-        "esri/tasks/QueryTask",
-        "esri/tasks/query",
-        "dojo/domReady!",
-        "esri/layers/FeatureLayer",
-      ], function (Map,ArcGISDynamicMapServiceLayer,QueryTask,Query, FeatureLayer) {
 
-        var query=new Query();
-        // query.outFields = ["*"];
-        query.where = "1=1";
-        // query.returnGeometry = true;
-        //实例化查询对象
-        var queryTask = new QueryTask("https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省县域/FeatureServer/0");
-        //进行查询
-        queryTask.execute(query,showFindResult);
-        function showFindResult(result) {
-            console.log(result);
-        }
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/3.26/esri/css/esri.css">
+  <script src="https://js.arcgis.com/3.26/"></script>
+  <style>
+    html,
+    body,
+    #map {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script>
+    require([
+      "esri/map",
+      // "esri/layers/ArcGISDynamicMapServiceLayer",
+      "esri/tasks/QueryTask",
+      "esri/tasks/query",
+      "dojo/domReady!",
+      "esri/layers/FeatureLayer",
+    ], function (Map, QueryTask, Query, FeatureLayer) {
+
+      var query = new Query();
+      query.outFields = ["Name", "Code", "市属"];
+      query.where = "1=1";
+      // query.returnGeometry = true;
+      //实例化查询对象
+      var queryTask = new QueryTask("https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省县域/FeatureServer/0");
+      //进行查询
+      queryTask.execute(query).then(function(results){
+        console.log(results.features);
       });
+    });
   </script>
 </head>
+
 <body>
-    <div id="map"></div>
-    
+  <div id="map"></div>
+
 </body>
+
 </html>
