@@ -1,28 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>筛选行政区</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/css/esri.css">
-  <script src="https://js.arcgis.com/4.17/"></script>
   <style>
-    html,
-    body,
-    #map {
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
       height: 100%;
       width: 100%;
-      margin: 0;
-      padding: 0;
     }
   </style>
-  <script>
+  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+  
+  <script>  
     require([
       "esri/Map",
+      "esri/views/MapView",
       "esri/tasks/QueryTask",
       "esri/tasks/support/Query",
-      "esri/layers/FeatureLayer",
-    ], function (Map, QueryTask, Query, FeatureLayer) {
+    ], function(Map, MapView, QueryTask, Query) {
+      
+      var map = new Map({
+        basemap: "topo-vector",
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [116.40, 39.90], // longitude, latitude
+        zoom: 13,
+      });
+      view.ui.add("optionsDiv", "bottom-right");
+
       var query = new Query();
       query.outFields = ["Name", "Code", "市属"];
       query.where = "1=1";
@@ -32,15 +44,35 @@
       //进行查询
       queryTask.execute(query).then(function(results){
         console.log(results.features);
-      });
-      
+      });Peaks 
     });
   </script>
 </head>
-
 <body>
-  <div id="map"></div>
-
+  <div id="viewDiv"></div>
+  <div class="esri-widget" id="optionsDiv">
+    <h2>选择行政区</h2>
+    <select class="esri-widget" id="attSelect">
+      <option value="江西省" selected>江西省</option>
+      <option value="湖北省">湖北省</option>
+      <option value="湖南省">湖南省</option>
+    </select>
+    <select class="esri-widget" id="signSelect">
+      <option value=">">is greater than</option>
+      <option value="<">is less than</option>
+      <option value="=">is equal to</option>
+    </select>
+    <select class="esri-widget" id="valSelect">
+      <option value="1000">1,000 ft</option>
+      <option value="5000">5,000 ft</option>
+      <option value="10000">10,000 ft</option>
+      <option value="15000">15,000 ft</option>
+      <option value="20000">20,000 ft</option>
+    </select>
+    <br />
+    <br />
+    <!-- <button class="esri-widget" id="doBtn">Do Query</button> <br />
+    <p><span id="printResults"></span></p> -->
+  </div>
 </body>
-
 </html>
