@@ -154,6 +154,19 @@
       });
     });
   </script>
+
+  <script>
+    // 为“一级类”绑定change事件
+    // 这里的document作为一种未简写的方式，与on搭配才能为未出现的元素绑定事件
+    // 如果使用简写方式，document这个位置上的元素必须在执行事件前存在于DOM树中
+
+    // $(document).on("change", "select:eq(0)", function () {
+
+    // })
+
+    //原生JS方法
+    cccc
+  </script>
 </head>
 
 <body>
@@ -171,6 +184,8 @@
     <!-- <button class="esri-widget" id="doBtn">Do Query</button> <br />
     <p><span id="printResults"></span></p> -->
   </div>
+
+
 </body>
 
 </html>
