@@ -33,9 +33,13 @@
       //实例化查询对象
       var queryTask = new QueryTask("https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省县域/FeatureServer/0");
       //进行查询
-      queryTask.execute(query).then(function(results){
-        console.log(results.features);
-      });
+      queryTask.execute(query,showFindResult);
+      function showFindResult(results) {
+          console.log(result);
+          return results;
+      };
+      // var str1=showFindResult();
+      // console.log(str1)
     });
   </script>
 </head>
