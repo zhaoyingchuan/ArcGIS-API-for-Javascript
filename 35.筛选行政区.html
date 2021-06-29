@@ -53,12 +53,39 @@
             value: e.attributes.citycode,
           })
         });
-        console.log(arr);
-        // console.log(results.features);
-        for (i = 0; i < 325; i++) {
-          document.querySelectorAll('#citySelect')[0].options[i] = new Option(arr[i].label, arr[i].value);
+
+        var compare = function (prop) {
+          return function (obj1, obj2) {
+            var val1 = obj1[prop];
+            var val2 = obj2[prop];
+            if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+              val1 = Number(val1);
+              val2 = Number(val2);
+            }
+            if (val1 < val2) {
+              return -1;
+            } else if (val1 > val2) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
         }
 
+        arr.sort(compare("value"))
+
+        console.log(arr);
+
+
+
+
+        for (i = 0; i < arr.length; i++) {
+          if (arr[i].label != arr[i + 1].label) {
+            document.querySelectorAll('#citySelect')[0].options[i] = new Option(arr[i].label, arr[i].value);
+          } else {
+
+          }
+        }
       });
     });
   </script>
