@@ -39,18 +39,22 @@
       view.ui.add("optionsDiv", "bottom-right");
 
       var query = new Query();
-      query.outFields = ["city", "citycode"];
+      query.outFields = ["name","code","city", "citycode","province", "procode"];
       query.where = "1=1";
       // query.returnGeometry = true;
       //实例化查询对象
       var queryTask = new QueryTask("https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省县域/FeatureServer/0");
       //进行查询
       queryTask.execute(query).then(function (results) {
-        var arr = [];
+        var arr0 = [];
         results.features.forEach(e => {
-          arr.push({
-            label: e.attributes.city,
-            value: e.attributes.citycode,
+          arr0.push({
+            name: e.attributes.name,
+            code: e.attributes.code,
+            city: e.attributes.city,
+            citycode: e.attributes.citycode,
+            province: e.attributes.province,
+            procode: e.attributes.procode,
           })
         });
 
@@ -72,23 +76,81 @@
           }
         }
 
-        arr.sort(compare("value"))
+        arr0.sort(compare("citycode"))
 
-        // console.log(arr);
-
-        for (i = 0; i < arr.length; i++) {
-          if (arr[i+1]==arr[i]) {
-            arr.splice(i, 1);
+        var arr1=[];
+        arr1.push({
+          province: arr0[0].province,
+          procode: arr0[0].procode,
+        })
+        for(var i = 1; i < arr0.length;i++){
+          if(arr0[i-1].province !== arr0[i].province){
+            arr1.push({
+              province: arr0[i].province,
+              procode: arr0[i].procode,
+            })
           } else {
-            
+      
           }
         };
 
-        console.log(arr);
+        var arr2=[];
+        arr2.push({
+          city: arr0[0].city,
+          citycode: arr0[0].citycode,
+        })
 
-        for (i = 0; i < arr.length; i++) {
-          document.querySelectorAll('#citySelect')[0].options[i] = new Option(arr[i].label, arr[i].value);
+        for(var i = 1; i < arr0.length;i++){
+          if(arr0[i-1].city !== arr0[i].city){
+            arr2.push({
+              city: arr0[i].city,
+              citycode: arr0[i].citycode,
+            })
+          } else {
+      
+          }
+        };
+
+        var arr3=[];
+        arr3.push({
+          name: arr0[0].name,
+          code: arr0[0].code,
+        })
+
+        for(var i = 1; i < arr0.length;i++){
+          if(arr0[i-1].name !== arr0[i].name){
+            arr3.push({
+              name: arr0[i].name,
+              code: arr0[i].code,
+            })
+          } else {
+      
+          }
+        };
+
+
+        // for(var i = 1; i < arr.length;i++){
+        //   if(arr[i-1] = arr[i]){
+        //     arr.splice(i, 1);
+        //     i--;
+        //   } else {
+
+        //   }
+        // };
+
+        console.log(arr3);
+
+        for (i = 0; i < arr1.length; i++) {
+          document.querySelectorAll('#proSelect')[0].options[i] = new Option(arr1[i].province, arr1[i].procode);
         }
+
+        for (i = 0; i < arr2.length; i++) {
+          document.querySelectorAll('#citySelect')[0].options[i] = new Option(arr2[i].city, arr2[i].citycode);
+        };
+
+        for (i = 0; i < arr3.length; i++) {
+          document.querySelectorAll('#countySelect')[0].options[i] = new Option(arr3[i].name, arr3[i].code);
+        };
       });
     });
   </script>
@@ -99,18 +161,10 @@
   <div class="esri-widget" id="optionsDiv">
     <h2>选择行政区</h2>
     <select class="esri-widget" id="proSelect">
-      <option value="江西省" selected>江西省</option>
-      <option value="湖北省">湖北省</option>
-      <option value="湖南省">湖南省</option>
     </select>
     <select class="esri-widget" id="citySelect">
     </select>
     <select class="esri-widget" id="countySelect">
-      <option value="1000">1,000 ft</option>
-      <option value="5000">5,000 ft</option>
-      <option value="10000">10,000 ft</option>
-      <option value="15000">15,000 ft</option>
-      <option value="20000">20,000 ft</option>
     </select>
     <br />
     <br />
