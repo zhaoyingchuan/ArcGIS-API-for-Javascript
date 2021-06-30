@@ -39,7 +39,7 @@
       view.ui.add("optionsDiv", "bottom-right");
 
       var query = new Query();
-      query.outFields = ["name","code","city", "citycode","province", "procode"];
+      query.outFields = ["name", "code", "city", "citycode", "province", "procode"];
       query.where = "1=1";
       // query.returnGeometry = true;
       //实例化查询对象
@@ -78,53 +78,53 @@
 
         arr0.sort(compare("citycode"))
 
-        var arr1=[];
+        var arr1 = [];
         arr1.push({
           province: arr0[0].province,
           procode: arr0[0].procode,
         })
-        for(var i = 1; i < arr0.length;i++){
-          if(arr0[i-1].province !== arr0[i].province){
+        for (var i = 1; i < arr0.length; i++) {
+          if (arr0[i - 1].province !== arr0[i].province) {
             arr1.push({
               province: arr0[i].province,
               procode: arr0[i].procode,
             })
           } else {
-      
+
           }
         };
 
-        var arr2=[];
+        var arr2 = [];
         arr2.push({
           city: arr0[0].city,
           citycode: arr0[0].citycode,
         })
 
-        for(var i = 1; i < arr0.length;i++){
-          if(arr0[i-1].city !== arr0[i].city){
+        for (var i = 1; i < arr0.length; i++) {
+          if (arr0[i - 1].city !== arr0[i].city) {
             arr2.push({
               city: arr0[i].city,
               citycode: arr0[i].citycode,
             })
           } else {
-      
+
           }
         };
 
-        var arr3=[];
+        var arr3 = [];
         arr3.push({
           name: arr0[0].name,
           code: arr0[0].code,
         })
 
-        for(var i = 1; i < arr0.length;i++){
-          if(arr0[i-1].name !== arr0[i].name){
+        for (var i = 1; i < arr0.length; i++) {
+          if (arr0[i - 1].name !== arr0[i].name) {
             arr3.push({
               name: arr0[i].name,
               code: arr0[i].code,
             })
           } else {
-      
+
           }
         };
 
@@ -165,7 +165,7 @@
     // })
 
     //原生JS方法
-    
+
   </script>
 </head>
 
@@ -174,6 +174,9 @@
   <div class="esri-widget" id="optionsDiv">
     <h2>选择行政区</h2>
     <select class="esri-widget" id="proSelect">
+      <option value="112360000000000">江西省</option>
+      <option value="112420000000000">湖北省</option>
+      <option value="112430000000000">湖南省</option>
     </select>
     <select class="esri-widget" id="citySelect">
     </select>

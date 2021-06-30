@@ -26,38 +26,7 @@
         width: 100%;
       }
 
-      #seasons-filter {
-        height: 160px;
-        width: 100%;
-        visibility: hidden;
-      }
-
-      .season-item {
-        width: 100%;
-        padding: 12px;
-        text-align: center;
-        vertical-align: baseline;
-        cursor: pointer;
-        height: 40px;
-      }
-
-      .season-item:focus {
-        background-color: dimgrey;
-      }
-
-      .season-item:hover {
-        background-color: dimgrey;
-      }
-
-      #titleDiv {
-        padding: 10px;
-      }
-
-      #titleText {
-        font-size: 20pt;
-        font-weight: 60;
-        padding-bottom: 10px;
-      }
+      
     </style>
     <script>
       require([
@@ -85,44 +54,31 @@
           center: [117.70, 28.31],
           zoom: 9,
         });
+        view.ui.add("optionsDiv", "bottom-right");
 
         const seasonsElement = document.getElementById("proSelect");
 
-        // click event handler for seasons choices
         seasonsElement.addEventListener("change", filterBySeason);
 
-        // User clicked on Winter, Spring, Summer or Fall
-        // set an attribute filter on flood warnings layer view
-        // to display the warnings issued in that season
         function filterBySeason(event) {
           var index=document.getElementById("proSelect").selectedIndex;
           var proname = document.getElementById("proSelect").options[index].innerText;
-          xzzqLayer.filter = {
-            where: "province = '" + proname + "'"
+          if(proname==""){
+            xzzqLayer.filter = {
+              where: "Province IS NOT NULL"
+            }
+          }else{
+            xzzqLayer.filter = {
+              where: "province = '" + proname + "'"
+            }
           };
         }
 
         view.whenLayerView(layer).then(function (layerView) {
-          // flash flood warnings layer loaded
-          // get a reference to the flood warnings layerview
           xzzqLayer = layerView;
 
-          // set up UI items
           seasonsElement.style.visibility = "visible";
-          // const seasonsExpand = new Expand({
-          //   view: view,
-          //   content: seasonsElement,
-          //   expandIconClass: "esri-icon-filter",
-          //   group: "top-left"
-          // });
-          // //clear the filters when user closes the expand widget
-          // seasonsExpand.watch("expanded", function () {
-          //   if (!seasonsExpand.expanded) {
-          //     xzzqLayer.filter = null;
-          //   }
-          // });
-          // view.ui.add(seasonsExpand, "top-left");
-          // view.ui.add("titleDiv", "top-right");
+          
         });
       });
     </script>
@@ -133,6 +89,7 @@
     <div class="esri-widget" id="optionsDiv">
       <h2>选择行政区</h2>
       <select class="esri-widget" id="proSelect">
+        <option value=""></option>
         <option value="112360000000000">江西省</option>
         <option value="112420000000000">湖北省</option>
         <option value="112430000000000">湖南省</option>
@@ -143,10 +100,8 @@
       </select>
       <br />
       <br />
-    </div>
-    <div id="titleDiv" class="esri-widget">
-      <div id="titleText">Flash Floods by Season</div>
-      <div>Flash Flood Warnings (2002 - 2012)</div>
+      <!-- <button class="esri-widget" id="doBtn">Do Query</button> <br />
+      <p><span id="printResults"></span></p> -->
     </div>
   </body>
 </html>
