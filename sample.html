@@ -1,52 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>
+      Filter features by attribute | Sample | ArcGIS API for JavaScript 4.17
+    </title>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/3.26/esri/css/esri.css">
-  <script src="https://js.arcgis.com/3.26/"></script>
-  <style>
-    html,
-    body,
-    #map {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <script>
-    require([
-      "esri/map",
-      // "esri/layers/ArcGISDynamicMapServiceLayer",
-      "esri/tasks/QueryTask",
-      "esri/tasks/query",
-      "dojo/domReady!",
-      "esri/layers/FeatureLayer",
-    ], function (Map, QueryTask, Query, FeatureLayer) {
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.17/"></script>
 
-      var query = new Query();
-      query.outFields = ["Name", "Code", "市属"];
-      query.where = "1=1";
-      // query.returnGeometry = true;
-      //实例化查询对象
-      var queryTask = new QueryTask("https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省县域/FeatureServer/0");
-      //进行查询
-      queryTask.execute(query,showFindResult);
-      function showFindResult(results) {
-          console.log(result);
-          return results;
-      };
-      // var str1=showFindResult();
-      // console.log(str1)
-    });
-  </script>
-</head>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
 
-<body>
-  <div id="map"></div>
+      #seasons-filter {
+        height: 160px;
+        width: 100%;
+        visibility: hidden;
+      }
 
-</body>
+      .season-item {
+        width: 100%;
+        padding: 12px;
+        text-align: center;
+        vertical-align: baseline;
+        cursor: pointer;
+        height: 40px;
+      }
 
+      .season-item:focus {
+        background-color: dimgrey;
+      }
+
+      .season-item:hover {
+        background-color: dimgrey;
+      }
+
+      #titleDiv {
+        padding: 10px;
+      }
+
+      #titleText {
+        font-size: 20pt;
+        font-weight: 60;
+        padding-bottom: 10px;
+      }
+    </style>
+    <script>
+      require([
+        "esri/views/MapView",
+        "esri/Map",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/Expand"
+      ], function (MapView, Map, FeatureLayer, Expand) {
+        let xzzqLayer;
+
+        // flash flood warnings layer
+        var layer = new FeatureLayer({
+          url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省县域/FeatureServer/0",
+          // definitionExpression: "一级类 = '' OR 一级类 IS NULL OR 二级类 = '' OR 二级类 IS NULL OR 三级类 = '' OR 三级类 IS NULL",
+        });
+
+        const map = new Map({
+          basemap: "gray-vector",
+          layers: [layer]
+        });
+
+        const view = new MapView({
+          map: map,
+          container: "viewDiv",
+          center: [117.70, 28.31],
+          zoom: 9,
+        });
+
+        const seasonsElement = document.getElementById("proSelect");
+
+        // click event handler for seasons choices
+        seasonsElement.addEventListener("change", filterBySeason);
+
+        // User clicked on Winter, Spring, Summer or Fall
+        // set an attribute filter on flood warnings layer view
+        // to display the warnings issued in that season
+        function filterBySeason(event) {
+          var index=document.getElementById("proSelect").selectedIndex;
+          var proname = document.getElementById("proSelect").options[index].innerText;
+          xzzqLayer.filter = {
+            where: "province = '" + proname + "'"
+          };
+        }
+
+        view.whenLayerView(layer).then(function (layerView) {
+          // flash flood warnings layer loaded
+          // get a reference to the flood warnings layerview
+          xzzqLayer = layerView;
+
+          // set up UI items
+          seasonsElement.style.visibility = "visible";
+          // const seasonsExpand = new Expand({
+          //   view: view,
+          //   content: seasonsElement,
+          //   expandIconClass: "esri-icon-filter",
+          //   group: "top-left"
+          // });
+          // //clear the filters when user closes the expand widget
+          // seasonsExpand.watch("expanded", function () {
+          //   if (!seasonsExpand.expanded) {
+          //     xzzqLayer.filter = null;
+          //   }
+          // });
+          // view.ui.add(seasonsExpand, "top-left");
+          // view.ui.add("titleDiv", "top-right");
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+    <div class="esri-widget" id="optionsDiv">
+      <h2>选择行政区</h2>
+      <select class="esri-widget" id="proSelect">
+        <option value="112360000000000">江西省</option>
+        <option value="112420000000000">湖北省</option>
+        <option value="112430000000000">湖南省</option>
+      </select>
+      <select class="esri-widget" id="citySelect">
+      </select>
+      <select class="esri-widget" id="countySelect">
+      </select>
+      <br />
+      <br />
+    </div>
+    <div id="titleDiv" class="esri-widget">
+      <div id="titleText">Flash Floods by Season</div>
+      <div>Flash Flood Warnings (2002 - 2012)</div>
+    </div>
+  </body>
 </html>
