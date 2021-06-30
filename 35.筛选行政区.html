@@ -66,11 +66,11 @@
           }
         } else if (proname != "" && cityname == "") {
           xzqLayerView.filter = {
-            where: "province = '" + proname + "'",
+            where: "Province = '" + proname + "'",
           }
         } else if (proname != "" && cityname != "") {
           xzqLayerView.filter = {
-            where: "province = '" + proname + "' AND " + "city = '" + cityname + "'",
+            where: "Province = '" + proname + "' AND " + "City = '" + cityname + "'",
           }
         } else {
 
@@ -151,7 +151,7 @@
           }
         }
 
-        arr0.sort(compare("CityCode"))
+        arr0.sort(compare("citycode"))
 
         var arr1 = [];
         arr1.push({
