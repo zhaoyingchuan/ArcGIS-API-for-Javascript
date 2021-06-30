@@ -13,6 +13,9 @@
       height: 100%;
       width: 100%;
     }
+    .esri-widget select {
+      width: 150px;
+    }
   </style>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
@@ -91,11 +94,11 @@
 <body>
   <div id="viewDiv"></div>
   <div class="esri-widget" id="optionsDiv">
-    <h2>选择行政区</h2>
-    <select class="esri-widget" id="proSelect">
+    <h3>选择行政区</h3>
+    <select class="esri-widget select" id="proSelect">
       <option value=""></option>
     </select>
-    <select class="esri-widget" id="citySelect">
+    <select class="esri-widget select" id="citySelect">
       <option value=""></option>
     </select>
     <!-- <select class="esri-widget" id="countySelect">
