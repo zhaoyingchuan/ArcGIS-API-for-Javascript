@@ -240,9 +240,10 @@
         proSelect.addEventListener('change', function (e) {
 
           document.querySelectorAll('#citySelect')[0].value = '';
+          var proname = document.querySelectorAll('#proSelect')[0].value;
 
           for (var i = oplist2.length - 1; i > 0; i--) {
-            if (document.querySelectorAll('#proSelect')[0].value != '' && oplist2[i].value.substring(0, 5) == document.querySelectorAll('#proSelect')[0].value.substring(0, 5)) {
+            if (proname != '' && oplist2[i].value.substring(0, 5) == proname.substring(0, 5)) {
               oplist2[i].style.display = '';
             } else {
               oplist2[i].style.display = 'none';
