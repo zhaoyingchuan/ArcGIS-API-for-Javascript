@@ -1,109 +1,104 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1,user-scalable=no"
+    />
+    <title>
+      FeatureTable widget with editing enabled | Sample | ArcGIS API for
+      JavaScript 4.17
+    </title>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>
-    Filter features by attribute | Sample | ArcGIS API for JavaScript 4.17
-  </title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.17/"></script>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
-  <script src="https://js.arcgis.com/4.17/"></script>
-
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
-  <script>
-    require([
-      "esri/views/MapView",
-      "esri/Map",
-      "esri/layers/FeatureLayer",
-      "esri/widgets/Expand"
-    ], function (MapView, Map, FeatureLayer, Expand) {
-
-      let xzqLayerView;
-
-      // flash flood warnings layer
-      var layer = new FeatureLayer({
-        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省县域/FeatureServer/0",
-        // definitionExpression: "一级类 = '' OR 一级类 IS NULL OR 二级类 = '' OR 二级类 IS NULL OR 三级类 = '' OR 三级类 IS NULL",
-      });
-
-      const map = new Map({
-        basemap: "gray-vector",
-        layers: [layer]
-      });
-
-      const view = new MapView({
-        map: map,
-        container: "viewDiv",
-        center: [117.70, 28.31],
-        zoom: 9,
-      });
-
-      
-
-      view.ui.add("optionsDiv", "bottom-right");
-
-      const seasonsElement = document.getElementById("proSelect");
-
-      seasonsElement.addEventListener("change", filterBySeason);
-
-      function filterBySeason(event) {
-        var index = document.getElementById("proSelect").selectedIndex;
-        var proname = document.getElementById("proSelect").options[index].innerText;
-        if (proname == "") {
-          xzqLayerView.filter = {
-            where: "province IS NOT NULL",
-          }
-        } else {
-          xzqLayerView.filter = {
-            where: "province = '" + proname + "'",
-          }
-        };
+    <style>
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
       }
 
-      view.whenLayerView(layer).then(function (layerView) {
-        xzqLayerView = layerView;
-        // view.extent = xzqLayerView.fullExtent;
+      #viewDiv {
+        height: 50%;
+        width: 100%;
+      }
+
+      .container {
+        height: 50%;
+        width: 100%;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/FeatureTable"
+      ], function (Map, MapView, FeatureLayer, FeatureTable) {
+        let featureLayer;
+        const features = [];
+
+        const map = new Map({
+          basemap: "streets-navigation-vector"
+        });
+
+        let view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [117.70, 28.31],
+          zoom: 8,
+          popup: {
+            autoOpenEnabled: false
+          } //disable popups
+        });
+
+        view.when(function () {
+          featureLayer = new FeatureLayer({
+            portalItem: {
+              id: "0881e34a779e4dd6aa07a2b5bf56ae5e"
+            },
+            outFields: ["*"],
+            title: "Chicago crime incidents"
+          });
+          map.add(featureLayer);
+
+          // Create the feature table
+          const featureTable = new FeatureTable({
+            view: view,
+            layer: featureLayer,
+            editingEnabled: true,
+            fieldConfigs: [
+              {
+                name: "Name",
+                label: "县名",
+                editable: false,
+                direction: "asc"
+              },
+              {
+                name: "Population",
+                label: "人口"
+              },
+            ],
+            container: document.getElementById("tableDiv")
+          });
+        });
       });
+    </script>
+  </head>
 
-      layer.when(function (layerView) {
-        view.extent = layerView.fullExtent;
-      });
-    });
-  </script>
-</head>
-
-<body>
-  <div id="viewDiv"></div>
-  <div class="esri-widget" id="optionsDiv">
-    <h2>选择行政区</h2>
-    <select class="esri-widget" id="proSelect">
-      <option value=""></option>
-      <option value="112360000000000">江西省</option>
-      <option value="112420000000000">湖北省</option>
-      <option value="112430000000000">湖南省</option>
-    </select>
-    <select class="esri-widget" id="citySelect">
-      <option value=""></option>
-    </select>
-    <select class="esri-widget" id="countySelect">
-      <option value=""></option>
-    </select>
-    <br />
-    <br />
-    <!-- <button class="esri-widget" id="doBtn">Do Query</button> <br />
-      <p><span id="printResults"></span></p> -->
-  </div>
-</body>
-
+  <body>
+    <div id="viewDiv"></div>
+    <div class="container">
+      <div id="tableDiv"></div>
+    </div>
+  </body>
 </html>

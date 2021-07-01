@@ -15,7 +15,12 @@
     }
 
     .esri-widget select {
-      width: 150px;
+      width: 200px;
+    }
+
+    #tableDiv {
+      height: 300px;
+      width: 400px;
     }
   </style>
 
@@ -29,11 +34,13 @@
       "esri/tasks/QueryTask",
       "esri/tasks/support/Query",
       "esri/layers/FeatureLayer",
-    ], function (Map, MapView, QueryTask, Query, FeatureLayer) {
+      "esri/widgets/FeatureTable",
+    ], function (Map, MapView, QueryTask, Query, FeatureLayer, FeatureTable) {
       let xzqLayerView;
 
       var layer = new FeatureLayer({
         url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省县域/FeatureServer/0",
+        definitionExpression: "",
       });
 
       const map = new Map({
@@ -46,6 +53,13 @@
         container: "viewDiv",
         center: [117.70, 28.31],
         zoom: 9,
+        popup: {
+          autoOpenEnabled: false
+        },
+      });
+
+      layer.when(function (layerView) {
+        view.extent = layerView.fullExtent;
       });
 
       view.ui.add("optionsDiv", "bottom-right");
@@ -60,29 +74,53 @@
         var index2 = document.getElementById("citySelect").selectedIndex;
         var cityname = document.getElementById("citySelect").options[index2].innerText;
         if (proname == "") {
-          xzqLayerView.filter = {
-            where: "",
-          }
+          layer.definitionExpression = "";
+          // xzqLayerView.filter = {
+          //   where: "",
+          // }
         } else if (proname != "" && cityname == "") {
-          xzqLayerView.filter = {
-            where: "province = '" + proname + "'",
-          }
+          layer.definitionExpression = "province = '" + proname + "'";
+          // xzqLayerView.filter = {
+          //   where: "province = '" + proname + "'",
+          // }
         } else if (proname != "" && cityname != "") {
-          xzqLayerView.filter = {
-            where: "province = '" + proname + "' AND " + "city = '" + cityname + "'",
-          }
+          layer.definitionExpression = "province = '" + proname + "' AND " + "city = '" + cityname + "'";
+          // xzqLayerView.filter = {
+          //   where: "province = '" + proname + "' AND " + "city = '" + cityname + "'",
+          // }
         } else {
 
         }
       }
 
-      view.whenLayerView(layer).then(function (layerView) {
-        xzqLayerView = layerView;
-      });
+      // view.whenLayerView(layer).then(function (layerView) {
+      //   view.extent = layerView.fullExtent;
+      // });
 
-      layer.when(function (layerView) {
-        view.extent = layerView.fullExtent;
+      var featureTable = new FeatureTable({
+        view: view,
+        layer: layer,
+        editingEnabled: true,
+        fieldConfigs: [
+          // {
+          //   name: "code",
+          //   label: "行政代码",
+          //   editable: false,
+          //   direction: "asc"
+          // },
+          {
+            name: "name",
+            label: "名称",
+            editable: false,
+          },
+          {
+            name: "population",
+            label: "人口"
+          },
+        ],
+        container: document.getElementById("tableDiv")
       });
+      view.ui.add("tableDiv", "top-right");
     });
   </script>
 
@@ -90,7 +128,9 @@
 </head>
 
 <body>
-  <div id="viewDiv"></div>
+  <div id="viewDiv">
+    <!-- <div id="tableDiv"></div> -->
+  </div>
   <div class="esri-widget" id="optionsDiv">
     <h3>选择行政区</h3>
     <select class="esri-widget select" id="proSelect">
@@ -102,6 +142,7 @@
     <br />
     <br />
   </div>
+  <div id="tableDiv"></div>
 
   <script>
     require([
@@ -110,7 +151,8 @@
       "esri/tasks/QueryTask",
       "esri/tasks/support/Query",
       "esri/layers/FeatureLayer",
-    ], function (Map, MapView, QueryTask, Query, FeatureLayer) {
+      "esri/widgets/FeatureTable",
+    ], function (Map, MapView, QueryTask, Query, FeatureLayer, FeatureTable) {
       var query = new Query();
       query.outFields = ["name", "code", "city", "citycode", "province", "procode"];
       query.where = "1=1";
@@ -209,11 +251,7 @@
         }, true);
       });
     });
-
   </script>
-
-
-
 </body>
 
 </html>
