@@ -233,8 +233,7 @@
           document.querySelectorAll('#citySelect')[0].options[i + 1].style.display = 'none'
         };
 
-        var oplist1 = document.querySelectorAll('#proSelect')[0].children;
-        var oplist2 = document.querySelectorAll('#citySelect')[0].children;
+        var oplist = document.querySelectorAll('#citySelect')[0].children;
 
         var proSelect = document.querySelector('#proSelect');
         proSelect.addEventListener('change', function (e) {
@@ -242,11 +241,11 @@
           document.querySelectorAll('#citySelect')[0].value = '';
           var proname = document.querySelectorAll('#proSelect')[0].value;
 
-          for (var i = oplist2.length - 1; i > 0; i--) {
-            if (proname != '' && oplist2[i].value.substring(0, 5) == proname.substring(0, 5)) {
-              oplist2[i].style.display = '';
+          for (var i = oplist.length - 1; i > 0; i--) {
+            if (proname != '' && oplist[i].value.substring(0, 5) == proname.substring(0, 5)) {
+              oplist[i].style.display = '';
             } else {
-              oplist2[i].style.display = 'none';
+              oplist[i].style.display = 'none';
             }
           }
         }, true);
