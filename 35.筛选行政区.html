@@ -91,6 +91,18 @@
         } else {
 
         }
+
+        zoomToLayer(layer)
+      }
+
+      function zoomToLayer(layer) {
+        return layer.queryExtent().then(function (response) {
+          view.goTo(response.extent).catch(function (error) {
+            if (error.name != "AbortError") {
+              console.error(error);
+            }
+          });
+        });
       }
 
       // view.whenLayerView(layer).then(function (layerView) {
