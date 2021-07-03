@@ -67,7 +67,7 @@
         view.extent = layerView.fullExtent;
       });
 
-      view.ui.add("optionsDiv", "top-right");
+      // view.ui.add("optionsDiv", "top-right");
 
       const optionsDiv = document.getElementById("optionsDiv");
 
@@ -148,18 +148,19 @@
   <div id="viewDiv">
     <!-- <div id="tableDiv"></div> -->
   </div>
-  <div class="esri-widget" id="optionsDiv">
-    <h3>选择行政区</h3>
-    <select class="esri-widget select" id="proSelect">
-      <option value=""></option>
-    </select>
-    <select class="esri-widget select" id="citySelect">
-      <option value=""></option>
-    </select>
-    <br />
-    <br />
-  </div>
+  
   <div class="container">
+    <div class="esri-widget" id="optionsDiv">
+      <h3>选择行政区</h3>
+      <select class="esri-widget select" id="proSelect">
+        <option value=""></option>
+      </select>
+      <select class="esri-widget select" id="citySelect">
+        <option value=""></option>
+      </select>
+      <br />
+      <br />
+    </div>
     <div id="tableDiv"></div>
   </div>
 
