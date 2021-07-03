@@ -6,11 +6,16 @@
   <title>筛选行政区</title>
   <style>
     html,
-    body,
+    body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
     #viewDiv {
       padding: 0;
       margin: 0;
-      height: 100%;
+      height: 50%;
       width: 100%;
     }
 
@@ -18,9 +23,9 @@
       width: 200px;
     }
 
-    #tableDiv {
-      height: 300px;
-      width: 400px;
+    .container {
+      height: 50%;
+      width: 100%;
     }
   </style>
 
@@ -44,7 +49,7 @@
       });
 
       const map = new Map({
-        basemap: "gray-vector",
+        // basemap: "gray-vector",
         layers: [layer]
       });
 
@@ -54,7 +59,7 @@
         center: [117.70, 28.31],
         zoom: 9,
         popup: {
-          autoOpenEnabled: false
+          defaultPopupTemplateEnabled: true
         },
       });
 
@@ -132,7 +137,7 @@
         ],
         container: document.getElementById("tableDiv")
       });
-      view.ui.add("tableDiv", "top-right");
+      // view.ui.add("tableDiv", "top-right");
     });
   </script>
 
@@ -154,7 +159,9 @@
     <br />
     <br />
   </div>
-  <div id="tableDiv"></div>
+  <div class="container">
+    <div id="tableDiv"></div>
+  </div>
 
   <script>
     require([
