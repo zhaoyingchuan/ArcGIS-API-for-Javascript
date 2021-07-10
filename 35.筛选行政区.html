@@ -45,12 +45,12 @@
       let xzqLayerView;
 
       var layer = new FeatureLayer({
-        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省区县/FeatureServer/0",
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省区县/FeatureServer/0",
         definitionExpression: "",
       });
 
       const map = new Map({
-        // basemap: "gray-vector",
+        basemap: "gray-vector",
         layers: [layer]
       });
 
@@ -120,12 +120,12 @@
         layer: layer,
         editingEnabled: true,
         fieldConfigs: [
-          // {
-          //   name: "code",
-          //   label: "行政代码",
-          //   editable: false,
-          //   direction: "asc"
-          // },
+          {
+            name: "code",
+            label: "行政代码",
+            editable: false,
+            direction: "asc"
+          },
           {
             name: "name",
             label: "名称",
@@ -163,6 +163,7 @@
     </div>
     <div id="tableDiv"></div>
   </div>
+  
 
   <script>
     require([
@@ -177,7 +178,7 @@
       query.outFields = ["name", "code", "city", "citycode", "province", "procode"];
       query.where = "1=1";
 
-      var queryTask = new QueryTask("https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/三省区县/FeatureServer/0");
+      var queryTask = new QueryTask("https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省区县/FeatureServer/0");
       queryTask.execute(query).then(function (results) {
         var arr0 = [];
         results.features.forEach(e => {
