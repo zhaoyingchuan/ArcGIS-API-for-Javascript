@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>加载谷歌卫星图和天地图标注</title>
+  <title>加载天地图影像和天地图标注</title>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -25,8 +25,11 @@
     ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle) {
 
       var tiledLayer = new WebTileLayer({
+        // urlTemplate:
+        //   "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}"
         urlTemplate:
-          "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}"
+          "http://{subDomain}.tianditu.gov.cn/DataServer?T=img_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
+        subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
       });
 
       var tiledLayer_poi = new WebTileLayer({
