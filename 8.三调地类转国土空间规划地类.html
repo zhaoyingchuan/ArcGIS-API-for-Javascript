@@ -46,8 +46,8 @@
     ], function (WebMap, MapView, FeatureLayer, Editor, LayerList, Compass) {
 
       var layer = new FeatureLayer({
-        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/中心城区和乡镇0121/FeatureServer/0",
-        definitionExpression: "一级类 = '' OR 一级类 IS NULL OR 二级类 = '' OR 二级类 IS NULL OR 三级类 = '' OR 三级类 IS NULL",
+        url: "https://services5.arcgis.com/AOQHsRKDi4eTwIc0/arcgis/rest/services/国土空间规划地类0306/FeatureServer/0",
+        // definitionExpression: "一级类 = '' OR 一级类 IS NULL OR 二级类 = '' OR 二级类 IS NULL OR 三级类 = '' OR 三级类 IS NULL",
       });
 
       var webMap = new WebMap({
@@ -72,12 +72,12 @@
           layer: layer,
           fieldConfig: [
             {
-              name: "dlbm",
+              name: "DLBM",
               label: "地类编码",
               editable: false
             },
             {
-              name: "dlmc",
+              name: "DLMC",
               label: "地类名称",
               editable: false
             },
@@ -139,7 +139,6 @@
     // 如果使用简写方式，document这个位置上的元素必须在执行事件前存在于DOM树中
 
     // $(document).on("change", "select:eq(0)", function () {
-
     // })
 
     //原生JS方法
