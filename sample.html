@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>map</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.18/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.18/"></script>
+</head>
+<body>
+<div id="vue_id">
+    {{title}}
+    <div id="viewDiv"></div>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#vue_id',
+        data: {
+            title: "hi",
+            map: null,
+        },
+        mounted() {
+            this.createMap();
+        },
+        methods: {
+            createMap: function() {
+                require(["esri/map"], function (Map) {
+                    console.log(Map);
+                    this.map = new Map("viewDiv", {
+                        basemap: "streets",
+                        zoom: 4,
+                        center: [120, 30]
+                    });
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>
