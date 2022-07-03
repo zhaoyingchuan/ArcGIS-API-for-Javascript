@@ -1,69 +1,67 @@
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Create a Starter App</title>
-  <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-
-    #sidebar {
-        z-index: 99;
-        position: absolute;
-        top: 0;
-        right: 0;
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>加载ArcGIS Online图层</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        width: 320px;
+        width: 100%;
       }
+    </style>
+ 
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.17/"></script>
+ 
+    <script>
+      require([
+        "esri/WebMap", 
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+      ], function(WebMap, MapView, FeatureLayer) {
+    
+        var layer = new FeatureLayer({
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/国土空间规划地类0306/FeatureServer/1",
+          // definitionExpression: "一级类 = '' OR 一级类 IS NULL OR 二级类 = '' OR 二级类 IS NULL OR 三级类 = '' OR 三级类 IS NULL",
+          copyright: "ZYC",
+          customParameters: {
+            "key": "my-special-key"
+          }
+        });
 
-    #text {
-      color: white;
-      padding: 3%;
-    }
-  </style>
-  
-  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.18/"></script>
-  
-  <script>  
-    require([
-      "esri/Map",
-      "esri/views/MapView",
-    ], function(Map, MapView) {
-      
-      var map = new Map({
-        basemap: "topo-vector",
-      });
+        var webmap = new WebMap({
+          portalItem: {
+            id: "bd10bb233d17435ca7b0e37e2135a7dd"
+          },
+          // layers: myFeatureLayer
+        });
 
-      var view = new MapView({
-        container: "viewDiv",
-        map: map,
-        center: [116.40, 39.90], // longitude, latitude
-        zoom: 13,   
-        // padding: {
-        //   right: 320// Same value as the #sidebar width in CSS
-        // }     
+        webmap.add(layer);
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: webmap,
+          center: [117.70, 28.31],
+          zoom: 12,
+        });
+
+        console.log(layer.customParameters.key)
       });
-    });
-  </script>
-</head>
-<body>
-  <div id="viewDiv">
-    <div id="sidebar" class="esri-widget">
-      <div id="text">
-        <h1>Liberty Island</h1>
-        <p>
-          Note that setting the view.padding makes the view.center,
-          view.extent etc work off a subsection of the full view.
-        </p>
-        <p>Try to resize the window to get a better understanding.</p>
-      </div>
-    </div>
-  </div>
-</body>
+    </script>
+  </head>
+ 
+  <body>
+    <div id="viewDiv"></div>
+  </body>
 </html>
