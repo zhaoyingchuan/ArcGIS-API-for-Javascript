@@ -1,17 +1,20 @@
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>通过id加载WebMap</title>
   <style>
-    html, body, #viewDiv {
+    html,
+    body,
+    #viewDiv {
       padding: 0;
       margin: 0;
       height: 100%;
       width: 100%;
     }
   </style>
-  
+
   <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.17/"></script>
 
@@ -19,11 +22,11 @@
     require([
       "esri/WebMap",
       "esri/views/MapView",
-    ], function(WebMap, MapView) {
+    ], function (WebMap, MapView) {
 
       var webmap = new WebMap({
         portalItem: {
-          id: "1d159aa6853848d1ae1bec91a461162f"
+          id: "bd10bb233d17435ca7b0e37e2135a7dd"
         }
       });
 
@@ -34,7 +37,9 @@
     });
   </script>
 </head>
+
 <body>
   <div id="viewDiv"></div>
 </body>
+
 </html>
