@@ -22,7 +22,8 @@
       "esri/Basemap",
       "esri/layers/WebTileLayer",
       "esri/widgets/BasemapToggle",
-    ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle) {
+      "esri/widgets/Locate",
+    ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate) {
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -52,6 +53,13 @@
         center: [117.767,28.623],//杨桥村
         zoom: 17,
       });
+
+      var locateBtn = new Locate({
+        view: view
+      });
+
+      // Add the locate widget to the top left corner of the view
+      view.ui.add(locateBtn, "top-left");
     });
   </script>
 </head>
