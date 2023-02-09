@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>加载谷歌影像图和天地图标注</title>
+  <title>宅基地权属调查</title>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -28,7 +28,7 @@
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
-        //   "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}",
+        // "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}",
         urlTemplate:
           "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
       });
@@ -51,8 +51,8 @@
         container: "viewDiv",
         map: map,
         //center: [116.329,26.049],//洋地村
-        center: [117.767,28.623],//杨桥村
-        zoom: 17,
+        center: [116.027,28.683],//江西师大
+        zoom: 16,
       });
 
       var locateBtn = new Locate({
@@ -61,6 +61,7 @@
 
       // Add the locate widget to the top left corner of the view
       view.ui.add(locateBtn, "top-left");
+      locateBtn.startup();
 
       var compassWidget = new Compass({
         view: view,
