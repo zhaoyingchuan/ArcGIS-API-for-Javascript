@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>通过id加载WebMap</title>
+  <title>微信公众号：学学GIS</title>
   <style>
     html,
     body,
@@ -22,7 +22,9 @@
     require([
       "esri/WebMap",
       "esri/views/MapView",
-    ], function (WebMap, MapView) {
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+    ], function (WebMap, MapView, Locate, Compass) {
 
       var webmap = new WebMap({
         portalItem: {
@@ -36,6 +38,20 @@
         center: [116.027,28.683],
         zoom: 16,
       });
+
+      var locateBtn = new Locate({
+        view: view
+      });
+
+      // Add the locate widget to the top left corner of the view
+      view.ui.add(locateBtn, "top-left");
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+
+      // Add the Compass widget to the top left corner of the view
+      view.ui.add(compassWidget, "top-left");
     });
   </script>
 </head>
