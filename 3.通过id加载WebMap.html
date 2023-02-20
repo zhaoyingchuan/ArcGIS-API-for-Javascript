@@ -20,17 +20,30 @@
 
   <script>
     require([
+      "esri/layers/WebTileLayer",
       "esri/WebMap",
       "esri/views/MapView",
       "esri/widgets/Locate",
       "esri/widgets/Compass",
-    ], function (WebMap, MapView, Locate, Compass) {
+    ], function (WebTileLayer, WebMap, MapView, Locate, Compass) {
+
+
+      // var tiledLayer = new WebTileLayer({
+      //   // urlTemplate:
+      //   // "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}",
+      //   urlTemplate:
+      //     "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+      // });
 
       var webmap = new WebMap({
+        
         portalItem: {
-          id: "331ee9476fe742feb80cf33408deb3b3"
-        }
+          id: "500715a3a57a4fef8a271b69bb496e7b"
+        },
+        
       });
+
+      // webmap.add(tiledLayer)
 
       var view = new MapView({
         container: "viewDiv",
