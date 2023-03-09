@@ -24,7 +24,8 @@
       "esri/widgets/BasemapToggle",
       "esri/widgets/Locate",
       "esri/widgets/Compass",
-    ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass) {
+      "esri/widgets/Attribution",
+    ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -68,10 +69,19 @@
 
       // Add the Compass widget to the top left corner of the view
       view.ui.add(compassWidget, "top-left");
+
+      // var attribWidget = new Attribution({
+      //   view: view,
+      //   label: "学学GIS",
+      // });
+
+      // view.ui.add(attribWidget, "top-left");
+
     });
   </script>
 </head>
 <body>
   <div id="viewDiv"></div>
+  <div class="esri-ui-inner-container esri-ui-manual-container"><div class="esri-component esri-attribution esri-widget"><div class="esri-attribution__sources esri-interactive" tabindex="0" role="button"></div><div class="esri-attribution__powered-by">作者：zyc，微信公众号： <a class="esri-attribution__link esri-widget__anchor" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a></div></div><div class="esri-component esri-popup" role="presentation"></div><div class="esri-component esri-spinner"></div></div>
 </body>
 </html>
