@@ -1,21 +1,35 @@
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>微信公众号：学学GIS</title>
   <style>
-    html, body, #viewDiv {
+    html,
+    body,
+    #viewDiv {
       padding: 0;
       margin: 0;
       height: 100%;
       width: 100%;
     }
+
+    /* .esri-attribution__link esri-widget__anchor{
+      color: rgb(2, 30, 170);
+    } */
+
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 10px;
+    }
   </style>
-  
+
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.18/"></script>
-  
-  <script>  
+
+  <script>
     require([
       "esri/Map",
       "esri/views/MapView",
@@ -25,7 +39,9 @@
       "esri/widgets/Locate",
       "esri/widgets/Compass",
       "esri/widgets/Attribution",
-    ], function(Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
+
+      
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -41,18 +57,18 @@
       });
 
       var myBasemap = new Basemap({
-          baseLayers: [tiledLayer, tiledLayer_poi],
-        });
-      
+        baseLayers: [tiledLayer, tiledLayer_poi],
+      });
+
       var map = new Map({
         basemap: myBasemap,
       });
-      
+
       var view = new MapView({
         container: "viewDiv",
         map: map,
         //center: [116.329,26.049],//洋地村
-        center: [116.027,28.683],//江西师大
+        center: [116.027, 28.683],//江西师大
         zoom: 16,
       });
 
@@ -77,11 +93,21 @@
 
       // view.ui.add(attribWidget, "top-left");
 
+      const titleDiv = document.getElementById("titleDiv");
+
+      view.ui.add(titleDiv, "top-right");
+
     });
   </script>
 </head>
+
 <body>
-  <div id="viewDiv"></div>
-  <div class="esri-ui-inner-container esri-ui-manual-container"><div class="esri-component esri-attribution esri-widget"><div class="esri-attribution__sources esri-interactive" tabindex="0" role="button"></div><div class="esri-attribution__powered-by">作者：zyc，微信公众号： <a class="esri-attribution__link esri-widget__anchor" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a></div></div><div class="esri-component esri-popup" role="presentation"></div><div class="esri-component esri-spinner"></div></div>
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：
+      <a class="weixin__link esri-widget__anchor" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
 </body>
+
 </html>
