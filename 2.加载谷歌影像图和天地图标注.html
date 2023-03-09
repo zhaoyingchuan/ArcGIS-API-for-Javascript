@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>微信公众号：学学GIS</title>
+  <title>在线影像底图</title>
   <style>
     html,
     body,
@@ -13,10 +13,6 @@
       height: 100%;
       width: 100%;
     }
-
-    /* .esri-attribution__link esri-widget__anchor{
-      color: rgb(2, 30, 170);
-    } */
 
     #titleDiv {
       font-weight: 400;
@@ -40,8 +36,6 @@
       "esri/widgets/Compass",
       "esri/widgets/Attribution",
     ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
-
-      
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -85,11 +79,6 @@
 
       // Add the Compass widget to the top left corner of the view
       view.ui.add(compassWidget, "top-left");
-
-      // var attribWidget = new Attribution({
-      //   view: view,
-      //   label: "学学GIS",
-      // });
 
       // view.ui.add(attribWidget, "top-left");
 
