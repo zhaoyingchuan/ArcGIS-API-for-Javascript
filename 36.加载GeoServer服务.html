@@ -23,7 +23,7 @@
   </style>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.18/"></script>
+  <script src="https://js.arcgis.com/4.20/"></script>
 
   <script>
     require([
@@ -35,8 +35,8 @@
       "esri/widgets/Locate",
       "esri/widgets/Compass",
       "esri/widgets/Attribution",
-      "esri/layers/OGCFeatureLayer",
-    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, OGCFeatureLayer) {
+      "esri/layers/WFSLayer",
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WFSLayer) {
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -46,9 +46,9 @@
       });
 
       var tiledLayer_poi = new WebTileLayer({
-        urlTemplate:
-          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
-        // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        // urlTemplate:
+        //   "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+        // // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
       });
 
       var myBasemap = new Basemap({
@@ -73,8 +73,8 @@
         zoom: 16,
       });
 
-      const countries = new OGCFeatureLayer({
-          url: "http://4d8cb093.r6.vip.cpolar.cn/geoserver/",
+      const countries = new WFSLayer({
+          url: "http://31640308.r6.vip.cpolar.cn/geoserver/sample/wms?service=WMS&version=1.1.0&request=GetMap&layers=sample%3Acounty&bbox=1.2642863E7%2C2813102.5%2C1.3189372E7%2C3513816.5&width=598&height=768&srs=EPSG%3A3857&styles=&format=application/openlayers",
           collectionId: "sample:county"
       });
       map.add(countries);
