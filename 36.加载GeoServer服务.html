@@ -23,7 +23,7 @@
   </style>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.18/"></script>
+  <script src="https://js.arcgis.com/4.20/"></script>
 
   <script>
     require([
@@ -35,7 +35,8 @@
       "esri/widgets/Locate",
       "esri/widgets/Compass",
       "esri/widgets/Attribution",
-    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
+      "esri/layers/WFSLayer",
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WFSLayer) {
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -47,7 +48,7 @@
       var tiledLayer_poi = new WebTileLayer({
         urlTemplate:
           "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
-        // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        // // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
       });
 
       var myBasemap = new Basemap({
@@ -66,6 +67,14 @@
         zoom: 16,
       });
 
+      var county = new WMSLayer({
+          url: "http://localhost:8081/geoserver/sample/wms?service=WMS&version=1.1.0&request=GetMap&layers=sample%3Acounty&bbox=1.2642863E7%2C2813102.5%2C1.3189372E7%2C3513816.5&width=598&height=768&srs=EPSG%3A3857&styles=&format=application/openlayers",
+          // collectionId: "sample:county"
+      });
+      map.add(county);
+
+      
+
       var locateBtn = new Locate({
         view: view
       });
@@ -82,7 +91,7 @@
 
       // view.ui.add(attribWidget, "top-left");
 
-      const titleDiv = document.getElementById("titleDiv");
+      var titleDiv = document.getElementById("titleDiv");
 
       view.ui.add(titleDiv, "top-right");
 

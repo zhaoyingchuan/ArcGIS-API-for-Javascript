@@ -38,7 +38,7 @@
       });
 
       var myFeatureLayer = new FeatureLayer({
-        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/地铁线路/FeatureServer/0",
+        url: "http://192.168.1.100:8081/geoserver/sample/wms?service=WMS&version=1.1.0&request=GetMap&layers=sample%3Acounty&bbox=1.26428638E7%2C2813102.571899999%2C1.31893716121E7%2C3513816.4852999975&width=598&height=768&srs=EPSG%3A3857&styles=&format=application/openlayers",
       });
 
       webmap.add(myFeatureLayer);
