@@ -21,6 +21,18 @@
         layers: [
           new ol.layer.Tile({
             source: new ol.source.OSM({layer: 'sat'})
+          }),
+          new ol.layer.Image({
+            source: new ol.source.ImageWMS({
+              ratio: 1,
+              url: 'http://localhost:8081/geoserver/sample/wms',
+              crossOrigin:'anonymous',
+              params:{
+                'FORMAT':'image/png',
+                'VERSION':'1.1.1',
+                "LAYERS":'sample:G50H030044',
+              }
+            })
           })
         ],
         view: new ol.View({
