@@ -25,11 +25,12 @@
           new ol.layer.Image({
             source: new ol.source.ImageWMS({
               ratio: 1,
-              url: 'http://1f74c355.r3.vip.cpolar.cn/geoserver/sample/wms',
+              url: 'https://1f74c355.r3.vip.cpolar.cn/geoserver/sample/wms',
               crossOrigin:'anonymous',
               params:{
-                'FORMAT':'image/png',
+                'FORMAT':'image/jpeg',
                 'VERSION':'1.1.1',
+                "exceptions":'application/vnd.ogc.se_inimage',
                 "LAYERS":'sample:G50H030044',
               }
             })
