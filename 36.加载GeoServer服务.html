@@ -35,8 +35,8 @@
       "esri/widgets/Locate",
       "esri/widgets/Compass",
       "esri/widgets/Attribution",
-      "esri/layers/WFSLayer",
-    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WFSLayer) {
+      "esri/layers/WMSLayer",
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WMSLayer) {
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -68,7 +68,7 @@
       });
 
       var county = new WMSLayer({
-          url: "http://localhost:8081/geoserver/sample/wms?service=WMS&version=1.1.0&request=GetMap&layers=sample%3Acounty&bbox=1.2642863E7%2C2813102.5%2C1.3189372E7%2C3513816.5&width=598&height=768&srs=EPSG%3A3857&styles=&format=application/openlayers",
+          url: "http://1f74c355.r3.vip.cpolar.cn/geoserver/sample/wms?service=WMS&version=1.1.0&request=GetMap&layers=sample%3Acounty&bbox=1.2642863E7%2C2813102.5%2C1.3189372E7%2C3513816.5&width=598&height=768&srs=EPSG%3A3857&styles=&format=application/openlayers",
           // collectionId: "sample:county"
       });
       map.add(county);
