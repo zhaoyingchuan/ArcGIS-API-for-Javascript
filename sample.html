@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
     <style>
       .map2 {
-        height: 400px;
+        height: 700px;
         width: 100%;
       }
     </style>
@@ -25,10 +25,10 @@
           new ol.layer.Image({
             source: new ol.source.ImageWMS({
               ratio: 1,
-              url: 'https://1f74c355.r3.vip.cpolar.cn/geoserver/sample/wms',
+              url: 'http://localhost:8081/geoserver/sample/wms',
               crossOrigin:'anonymous',
               params:{
-                'FORMAT':'image/jpeg',
+                'FORMAT':'image/png',
                 'VERSION':'1.1.1',
                 "exceptions":'application/vnd.ogc.se_inimage',
                 "LAYERS":'sample:G50H030044',
@@ -37,8 +37,8 @@
           })
         ],
         view: new ol.View({
-          center: ol.proj.transform([37.41, 8.82], 'EPSG:4326', 'EPSG:3857'),
-          zoom: 4
+          center: ol.proj.transform([115.36, 27.38], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 15
         })
       });
     </script>
