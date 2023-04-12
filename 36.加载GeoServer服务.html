@@ -1,0 +1,129 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>在线影像底图</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 5px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+      "esri/widgets/Attribution",
+      "esri/layers/WMSLayer",
+      "esri/widgets/Expand",
+      "esri/widgets/Legend", 
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WMSLayer, Expand, Legend) {
+
+      var tiledLayer = new WebTileLayer({
+        // urlTemplate:
+        // "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}",
+        urlTemplate:
+          "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+        // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+      });
+
+      var myBasemap = new Basemap({
+        baseLayers: [tiledLayer, tiledLayer_poi],
+      });
+
+      var map = new Map({
+        basemap: myBasemap,
+      });
+
+      // Typical usage
+      let myLayer = new WMSLayer({
+        url: "http://51d40576.r1.vip.cpolar.cn/geoserver/sample/wms",
+        sublayers: [{
+          name: 'sample:county',
+          // legendUrl: // url to the legend
+        }],
+        // name: 'sample:county',
+      });
+
+      map.add(myLayer)
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        //center: [116.329,26.049],//洋地村
+        center: [116.027, 28.683],//江西师大
+        zoom: 10,
+      });
+
+      var locateBtn = new Locate({
+        view: view
+      });
+
+      // Add the locate widget to the top left corner of the view
+      view.ui.add(locateBtn, "top-left");
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+
+      // Add the Compass widget to the top left corner of the view
+      view.ui.add(compassWidget, "top-left");
+
+      // view.ui.add(attribWidget, "top-left");
+
+      const titleDiv = document.getElementById("titleDiv");
+
+      view.ui.add(titleDiv, "top-right");
+
+      const legend = new Expand({
+        content: new Legend({
+          view: view,
+          // style: "card" // other styles include 'classic'
+        }),
+        view: view,
+        expanded: true
+      });
+
+      view.ui.add(legend, "bottom-right");
+
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：
+      <a class="weixin__link esri-widget__anchor" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
+</body>
+
+</html>
