@@ -37,9 +37,12 @@
       "esri/widgets/Attribution",
       "esri/layers/WMSLayer",
       "esri/layers/WFSLayer",
+      "esri/layers/GeoJSONLayer",
       "esri/widgets/Expand",
       "esri/widgets/Legend", 
-    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WMSLayer, WFSLayer, Expand, Legend) {
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Editor",
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WMSLayer, WFSLayer, Expand, Legend, FeatureLayer, Editor, GeoJSONLayer) {
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -74,7 +77,7 @@
       // map.add(myLayer)
 
       var popupXZQ = {
-          title: "{XZQMC}",
+          title: "{名称}",
           content: [{
             "type": "fields",
             "fieldInfos": [
@@ -104,11 +107,21 @@
         }
 
       // 加载wfs服务
-      var myLayer = new WFSLayer({
-        url: "http://51d40576.r1.vip.cpolar.cn/geoserver/sample/wfs",
-        name: "county",        
-        popupTemplate: popupXZQ,
-      })
+      // var myLayer = new WFSLayer({
+      //   url: "http://localhost:8081/geoserver/sample/wfs",
+      //   // name: "county", 
+      //   // displayField: "名称",
+      //   // popupEnabled: false,
+      //   popupTemplate: popupXZQ,
+      // })
+
+      const myLayer = new GeoJSONLayer({
+        url: "http://localhost:8081/geoserver/sample/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sample%3Acounty&maxFeatures=50&outputFormat=application%2Fjson",
+        // copyright: "USGS Earthquakes",
+      });
+      // map.add(geoJSONLayer);  // adds the layer to the map
+
+      
       map.add(myLayer)
 
       var view = new MapView({
@@ -153,6 +166,16 @@
 
       view.ui.add(legend, "bottom-right");
 
+      // Editor widget
+      var editor = new Editor({
+        view: view,
+        layerInfos: [myLayer],
+        allowedWorkflows: ["update"],
+      });
+
+      // Add widget to the view
+      view.ui.add(editor, "top-right");
+
 
     });
   </script>
@@ -162,7 +185,7 @@
   <div id="viewDiv">
     <div id="titleDiv" class="esri-widget">
       制作：zyc | 微信公众号：
-      <a class="weixin__link esri-widget__anchor" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a>
+      <a class="weixin_link" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a>
     </div>
   </div>
 </body>
