@@ -27,6 +27,7 @@
 
   <script>
     require([
+      "esri/config",
       "esri/Map",
       "esri/views/MapView",
       "esri/Basemap",
@@ -42,7 +43,7 @@
       "esri/widgets/Legend", 
       "esri/layers/FeatureLayer",
       "esri/widgets/Editor",
-    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WMSLayer, WFSLayer, Expand, Legend, FeatureLayer, Editor, GeoJSONLayer) {
+    ], function (esriConfig, Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WMSLayer, WFSLayer, Expand, Legend, FeatureLayer, Editor, GeoJSONLayer) {
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -106,9 +107,11 @@
       //     }]
       //   }
 
+      // esriConfig.defaults.io.corsEnabledServers.push("http://localhost:8081");
+
       // 加载wfs服务
       var myLayer = new WFSLayer({
-        url: "http://localhost:8081/geoserver/sample/wfs",
+        url: "http://678bacce.r3.vip.cpolar.cn/geoserver/sample/wfs",
         name: "城镇村范围_Merge", 
         // displayField: "名称",
         // popupEnabled: false,
