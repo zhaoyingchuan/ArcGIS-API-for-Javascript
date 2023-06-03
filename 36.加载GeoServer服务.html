@@ -76,71 +76,58 @@
       // });
       // map.add(myLayer)
 
-      var popupXZQ = {
-          title: "{名称}",
-          content: [{
-            "type": "fields",
-            "fieldInfos": [
-              {
-                "fieldName": "名称",
-                "label": "名称",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": null,
-                "stringFieldOption": "text-box"
-              },
-              {
-                "fieldName": "Shape_Area",
-                "label": "Shape_Area",
-                "isEditable": true,
-                "tooltip": "",
-                "visible": true,
-                "format": {//格式化数值
-                  "places": 2,
-                  "digitSeparator": false
-                },
-                "stringFieldOption": "text-box"
-              },
-            ]
-          }]
-        }
+      // var popupXZQ = {
+      //     title: "{名称}",
+      //     content: [{
+      //       "type": "fields",
+      //       "fieldInfos": [
+      //         {
+      //           "fieldName": "名称",
+      //           "label": "名称",
+      //           "isEditable": true,
+      //           "tooltip": "",
+      //           "visible": true,
+      //           "format": null,
+      //           "stringFieldOption": "text-box"
+      //         },
+      //         {
+      //           "fieldName": "Shape_Area",
+      //           "label": "Shape_Area",
+      //           "isEditable": true,
+      //           "tooltip": "",
+      //           "visible": true,
+      //           "format": {//格式化数值
+      //             "places": 2,
+      //             "digitSeparator": false
+      //           },
+      //           "stringFieldOption": "text-box"
+      //         },
+      //       ]
+      //     }]
+      //   }
 
       // 加载wfs服务
-      // var myLayer = new WFSLayer({
-      //   url: "http://localhost:8081/geoserver/sample/wfs",
-      //   // name: "county", 
-      //   // displayField: "名称",
-      //   // popupEnabled: false,
-      //   popupTemplate: popupXZQ,
-      // })
+      var myLayer = new WFSLayer({
+        url: "http://localhost:8081/geoserver/sample/wfs",
+        name: "城镇村范围_Merge", 
+        // displayField: "名称",
+        // popupEnabled: false,
+        // popupTemplate: popupXZQ,
+      })
 
-      const myLayer = new GeoJSONLayer({
-        url: "http://localhost:8081/geoserver/sample/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sample%3Acounty&maxFeatures=50&outputFormat=application%2Fjson",
-        // copyright: "USGS Earthquakes",
-      });
-      // map.add(geoJSONLayer);  // adds the layer to the map
-
-      
       map.add(myLayer)
 
       var view = new MapView({
         container: "viewDiv",
         map: map,
         //center: [116.329,26.049],//洋地村
-        center: [116.027, 28.683],//江西师大
+        center: [116.247, 29.732],//江西师大
         zoom: 10,
         // popup: {
         //   defaultPopupTemplateEnabled: true
         // },
       });
 
-      var locateBtn = new Locate({
-        view: view
-      });
-
-      // Add the locate widget to the top left corner of the view
-      view.ui.add(locateBtn, "top-left");
 
       var compassWidget = new Compass({
         view: view,
