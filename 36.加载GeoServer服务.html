@@ -27,104 +27,58 @@
 
   <script>
     require([
-      "esri/config",
       "esri/Map",
       "esri/views/MapView",
       "esri/Basemap",
       "esri/layers/WebTileLayer",
-      "esri/widgets/BasemapToggle",
-      "esri/widgets/Locate",
       "esri/widgets/Compass",
-      "esri/widgets/Attribution",
-      "esri/layers/WMSLayer",
       "esri/layers/WFSLayer",
-      "esri/layers/GeoJSONLayer",
-      "esri/widgets/Expand",
-      "esri/widgets/Legend", 
-      "esri/layers/FeatureLayer",
-      "esri/widgets/Editor",
-    ], function (esriConfig, Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, WMSLayer, WFSLayer, Expand, Legend, FeatureLayer, Editor, GeoJSONLayer) {
+      "esri/widgets/LayerList",
+    ], function (Map, MapView, Basemap, WebTileLayer, Compass, WFSLayer, LayerList) {
+
+      // var myBasemap = new Basemap({
+      //   baseLayers: [tiledLayer, tiledLayer_poi],
+      // });
+
+      var map = new Map({
+
+      });
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
         // "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}",
         urlTemplate:
           "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+        title:"影像图",
       });
 
-      var tiledLayer_poi = new WebTileLayer({
-        urlTemplate:
-          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
-        // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
-      });
-
-      var myBasemap = new Basemap({
-        baseLayers: [tiledLayer, tiledLayer_poi],
-      });
-
-      var map = new Map({
-        basemap: myBasemap,
-      });
-
-      // 加载wms服务
-      // let myLayer = new WMSLayer({
-      //   url: "http://51d40576.r1.vip.cpolar.cn/geoserver/sample/wms",
-      //   sublayers: [{
-      //     name: 'sample:county',
-      //     // legendUrl: // url to the legend
-      //   }],
-      //   // name: 'sample:county',
-      // });
-      // map.add(myLayer)
-
-      // var popupXZQ = {
-      //     title: "{名称}",
-      //     content: [{
-      //       "type": "fields",
-      //       "fieldInfos": [
-      //         {
-      //           "fieldName": "名称",
-      //           "label": "名称",
-      //           "isEditable": true,
-      //           "tooltip": "",
-      //           "visible": true,
-      //           "format": null,
-      //           "stringFieldOption": "text-box"
-      //         },
-      //         {
-      //           "fieldName": "Shape_Area",
-      //           "label": "Shape_Area",
-      //           "isEditable": true,
-      //           "tooltip": "",
-      //           "visible": true,
-      //           "format": {//格式化数值
-      //             "places": 2,
-      //             "digitSeparator": false
-      //           },
-      //           "stringFieldOption": "text-box"
-      //         },
-      //       ]
-      //     }]
-      //   }
-
-      // esriConfig.defaults.io.corsEnabledServers.push("http://localhost:8081");
+      map.add(tiledLayer)
 
       // 加载wfs服务
       var myLayer = new WFSLayer({
-        url: "http://678bacce.r3.vip.cpolar.cn/geoserver/sample/wfs",
-        name: "城镇村范围_Merge", 
+        url: "http://localhost:8081/geoserver/sample/wfs",
+        name: "可建设区",
         // displayField: "名称",
         // popupEnabled: false,
         // popupTemplate: popupXZQ,
       })
-
       map.add(myLayer)
+    
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+        // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        title:"注记",
+      });
+
+      map.add(tiledLayer_poi)
 
       var view = new MapView({
         container: "viewDiv",
         map: map,
         //center: [116.329,26.049],//洋地村
-        center: [116.247, 29.732],//江西师大
+        //center: [116.247, 29.732],//江西师大
+        center: [116.247, 29.732],//湖口县
         zoom: 10,
         // popup: {
         //   defaultPopupTemplateEnabled: true
@@ -145,27 +99,12 @@
 
       view.ui.add(titleDiv, "top-right");
 
-      const legend = new Expand({
-        content: new Legend({
-          view: view,
-          // style: "card" // other styles include 'classic'
-        }),
-        view: view,
-        expanded: true
+      var layerList = new LayerList({
+        view: view
       });
 
-      view.ui.add(legend, "bottom-right");
-
-      // Editor widget
-      var editor = new Editor({
-        view: view,
-        layerInfos: [myLayer],
-        allowedWorkflows: ["update"],
-      });
-
-      // Add widget to the view
-      view.ui.add(editor, "top-right");
-
+      // Add widget to the top right corner of the view
+      view.ui.add(layerList, "top-right");
 
     });
   </script>
@@ -175,7 +114,9 @@
   <div id="viewDiv">
     <div id="titleDiv" class="esri-widget">
       制作：zyc | 微信公众号：
-      <a class="weixin_link" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a>
+      <a class="weixin_link"
+        href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
+        target="_blank" rel="noreferrer">学学GIS</a>
     </div>
   </div>
 </body>
