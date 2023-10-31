@@ -1,92 +1,143 @@
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <title>WMSLayer | Sample | ArcGIS Maps SDK for JavaScript 4.26</title>
+<html>
 
-    <style>
-      html,
-      body,
-      #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>在线影像底图</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 5px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+
+    var latitude;
+    var longitude;
+
+    // Create a promise to get geolocation data
+    var geolocationPromise = new Promise(function(resolve, reject) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          latitude = position.coords.latitude.toFixed(3);
+          longitude = position.coords.longitude.toFixed(3);
+          console.log("Latitude: " + latitude + " Longitude: " + longitude);
+          resolve(); // Resolve the promise when geolocation data is available
+        });
+      } else {
+        console.log("Geolocation is not supported by this browser.");
+        reject("Geolocation not supported");
       }
-    </style>
+    });
 
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.26/esri/themes/light/main.css"
-    />
-    <script src="https://js.arcgis.com/4.26/"></script>
+    geolocationPromise.then(function() {
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/Basemap",
+        "esri/layers/WebTileLayer",
+        "esri/widgets/BasemapToggle",
+        "esri/widgets/Locate",
+        "esri/widgets/Compass",
+        "esri/widgets/Attribution",
+      ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
 
-    <script>
-      require(["esri/Map", "esri/views/SceneView", "esri/layers/WMSLayer"], (
-        Map,
-        SceneView,
-        WMSLayer
-      ) => {
-        /***********************************
-         * Data attribution:
-         *  OpenStreetMap WMS by terrestris GmbH and Co. KG. Following sources were used:
-         *  (c) OpenStreetMap contributors (http://www.openstreetmap.org/copyright)
-         *  (c) OpenStreetMap Data (http://openstreetmapdata.com)
-         *  (c) Natural Earth Data (http://www.naturalearthdata.com)
-         *  (c) ASTER GDEM 30m (https://asterweb.jpl.nasa.gov/gdem.asp)
-         *  (c) SRTM 450m by ViewfinderPanoramas (http://viewfinderpanoramas.org/)
-         *  (c) Great Lakes Bathymetry by NGDC (http://www.ngdc.noaa.gov/mgg/greatlakes/)
-         *  (c) SRTM 30m by NASA EOSDIS Land Processes Distributed Active Archive Center (LP DAAC, https://lpdaac.usgs.gov/)
-         *********************************/
-        require([
-          "esri/layers/WMSLayer",
-          "esri/layers/MapImageLayer",
-          "esri/Map",
-          "esri/views/MapView"
-        ], function (WMSLayer, MapImageLayer, Map, MapView) {
-          // 创建 WMSLayer 对象
-          // var wmsLayer = new WMSLayer({
-          //   url: "http://localhost:8081/geoserver/wms",
-          //   sublayers: [
-          //     {
-          //       name: "sample:county"
-          //     }
-          //   ],
-          //   spatialReference: {
-          //     wkid: 102100
-          //   }
-          // });
+        var tiledLayer = new WebTileLayer({
+          urlTemplate: "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+        });
 
-          // 创建 MapImageLayer 对象
-          // var mapImageLayer = new MapImageLayer({
-          //   sublayers: [
-          //     {
-          //       id: 0,
-          //       layer: wmsLayer
-          //     }
-          //   ]
-          // });
+        var tiledLayer_poi = new WebTileLayer({
+          urlTemplate: "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+        });
 
-          // 创建 Map 对象
-          var map = new Map({
-            // layers: [mapImageLayer]
-          });
+        var myBasemap = new Basemap({
+          baseLayers: [tiledLayer, tiledLayer_poi],
+        });
 
-          // 创建 MapView 对象
-          var view = new MapView({
-            container: "viewDiv",
-            map: map,
-            zoom: 7,
-            center: [-122.416, 37.785]
-          });
+        var map = new Map({
+          basemap: myBasemap,
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [longitude, latitude], // Use the geolocation data for the initial center
+          zoom: 16,
+        });
+
+        console.log("Latitude: 无" + " Longitude: 无")
+
+        var locateBtn = new Locate({
+          view: view
+        });
+
+        // Add the locate widget to the top left corner of the view
+        view.ui.add(locateBtn, "top-left");
+
+        var compassWidget = new Compass({
+          view: view,
+        });
+
+        // Add the Compass widget to the top left corner of the view
+        view.ui.add(compassWidget, "top-left");
+
+        // view.ui.add(attribWidget, "top-left");
+
+        const titleDiv = document.getElementById("titleDiv");
+
+        view.ui.add(titleDiv, "top-right");
+
+        //*** Add div element to show coordates ***//
+        var coordsWidget = document.createElement("div");
+        coordsWidget.id = "coordsWidget";
+        coordsWidget.className = "esri-widget esri-component";
+        coordsWidget.style.padding = "3px 10px 1px";
+        view.ui.add(coordsWidget, "bottom-right");
+
+        //*** Update lat, lon, zoom and scale ***//
+        function showCoordinates(pt) {
+          var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) + 
+              " | Scale 1:" + Math.round(view.scale * 1) / 1 +
+              " | Zoom " + view.zoom;
+          coordsWidget.innerHTML = coords;
+        }
+        
+        //*** Add event and show center coordinates after the view is finished moving e.g. zoom, pan ***//
+        view.watch(["stationary"], function() {
+          showCoordinates(view.center);
+        });
+
+        //*** Add event to show mouse coordinates on click and move ***//
+        view.on(["pointer-down","pointer-move"], function(evt) {
+          showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
         });
       });
-    </script>
-  </head>
-  <body>
-    <div id="viewDiv"></div>
-  </body>
+    });    
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：
+      <a class="weixin__link esri-widget__anchor" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
+</body>
+
 </html>
