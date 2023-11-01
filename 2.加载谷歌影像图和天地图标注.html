@@ -88,9 +88,7 @@
       view.ui.add(coordsWidget, "bottom-right");
 
       function showCoordinates(pt) {
-        var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) +
-          " | Scale 1:" + Math.round(view.scale * 1) / 1 +
-          " | Zoom " + view.zoom;
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) + " | Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
         coordsWidget.innerHTML = coords;
       }
 
