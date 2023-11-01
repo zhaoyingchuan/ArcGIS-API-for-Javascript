@@ -61,7 +61,7 @@
         //center: [116.329,26.049],//洋地村
         //center: [116.027, 28.683],//江西师大
         //当前定位
-        center: [116.027, 28.68],
+        center: [116.329, 26.049],
         zoom: 16,
       });
 
@@ -84,11 +84,11 @@
       var coordsWidget = document.createElement("div");
       coordsWidget.id = "coordsWidget";
       coordsWidget.className = "esri-widget esri-component";
-      coordsWidget.style.padding = "3px 10px 1px";
+      coordsWidget.style.padding = "3px 10px 3px";
       view.ui.add(coordsWidget, "bottom-right");
 
       function showCoordinates(pt) {
-        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) + " | Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +"<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
         coordsWidget.innerHTML = coords;
       }
 
