@@ -58,7 +58,10 @@
       var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [116.329, 26.049], //当前定位
+        //center: [116.329,26.049],//洋地村
+        //center: [116.027, 28.683],//江西师大
+        //当前定位
+        center: [116.329, 26.049],
         zoom: 16,
       });
 
@@ -85,9 +88,7 @@
       view.ui.add(coordsWidget, "bottom-right");
 
       function showCoordinates(pt) {
-        var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) +
-          " | Scale 1:" + Math.round(view.scale * 1) / 1 +
-          " | Zoom " + view.zoom;
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) + " | Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
         coordsWidget.innerHTML = coords;
       }
 
@@ -100,14 +101,25 @@
       });
 
       // Now try to locate the user's position after all widgets are initialized
-      setTimeout(function () {
-        var locateBtnElement = document.querySelector(".esri-locate");
-        if (locateBtnElement != null) {
+      // setTimeout(function () {
+      //   var locateBtnElement = document.querySelector(".esri-locate");
+      //   if (locateBtnElement != null) {
+      //     locateBtnElement.click();
+      //   } else {
+      //     console.error("元素不存在");
+      //   }
+      // }, 1000); // Adjust the delay as needed
+
+      document.getElementsByClassName("esri-component esri-locate esri-widget--button esri-widget")[0].on("locate", function (event) {
+        if (event.position && event.position.coords) {
+          // Location is found, you can now access the coordinates or perform other actions
+          console.log("Location found:", event.position.coords.latitude, event.position.coords.longitude);
+          var locateBtnElement = document.getElementsByClassName("esri-component esri-locate esri-widget--button esri-widget")[0];
           locateBtnElement.click();
         } else {
-          console.error("元素不存在");
+          console.error("Location not found");
         }
-      }, 1000); // Adjust the delay as needed
+      });
     });
   </script>
 </head>
