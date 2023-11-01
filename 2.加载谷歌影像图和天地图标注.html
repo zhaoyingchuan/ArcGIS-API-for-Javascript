@@ -25,8 +25,8 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.18/"></script>
 
-  <script>   
- 
+  <script>
+
     require([
       "esri/Map",
       "esri/views/MapView",
@@ -38,7 +38,7 @@
       "esri/widgets/Attribution",
     ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
 
-      
+
 
       var tiledLayer = new WebTileLayer({
         // urlTemplate:
@@ -61,7 +61,7 @@
         basemap: myBasemap,
       });
 
-      
+
 
       var view = new MapView({
         container: "viewDiv",
@@ -71,7 +71,6 @@
         center: [116.329, 26.049],//当前定位
         zoom: 16,
       });
-      // console.log("Latitude: 无" + " Longitude: 无")
 
       var locateBtn = new Locate({
         view: view
@@ -102,24 +101,24 @@
 
       //*** Update lat, lon, zoom and scale ***//
       function showCoordinates(pt) {
-        var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) + 
-            " | Scale 1:" + Math.round(view.scale * 1) / 1 +
-            " | Zoom " + view.zoom;
+        var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) +
+          " | Scale 1:" + Math.round(view.scale * 1) / 1 +
+          " | Zoom " + view.zoom;
         coordsWidget.innerHTML = coords;
       }
-      
+
       //*** Add event and show center coordinates after the view is finished moving e.g. zoom, pan ***//
-      view.watch(["stationary"], function() {
+      view.watch(["stationary"], function () {
         showCoordinates(view.center);
       });
 
       //*** Add event to show mouse coordinates on click and move ***//
-      view.on(["pointer-down","pointer-move"], function(evt) {
+      view.on(["pointer-down", "pointer-move"], function (evt) {
         showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
       });
 
     });
-    
+
   </script>
 </head>
 
@@ -127,10 +126,14 @@
   <div id="viewDiv">
     <div id="titleDiv" class="esri-widget">
       制作：zyc | 微信公众号：
-      <a class="weixin__link esri-widget__anchor" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect" target="_blank" rel="noreferrer">学学GIS</a>
+      <a class="weixin__link esri-widget__anchor"
+        href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
+        target="_blank" rel="noreferrer">学学GIS</a>
     </div>
   </div>
 
+
 </body>
+
 
 </html>
