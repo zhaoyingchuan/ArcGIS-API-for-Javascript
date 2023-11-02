@@ -84,11 +84,11 @@
       var coordsWidget = document.createElement("div");
       coordsWidget.id = "coordsWidget";
       coordsWidget.className = "esri-widget esri-component";
-      coordsWidget.style.padding = "3px 10px 1px";
+      coordsWidget.style.padding = "3px 10px 3px";
       view.ui.add(coordsWidget, "bottom-right");
 
       function showCoordinates(pt) {
-        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) + " | Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +"<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
         coordsWidget.innerHTML = coords;
       }
 
@@ -100,6 +100,21 @@
         showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
       });
 
+      function tryToClickLocateBtn() {
+        var locateBtnElement = document.querySelector(".esri-locate");
+        if (locateBtnElement) {
+          // 找到按钮元素，可以执行点击操作
+          locateBtnElement.click();
+        } else {
+          // 没有找到按钮元素，继续等待
+          setTimeout(tryToClickLocateBtn, 1000); // 1秒后再次尝试
+        }
+      }
+
+      // 启动等待定时器
+      tryToClickLocateBtn();
+
+
       // Now try to locate the user's position after all widgets are initialized
       // setTimeout(function () {
       //   var locateBtnElement = document.querySelector(".esri-locate");
@@ -109,17 +124,6 @@
       //     console.error("元素不存在");
       //   }
       // }, 1000); // Adjust the delay as needed
-
-      document.getElementsByClassName("esri-component esri-locate esri-widget--button esri-widget")[0].on("locate", function (event) {
-        if (event.position && event.position.coords) {
-          // Location is found, you can now access the coordinates or perform other actions
-          console.log("Location found:", event.position.coords.latitude, event.position.coords.longitude);
-          var locateBtnElement = document.getElementsByClassName("esri-component esri-locate esri-widget--button esri-widget")[0];
-          locateBtnElement.click();
-        } else {
-          console.error("Location not found");
-        }
-      });
     });
   </script>
 </head>

@@ -21,6 +21,10 @@
       font-size: 12px;
       padding: 5px;
     }
+
+    #coordsWidget {
+      font-size: 12px;
+    }
   </style>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
@@ -88,7 +92,7 @@
       view.ui.add(coordsWidget, "bottom-right");
 
       function showCoordinates(pt) {
-        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +"<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) + "<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
         coordsWidget.innerHTML = coords;
       }
 
@@ -100,15 +104,6 @@
         showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
       });
 
-      // Now try to locate the user's position after all widgets are initialized
-      setTimeout(function () {
-        var locateBtnElement = document.querySelector(".esri-locate");
-        if (locateBtnElement != null) {
-          locateBtnElement.click();
-        } else {
-          console.error("元素不存在");
-        }
-      }, 1000); // Adjust the delay as needed
     });
   </script>
 </head>
