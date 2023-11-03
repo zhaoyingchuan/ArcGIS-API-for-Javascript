@@ -21,10 +21,6 @@
       font-size: 12px;
       padding: 5px;
     }
-
-    #coordsWidget {
-      font-size: 12px;
-    }
   </style>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
@@ -65,7 +61,7 @@
         //center: [116.329,26.049],//洋地村
         //center: [116.027, 28.683],//江西师大
         //当前定位
-        center: [116.329, 26.049],
+        center: [116.027, 28.683],
         zoom: 16,
       });
 
@@ -92,7 +88,7 @@
       view.ui.add(coordsWidget, "bottom-right");
 
       function showCoordinates(pt) {
-        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) + "<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +"<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
         coordsWidget.innerHTML = coords;
       }
 
@@ -103,6 +99,19 @@
       view.on(["pointer-down", "pointer-move"], function (evt) {
         showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
       });
+
+      function tryToClickLocateBtn() {
+        var locateBtnElement = document.querySelector(".esri-locate");
+        if (locateBtnElement) {
+          // 找到按钮元素，可以执行点击操作
+          locateBtnElement.click();
+        } else {
+          // 没有找到按钮元素，继续等待
+          setTimeout(tryToClickLocateBtn, 1000); // 1秒后再次尝试
+        }
+      }
+      // 启动等待定时器
+      tryToClickLocateBtn();
 
     });
   </script>
