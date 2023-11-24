@@ -91,48 +91,48 @@
       const titleDiv = document.getElementById("titleDiv");
       view.ui.add(titleDiv, "top-right");
 
-      var editLayer;
-      view.popup.autoOpenEnabled = false; //disable popups
-      editLayer = {
-        layer: myFeatureLayer,
-        fieldConfig: [
-          {
-            name: "权利人",
-            label: "户主名",
-            editable: true
-          },
-          // {
-          //   name: "DLMC",
-          //   label: "地类名称",
-          //   editable: false
-          // },
-          // {
-          //   name: "一级类",
-          //   label: "一级类",
-          //   editable: true
-          // },
-          // {
-          //   name: "二级类",
-          //   label: "二级类",
-          //   editable: true
-          // },
-          // {
-          //   name: "三级类",
-          //   label: "三级类",
-          //   editable: true
-          // },
-        ],
-      };
+      // var editLayer;
+      // view.popup.autoOpenEnabled = false; //disable popups
+      // editLayer = {
+      //   layer: myFeatureLayer,
+      //   fieldConfig: [
+      //     {
+      //       name: "权利人",
+      //       label: "户主名",
+      //       editable: true
+      //     },
+      //     // {
+      //     //   name: "DLMC",
+      //     //   label: "地类名称",
+      //     //   editable: false
+      //     // },
+      //     // {
+      //     //   name: "一级类",
+      //     //   label: "一级类",
+      //     //   editable: true
+      //     // },
+      //     // {
+      //     //   name: "二级类",
+      //     //   label: "二级类",
+      //     //   editable: true
+      //     // },
+      //     // {
+      //     //   name: "三级类",
+      //     //   label: "三级类",
+      //     //   editable: true
+      //     // },
+      //   ],
+      // };
 
-      // Editor widget
-      var editor = new Editor({
-        view: view,
-        layerInfos: [editLayer],
-        allowedWorkflows: ["update"],
-      });
+      // // Editor widget
+      // var editor = new Editor({
+      //   view: view,
+      //   layerInfos: [editLayer],
+      //   allowedWorkflows: ["update"],
+      // });
 
-      // Add widget to the view
-      view.ui.add(editor, "top-right");
+      // // Add widget to the view
+      // view.ui.add(editor, "top-right");
 
 
       var locateBtn = new Locate({
