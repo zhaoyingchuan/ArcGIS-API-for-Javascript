@@ -32,9 +32,7 @@
     ], function(Map, WebMap, MapView, Basemap, WebTileLayer, BasemapToggle) {
 
       var map = new Map({
-        basemap: {
-          portalItem: {id: "bb328ac19e1343a5903b2a72e57884f2"}
-        }
+        basemap: "topo-vector",
       });
 
       var view = new MapView({
@@ -46,7 +44,7 @@
 
       var basemapToggle = new BasemapToggle({
         view: view,
-        nextBasemap: "topo-vector",
+        nextBasemap: "Satellite",
       });
       
       view.ui.add(basemapToggle,"bottom-right");

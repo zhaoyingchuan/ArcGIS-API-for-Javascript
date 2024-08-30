@@ -1,13 +1,10 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>三调地类转国土空间规划地类</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
-  <!-- 引用ArcGIS JS API -->
-  <script src="https://js.arcgis.com/4.18/"></script>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>在线影像底图</title>
   <style>
     html,
     body,
@@ -18,50 +15,67 @@
       width: 100%;
     }
 
-    .esri-ui .esri-editor__scroller {
-      max-height: 500px;
-    }
-
-    .esri-view-height-medium .esri-expand .esri-widget--panel,
-    .esri-view-height-medium .esri-expand .esri-widget--panel-height-only,
-    .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel,
-    .esri-view-height-medium .esri-ui-corner .esri-component.esri-widget--panel-height-only {
-      max-height: 1000px;
-    }
-
-    .esri-view .esri-view-surface--inset-outline:focus::after {
-      outline: auto 0px Highlight !important;
-      outline: auto 0px -webkit-focus-ring-color !important;
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 5px;
     }
   </style>
 
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
   <script>
     require([
-      "esri/WebMap",
+      "esri/Map",
       "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+      "esri/widgets/Attribution",
       "esri/layers/FeatureLayer",
       "esri/widgets/Editor",
       "esri/widgets/LayerList",
-      "esri/widgets/Compass",
-    ], function (WebMap, MapView, FeatureLayer, Editor, LayerList, Compass) {
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution,FeatureLayer,Editor,LayerList) {
+      var tiledLayer = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=img_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+					// "https://gac-geo.lreept.online/vt/lyrs=s&x={x}&y={y}&z={z}",
+          // "https://0pn.cn/vt/lyrs=s&x={x}&y={y}&z={z}",
+          // "https://gac-geo.googlecnapps.club/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+      });
+
+      var myBasemap = new Basemap({
+        baseLayers: [tiledLayer, tiledLayer_poi],
+      });
+
+      var map = new Map({
+        basemap: myBasemap,
+      });
 
       var layer = new FeatureLayer({
-        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/国土空间规划地类0306/FeatureServer/1",
+        url: "https://services5.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/科教文卫用地/FeatureServer/3",
         // definitionExpression: "一级类 = '' OR 一级类 IS NULL OR 二级类 = '' OR 二级类 IS NULL OR 三级类 = '' OR 三级类 IS NULL",
       });
 
-      var webMap = new WebMap({
-        portalItem: {
-          id: "bd10bb233d17435ca7b0e37e2135a7dd"
-        },
-        layers: [layer],
-      });
+      map.add(layer);
 
       var view = new MapView({
         container: "viewDiv",
-        map: webMap,
-        center: [117.70, 28.31],
-        zoom: 12,
+        map: map,
+        //center: [116.329,26.049],//洋地村
+        //center: [116.027, 28.683],//江西师大
+        //当前定位
+        center: [115.382, 28.688],
+        zoom: 16,
       });
 
       var editLayer;
@@ -116,23 +130,67 @@
         });
       });
 
+      var locateBtn = new Locate({
+        view: view,
+      });
+
+      view.ui.add(locateBtn, "top-left");
+
       var compassWidget = new Compass({
         view: view,
       });
 
-      // Add the Compass widget to the top left corner of the view
       view.ui.add(compassWidget, "top-left");
+
+      const titleDiv = document.getElementById("titleDiv");
+
+      view.ui.add(titleDiv, "top-right");
+
+      var coordsWidget = document.createElement("div");
+      coordsWidget.id = "coordsWidget";
+      coordsWidget.className = "esri-widget esri-component";
+      coordsWidget.style.padding = "3px 10px 3px";
+      view.ui.add(coordsWidget, "bottom-right");
+
+      function showCoordinates(pt) {
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +"<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        coordsWidget.innerHTML = coords;
+      }
+
+      view.watch(["stationary"], function () {
+        showCoordinates(view.center);
+      });
+
+      // view.on(["pointer-down", "pointer-move"], function (evt) {
+      //   showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+      // });
+
+      // function tryToClickLocateBtn() {
+      //   var locateBtnElement = document.querySelector(".esri-locate");
+      //   if (locateBtnElement) {
+      //     // 找到按钮元素，可以执行点击操作
+      //     locateBtnElement.click();
+      //   } else {
+      //     // 没有找到按钮元素，继续等待
+      //     setTimeout(tryToClickLocateBtn, 1000); // 1秒后再次尝试
+      //   }
+      // }
+      // // 启动等待定时器
+      // tryToClickLocateBtn();
+
     });
   </script>
 </head>
 
 <body>
-  <div id="viewDiv"></div>
-
-  <!-- 引用jQuery -->
-  <!-- <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script> -->
-  <!-- 绑定change事件 -->
-
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：
+      <a class="weixin__link esri-widget__anchor"
+        href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
+        target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
   <script>
     // 为“一级类”绑定change事件
     // 这里的document作为一种未简写的方式，与on搭配才能为未出现的元素绑定事件
