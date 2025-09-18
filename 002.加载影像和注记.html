@@ -21,6 +21,17 @@
       font-size: 12px;
       padding: 5px;
     }
+
+    /* 左下角天地图标识 */
+    #tdt-logo {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0);
+      font-size: 12px;
+      padding: 2px 6px;
+    }
   </style>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
@@ -40,9 +51,6 @@
       var tiledLayer = new WebTileLayer({
         urlTemplate:
           "https://t0.tianditu.gov.cn/DataServer?T=img_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
-					// "https://gac-geo.lreept.online/vt/lyrs=s&x={x}&y={y}&z={z}",
-          // "https://0pn.cn/vt/lyrs=s&x={x}&y={y}&z={z}",
-          // "https://gac-geo.googlecnapps.club/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
       });
 
       var tiledLayer_poi = new WebTileLayer({
@@ -61,27 +69,21 @@
       var view = new MapView({
         container: "viewDiv",
         map: map,
-        //center: [116.329,26.049],//洋地村
-        //center: [116.027, 28.683],//江西师大
-        //当前定位
-        center: [116.027, 28.683],
+        center: [116.027, 28.683], // 当前定位
         zoom: 16,
       });
 
       var locateBtn = new Locate({
         view: view,
       });
-
       view.ui.add(locateBtn, "top-left");
 
       var compassWidget = new Compass({
         view: view,
       });
-
       view.ui.add(compassWidget, "top-left");
 
       const titleDiv = document.getElementById("titleDiv");
-
       view.ui.add(titleDiv, "top-right");
 
       var coordsWidget = document.createElement("div");
@@ -91,7 +93,8 @@
       view.ui.add(coordsWidget, "bottom-right");
 
       function showCoordinates(pt) {
-        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +"<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +
+          "<br>Scale 1:" + Math.round(view.scale) / 1 + " | Zoom " + view.zoom.toFixed(1);
         coordsWidget.innerHTML = coords;
       }
 
@@ -106,16 +109,12 @@
       function tryToClickLocateBtn() {
         var locateBtnElement = document.querySelector(".esri-locate");
         if (locateBtnElement) {
-          // 找到按钮元素，可以执行点击操作
           locateBtnElement.click();
         } else {
-          // 没有找到按钮元素，继续等待
-          setTimeout(tryToClickLocateBtn, 1000); // 1秒后再次尝试
+          setTimeout(tryToClickLocateBtn, 1000);
         }
       }
-      // 启动等待定时器
       tryToClickLocateBtn();
-
     });
   </script>
 </head>
@@ -128,6 +127,11 @@
         href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
         target="_blank" rel="noreferrer">学学GIS</a>
     </div>
+  </div>
+
+  <!-- 左下角天地图标识 -->
+  <div id="tdt-logo">
+    <a href="http://www.tianditu.gov.cn" target="_blank" rel="noreferrer">天地图</a>
   </div>
 </body>
 
