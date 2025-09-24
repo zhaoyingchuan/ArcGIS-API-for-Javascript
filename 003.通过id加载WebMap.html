@@ -1,0 +1,76 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>微信公众号：学学GIS</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+    require([
+      "esri/layers/WebTileLayer",
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+    ], function (WebTileLayer, WebMap, MapView, Locate, Compass) {
+
+
+      // var tiledLayer = new WebTileLayer({
+      //   // urlTemplate:
+      //   // "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}",
+      //   urlTemplate:
+      //     "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+      // });
+
+      var webmap = new WebMap({
+        
+        portalItem: {
+          id: "cf65099e04e645b1ac13c0de90a536cc"
+        },
+        
+      });
+
+      // webmap.add(tiledLayer)
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap,
+        center: [116.027,28.683],
+        zoom: 16,
+      });
+
+      var locateBtn = new Locate({
+        view: view
+      });
+
+      // Add the locate widget to the top left corner of the view
+      view.ui.add(locateBtn, "top-left");
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+
+      // Add the Compass widget to the top left corner of the view
+      view.ui.add(compassWidget, "top-left");
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>三调地类转国空地类</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 5px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+      "esri/widgets/Attribution",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Editor",
+      "esri/widgets/LayerList",
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution,FeatureLayer,Editor,LayerList) {
+      var tiledLayer = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=img_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+					// "https://gac-geo.lreept.online/vt/lyrs=s&x={x}&y={y}&z={z}",
+          // "https://0pn.cn/vt/lyrs=s&x={x}&y={y}&z={z}",
+          // "https://gac-geo.googlecnapps.club/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+      });
+
+      var myBasemap = new Basemap({
+        baseLayers: [tiledLayer, tiledLayer_poi],
+      });
+
+      var map = new Map({
+        basemap: myBasemap,
+      });
+
+      var layer = new FeatureLayer({
+        url: "https://services5.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/科教文卫用地/FeatureServer/3",
+        // definitionExpression: "一级类 = '' OR 一级类 IS NULL OR 二级类 = '' OR 二级类 IS NULL OR 三级类 = '' OR 三级类 IS NULL",
+      });
+
+      map.add(layer);
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        //center: [116.329,26.049],//洋地村
+        //center: [116.027, 28.683],//江西师大
+        //当前定位
+        center: [115.382, 28.688],
+        zoom: 16,
+      });
+
+      var editLayer;
+      view.when(function () {
+        view.popup.autoOpenEnabled = false; //disable popups
+        // Loop through webmap layers and set an EditConfig for each
+        editLayer = {
+          layer: layer,
+          fieldConfig: [
+            {
+              name: "DLBM",
+              label: "地类编码",
+              editable: false
+            },
+            {
+              name: "DLMC",
+              label: "地类名称",
+              editable: false
+            },
+            {
+              name: "一级类",
+              label: "一级类",
+              editable: true
+            },
+            {
+              name: "二级类",
+              label: "二级类",
+              editable: true
+            },
+            {
+              name: "三级类",
+              label: "三级类",
+              editable: true
+            },
+          ],
+        };
+        // Create the Editor
+        var editor = new Editor({
+          view: view,
+          // Pass in the configurations created above
+          layerInfos: [editLayer],
+          allowedWorkflows: ["update"],
+        });
+        // Add widget to top-right of the view
+        view.ui.add(editor, "top-right");
+        // Add widget to the top right corner of the view
+        view.when(function () {
+          var layerList = new LayerList({
+            view: view
+          });
+          view.ui.add(layerList, "top-right");
+        });
+      });
+
+      var locateBtn = new Locate({
+        view: view,
+      });
+
+      view.ui.add(locateBtn, "top-left");
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+
+      view.ui.add(compassWidget, "top-left");
+
+      const titleDiv = document.getElementById("titleDiv");
+
+      view.ui.add(titleDiv, "top-right");
+
+      var coordsWidget = document.createElement("div");
+      coordsWidget.id = "coordsWidget";
+      coordsWidget.className = "esri-widget esri-component";
+      coordsWidget.style.padding = "3px 10px 3px";
+      view.ui.add(coordsWidget, "bottom-right");
+
+      function showCoordinates(pt) {
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +"<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        coordsWidget.innerHTML = coords;
+      }
+
+      view.watch(["stationary"], function () {
+        showCoordinates(view.center);
+      });
+
+      // view.on(["pointer-down", "pointer-move"], function (evt) {
+      //   showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+      // });
+
+      // function tryToClickLocateBtn() {
+      //   var locateBtnElement = document.querySelector(".esri-locate");
+      //   if (locateBtnElement) {
+      //     // 找到按钮元素，可以执行点击操作
+      //     locateBtnElement.click();
+      //   } else {
+      //     // 没有找到按钮元素，继续等待
+      //     setTimeout(tryToClickLocateBtn, 1000); // 1秒后再次尝试
+      //   }
+      // }
+      // // 启动等待定时器
+      // tryToClickLocateBtn();
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：
+      <a class="weixin__link esri-widget__anchor"
+        href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
+        target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
+  <script>
+    // 为“一级类”绑定change事件
+    // 这里的document作为一种未简写的方式，与on搭配才能为未出现的元素绑定事件
+    // 如果使用简写方式，document这个位置上的元素必须在执行事件前存在于DOM树中
+
+    // $(document).on("change", "select:eq(0)", function () {
+    // })
+
+    //原生JS方法
+    var father = document.querySelector('#viewDiv');
+    father.addEventListener('change', function(e) {
+
+      if(e.target.parentNode.firstChild.data=="一级类"){
+
+        var arr1 = document.querySelectorAll('.esri-select')[0];
+
+        var arr2 = document.querySelectorAll('.esri-select')[1];
+        arr2.value = '';
+
+        var arr3 = document.querySelectorAll('.esri-select')[2];
+        arr3.value = '';
+
+        var oplist1 = arr1.children;
+        var oplist2 = arr2.children;
+        var oplist3 = arr3.children;
+
+        var x2 = 0
+        for (var i = oplist2.length - 1; i >= 0; i--) {
+          if (oplist2[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+            oplist2[i].style.display = '';
+            x2 = x2 + 1
+          } else {
+            oplist2[i].style.display = 'none';
+          }
+        }
+        if (x2 == 0) {
+          document.querySelectorAll('option[value="无"]')[0].style.display = '';
+          arr2.value = '无'
+        } else {
+          document.querySelectorAll('option[value=""]')[1].style.display = ''
+        }
+
+        var x3 = 0
+        for (var i = oplist3.length - 1; i >= 0; i--) {
+          if (oplist3[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+            oplist3[i].style.display = '';
+            x3 = x3 + 1
+          } else {
+            oplist3[i].style.display = 'none';
+          }
+        }
+        if (x3 == 0) {
+          document.querySelectorAll('option[value="无"]')[1].style.display = '';
+          arr3.value = '无'
+        } else {
+          document.querySelectorAll('option[value=""]')[2].style.display = ''
+        }
+      }
+
+      else if(e.target.parentNode.firstChild.data=="二级类"){
+
+        var arr1 = document.querySelectorAll('.esri-select')[0];
+
+        var arr2 = document.querySelectorAll('.esri-select')[1];
+
+        var arr3 = document.querySelectorAll('.esri-select')[2];
+        arr3.value = '';
+
+        var oplist1 = arr1.children;
+        var oplist2 = arr2.children;
+        var oplist3 = arr3.children;
+
+        for (var i = oplist1.length - 1; i >= 0; i--) {
+          if (oplist1[i].value.substring(0, 2) == arr2.value.substring(0, 2) && arr2.value != '') {
+            // oplist1[i].style.display='';
+            arr1.value = oplist1[i].value
+          } else {
+            // oplist1[i].style.display='none';
+          }
+        }
+
+        var x3 = 0
+        for (var i = oplist3.length - 1; i >= 0; i--) {
+          if (oplist3[i].value.substring(0, 4) == arr2.value.substring(0, 4)) {
+            oplist3[i].style.display = '';
+            x3 = x3 + 1
+          } else {
+            oplist3[i].style.display = 'none';
+          }
+        }
+        if (x3 == 0) {
+          document.querySelectorAll('option[value="无"]')[1].style.display = '';
+          arr3.value = '无'
+        } else {
+          document.querySelectorAll('option[value=""]')[2].style.display = ''
+        }
+      }
+
+      else if(e.target.parentNode.firstChild.data=="三级类"){
+
+        var arr1 = document.querySelectorAll('.esri-select')[0];
+
+        var arr2 = document.querySelectorAll('.esri-select')[1];
+
+        var arr3 = document.querySelectorAll('.esri-select')[2];
+
+        var oplist1 = arr1.children;
+        var oplist2 = arr2.children;
+        var oplist3 = arr3.children;
+
+        for (var i = oplist1.length - 1; i >= 0; i--) {
+          if (oplist1[i].value.substring(0, 2) == arr3.value.substring(0, 2) && arr3.value != '' && arr3.value != '无') {
+            // oplist1[i].style.display='';
+            arr1.value = oplist1[i].value
+          } else {
+            // oplist1[i].style.display='none';
+          }
+        }
+
+        for (var i = oplist2.length - 1; i >= 0; i--) {
+          if (oplist2[i].value.substring(0, 4) == arr3.value.substring(0, 4) && arr3.value != '' && arr3.value != '无') {
+            // oplist2[i].style.display='';
+            arr2.value = oplist2[i].value
+          } else {
+            // oplist2[i].style.display='none';
+          }
+        }
+      }
+    }, true);
+
+    father.addEventListener('click', function(e) {
+
+      if(e.target.parentNode.firstChild.data=="二级类"){
+
+        var arr1 = document.querySelectorAll('.esri-select')[0];
+
+        var arr2 = document.querySelectorAll('.esri-select')[1];
+
+        var arr3 = document.querySelectorAll('.esri-select')[2];
+
+        var oplist1 = arr1.children;
+        var oplist2 = arr2.children;
+        var oplist3 = arr3.children;
+
+        var x2 = 0
+        for (var i = oplist2.length - 1; i >= 0; i--) {
+          if (oplist2[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+            oplist2[i].style.display = '';
+            x2 = x2 + 1
+          } else {
+            oplist2[i].style.display = 'none';
+          }
+        }
+        if (x2 == 0) {
+          document.querySelectorAll('option[value="无"]')[0].style.display = '';
+          arr2.value = '无'
+        } else {
+          document.querySelectorAll('option[value=""]')[1].style.display = ''
+        }
+      }
+
+      else if(e.target.parentNode.firstChild.data=="三级类"){
+
+        var arr1 = document.querySelectorAll('.esri-select')[0];
+
+        var arr2 = document.querySelectorAll('.esri-select')[1];
+
+        var arr3 = document.querySelectorAll('.esri-select')[2];
+
+        var oplist1 = arr1.children;
+        var oplist2 = arr2.children;
+        var oplist3 = arr3.children;
+
+        var x3 = 0
+        if (arr2.value != '') {
+          for (var i = oplist3.length - 1; i >= 0; i--) {
+            if (oplist3[i].value.substring(0, 4) == arr2.value.substring(0, 4)) {
+              oplist3[i].style.display = '';
+              x3 = x3 + 1
+            } else {
+              oplist3[i].style.display = 'none';
+            }
+          }
+        } else {
+          for (var i = oplist3.length - 1; i >= 0; i--) {
+            if (oplist3[i].value.substring(0, 2) == arr1.value.substring(0, 2) || arr1.value == '') {
+              oplist3[i].style.display = '';
+              x3 = x3 + 1
+            } else {
+              oplist3[i].style.display = 'none';
+            }
+          }
+        }
+        if (x3 == 0 || x3 == 1) {
+          document.querySelectorAll('option[value="无"]')[1].style.display = '';
+          arr3.value = '无'
+        } else {
+          document.querySelectorAll('option[value=""]')[2].style.display = ''
+        }
+      }
+    }, true);
+    
+  </script>
+</body>
+
+</html>

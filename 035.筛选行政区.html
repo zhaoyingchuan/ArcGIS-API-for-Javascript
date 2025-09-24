@@ -1,0 +1,278 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>筛选行政区</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 50%;
+      width: 100%;
+    }
+
+    .esri-widget select {
+      height: 10%;
+      width: 40%;
+    }
+
+    .container {
+      height: 50%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/tasks/QueryTask",
+      "esri/tasks/support/Query",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/FeatureTable",
+    ], function (Map, MapView, QueryTask, Query, FeatureLayer, FeatureTable) {
+      let xzqLayerView;
+
+      var layer = new FeatureLayer({
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省区县/FeatureServer/0",
+        definitionExpression: "",
+      });
+
+      const map = new Map({
+        basemap: "gray-vector",
+        layers: [layer]
+      });
+
+      const view = new MapView({
+        map: map,
+        container: "viewDiv",
+        center: [117.70, 28.31],
+        zoom: 9,
+        popup: {
+          defaultPopupTemplateEnabled: true
+        },
+      });
+
+      layer.when(function (layerView) {
+        view.extent = layerView.fullExtent;
+      });
+
+      // view.ui.add("optionsDiv", "top-right");
+
+      const optionsDiv = document.getElementById("optionsDiv");
+
+      optionsDiv.addEventListener("change", filterFeatures);
+
+      function filterFeatures(event) {
+        var index1 = document.getElementById("proSelect").selectedIndex;
+        var proname = document.getElementById("proSelect").options[index1].innerText;
+        var index2 = document.getElementById("citySelect").selectedIndex;
+        var cityname = document.getElementById("citySelect").options[index2].innerText;
+        if (proname == "") {
+          layer.definitionExpression = "";
+          // xzqLayerView.filter = {
+          //   where: "",
+          // }
+        } else if (proname != "" && cityname == "") {
+          layer.definitionExpression = "province = '" + proname + "'";
+          // xzqLayerView.filter = {
+          //   where: "province = '" + proname + "'",
+          // }
+        } else if (proname != "" && cityname != "") {
+          layer.definitionExpression = "province = '" + proname + "' AND " + "city = '" + cityname + "'";
+          // xzqLayerView.filter = {
+          //   where: "province = '" + proname + "' AND " + "city = '" + cityname + "'",
+          // }
+        } else {
+
+        }
+
+        zoomToLayer(layer)
+      }
+
+      function zoomToLayer(layer) {
+        return layer.queryExtent().then(function (response) {
+          view.goTo(response.extent).catch(function (error) {
+            if (error.name != "AbortError") {
+              console.error(error);
+            }
+          });
+        });
+      }
+
+      // view.whenLayerView(layer).then(function (layerView) {
+      //   view.extent = layerView.fullExtent;
+      // });
+
+      var featureTable = new FeatureTable({
+        view: view,
+        layer: layer,
+        editingEnabled: true,
+        fieldConfigs: [
+          {
+            name: "code",
+            label: "行政代码",
+            editable: false,
+            direction: "asc"
+          },
+          {
+            name: "name",
+            label: "名称",
+            editable: false,
+          },
+          {
+            name: "population",
+            label: "人口"
+          },
+        ],
+        container: document.getElementById("tableDiv")
+      });
+      // view.ui.add("tableDiv", "top-right");
+    });
+  </script>
+
+
+</head>
+
+<body>
+  <div id="viewDiv">
+    <!-- <div id="tableDiv"></div> -->
+  </div>
+  
+  <div class="container">
+    <div class="esri-widget" id="optionsDiv">
+      <p>选择行政区</p>
+      <select class="esri-widget select" id="proSelect">
+        <option value=""></option>
+      </select>
+      <select class="esri-widget select" id="citySelect">
+        <option value=""></option>
+      </select>
+      <br />
+    </div>
+    <div id="tableDiv"></div>
+  </div>
+  
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/tasks/QueryTask",
+      "esri/tasks/support/Query",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/FeatureTable",
+    ], function (Map, MapView, QueryTask, Query, FeatureLayer, FeatureTable) {
+      var query = new Query();
+      query.outFields = ["name", "code", "city", "citycode", "province", "procode"];
+      query.where = "1=1";
+
+      var queryTask = new QueryTask("https://zyc.dongtaiyuming.net/server/rest/services/Hosted/三省区县/FeatureServer/0");
+      queryTask.execute(query).then(function (results) {
+        var arr0 = [];
+        results.features.forEach(e => {
+          arr0.push({
+            name: e.attributes.name,
+            code: e.attributes.code,
+            city: e.attributes.city,
+            citycode: e.attributes.citycode,
+            province: e.attributes.province,
+            procode: e.attributes.procode,
+          })
+        });
+
+        var compare = function (prop) {
+          return function (obj1, obj2) {
+            var val1 = obj1[prop];
+            var val2 = obj2[prop];
+            if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+              val1 = Number(val1);
+              val2 = Number(val2);
+            }
+            if (val1 < val2) {
+              return -1;
+            } else if (val1 > val2) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+        }
+
+        arr0.sort(compare("citycode"))
+
+        var arr1 = [];
+        arr1.push({
+          province: arr0[0].province,
+          procode: arr0[0].procode,
+        })
+        for (var i = 1; i < arr0.length; i++) {
+          if (arr0[i - 1].province !== arr0[i].province) {
+            arr1.push({
+              province: arr0[i].province,
+              procode: arr0[i].procode,
+            })
+          } else {
+
+          }
+        };
+
+        var arr2 = [];
+        arr2.push({
+          city: arr0[0].city,
+          citycode: arr0[0].citycode,
+        })
+
+        for (var i = 1; i < arr0.length; i++) {
+          if (arr0[i - 1].city !== arr0[i].city) {
+            arr2.push({
+              city: arr0[i].city,
+              citycode: arr0[i].citycode,
+            })
+          } else {
+
+          }
+        };
+
+        for (i = 0; i < arr1.length; i++) {
+          document.querySelectorAll('#proSelect')[0].options[i + 1] = new Option(arr1[i].province, arr1[i].procode);
+        }
+
+        for (i = 0; i < arr2.length; i++) {
+          document.querySelectorAll('#citySelect')[0].options[i + 1] = new Option(arr2[i].city, arr2[i].citycode);
+          document.querySelectorAll('#citySelect')[0].options[i + 1].style.display = 'none'
+        };
+
+        var oplist = document.querySelectorAll('#citySelect')[0].children;
+
+        var proSelect = document.querySelector('#proSelect');
+        proSelect.addEventListener('change', function (e) {
+
+          document.querySelectorAll('#citySelect')[0].value = '';
+          var proname = document.querySelectorAll('#proSelect')[0].value;
+
+          for (var i = oplist.length - 1; i > 0; i--) {
+            if (proname != '' && oplist[i].value.substring(0, 5) == proname.substring(0, 5)) {
+              oplist[i].style.display = '';
+            } else {
+              oplist[i].style.display = 'none';
+            }
+          }
+        }, true);
+      });
+    });
+  </script>
+</body>
+
+</html>

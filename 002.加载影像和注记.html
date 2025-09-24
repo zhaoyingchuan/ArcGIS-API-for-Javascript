@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>在线影像底图</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 5px;
+    }
+
+    /* 左下角天地图标识 */
+    #tdt-logo {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0);
+      font-size: 12px;
+      padding: 0px 6px;
+    }
+		
+    #tdt-logo a {
+      color: #666666;
+      text-decoration: none;
+    }
+		
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+      "esri/widgets/Attribution",
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution) {
+      var tiledLayer = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=img_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+      });
+
+      var myBasemap = new Basemap({
+        baseLayers: [tiledLayer, tiledLayer_poi],
+      });
+
+      var map = new Map({
+        basemap: myBasemap,
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [116.027, 28.683], // 当前定位
+        zoom: 16,
+      });
+
+      var locateBtn = new Locate({
+        view: view,
+      });
+      view.ui.add(locateBtn, "top-left");
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+      view.ui.add(compassWidget, "top-left");
+
+      const titleDiv = document.getElementById("titleDiv");
+      view.ui.add(titleDiv, "top-right");
+
+      var coordsWidget = document.createElement("div");
+      coordsWidget.id = "coordsWidget";
+      coordsWidget.className = "esri-widget esri-component";
+      coordsWidget.style.padding = "3px 10px 3px";
+      view.ui.add(coordsWidget, "bottom-right");
+
+      function showCoordinates(pt) {
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) +
+          "<br>Scale 1:" + Math.round(view.scale) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        coordsWidget.innerHTML = coords;
+      }
+
+      view.watch(["stationary"], function () {
+        showCoordinates(view.center);
+      });
+
+      view.on(["pointer-down", "pointer-move"], function (evt) {
+        showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+      });
+
+      function tryToClickLocateBtn() {
+        var locateBtnElement = document.querySelector(".esri-locate");
+        if (locateBtnElement) {
+          locateBtnElement.click();
+        } else {
+          setTimeout(tryToClickLocateBtn, 1000);
+        }
+      }
+      tryToClickLocateBtn();
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：
+      <a class="weixin__link esri-widget__anchor"
+        href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
+        target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
+
+  <!-- 左下角天地图标识 -->
+  <div id="tdt-logo">
+    <a href="http://www.tianditu.gov.cn" target="_blank" rel="noreferrer">天地图</a>
+  </div>
+</body>
+
+</html>

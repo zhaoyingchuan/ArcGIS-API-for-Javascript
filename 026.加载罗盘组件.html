@@ -1,0 +1,61 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>添加罗盘组件</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+    require([
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Compass",
+    ], function (WebMap, MapView, FeatureLayer, Compass) {
+
+      var myLayer = new FeatureLayer({
+        url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/中心城区和乡镇/FeatureServer/0",
+        definitionExpression: "一级类 = '' Or 一级类 IS NULL Or 二级类 = '' Or 二级类 IS NULL Or 三级类 = '' Or 三级类 IS NULL",
+      });
+
+      var webMap = new WebMap({
+        portalItem: {
+          id: "bd10bb233d17435ca7b0e37e2135a7dd"
+        },
+        layers: [myLayer],
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webMap,
+        center: [117.70, 28.31],
+        zoom: 12,
+      });
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+
+      // Add the Compass widget to the top left corner of the view
+      view.ui.add(compassWidget, "top-left");
+      
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

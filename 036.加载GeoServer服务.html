@@ -1,0 +1,124 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>在线影像底图</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 5px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.20/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
+      "esri/widgets/Compass",
+      "esri/layers/WFSLayer",
+      "esri/widgets/LayerList",
+    ], function (Map, MapView, Basemap, WebTileLayer, Compass, WFSLayer, LayerList) {
+
+      // var myBasemap = new Basemap({
+      //   baseLayers: [tiledLayer, tiledLayer_poi],
+      // });
+
+      var map = new Map({
+
+      });
+
+      var tiledLayer = new WebTileLayer({
+        // urlTemplate:
+        // "http://mt0.google.com/vt/lyrs=s&x={col}&y={row}&z={level}",
+        urlTemplate:
+          "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+        title:"影像图",
+      });
+
+      map.add(tiledLayer)
+
+      // 加载wfs服务
+      var myLayer = new WFSLayer({
+        url: "http://678bacce.r3.vip.cpolar.cn/geoserver/sample/wfs",
+        name: "可建设区",
+        // displayField: "名称",
+        // popupEnabled: false,
+        // popupTemplate: popupXZQ,
+      })
+      map.add(myLayer)
+    
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+        // subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        title:"注记",
+      });
+
+      map.add(tiledLayer_poi)
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        //center: [116.329,26.049],//洋地村
+        //center: [116.247, 29.732],//江西师大
+        center: [116.247, 29.732],//湖口县
+        zoom: 10,
+        // popup: {
+        //   defaultPopupTemplateEnabled: true
+        // },
+      });
+
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+
+      // Add the Compass widget to the top left corner of the view
+      view.ui.add(compassWidget, "top-left");
+
+      // view.ui.add(attribWidget, "top-left");
+
+      const titleDiv = document.getElementById("titleDiv");
+
+      view.ui.add(titleDiv, "top-right");
+
+      var layerList = new LayerList({
+        view: view
+      });
+
+      // Add widget to the top right corner of the view
+      view.ui.add(layerList, "top-right");
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：
+      <a class="weixin_link"
+        href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
+        target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
+</body>
+
+</html>

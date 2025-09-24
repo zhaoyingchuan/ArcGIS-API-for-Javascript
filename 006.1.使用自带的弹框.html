@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>使用自带弹框</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.17/"></script>
+
+  <script>
+    require([
+      "esri/Map", 
+      "esri/views/MapView", 
+      "esri/layers/FeatureLayer"
+    ], function (Map, MapView, FeatureLayer) {
+
+      //为了自动显示弹框，加载图层需要使用portalItem的方法
+      var layer = new FeatureLayer({
+        // 使用要素图层的链接而不是portalItem可以使弹窗包含图层名
+        // 使用纯文本的链接，避免ASCII码形式的链接使默认的弹窗中内容显示异常
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/市域/FeatureServer/0",
+        // outFields: ["XZQMC","Shape__Area"],
+      });
+
+      var map = new Map({
+        layers: [layer],
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        zoom: 5,
+        center: [117.70, 28.31],
+        popup: {
+          defaultPopupTemplateEnabled: true
+        },
+      });
+
+      view.whenLayerView(layer).then(function(layerView){
+        layerView.watch("updating", function(value){
+          // availableFields will become available
+          // once the layer view finishes updating
+          if (!value) {
+            layerView.queryFeatures({
+              outFields: layerView.availableFields,
+              // where: "DEW_POINT > 10"
+            })
+            .then(function(results) {
+              console.log(results.features.length, " features returned");
+            })
+            .catch(function(error) {
+              console.log("query failed: ", error);
+            });
+          }
+        });
+      });
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>设置要素符号</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.17/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      .esri-editor .esri-item-list__scroller {
+        max-height: 350px;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/WebMap",
+        "esri/views/MapView",
+				"esri/layers/FeatureLayer",
+        "esri/widgets/Editor",
+      ], function (WebMap, MapView, FeatureLayer, Editor) {
+
+        var trailheadsLabels = {
+          symbol: {
+            type: "text",
+            color: "#FFFFFF",
+            haloColor: "#5E8D74",
+            haloSize: "2px",
+            font: {
+              size: "12px",
+              family: "Noto Sans",
+              style: "italic",
+              weight: "normal"
+            }
+          },
+          labelPlacement: "above-center",
+          labelExpressionInfo: {
+            expression: "$feature.XZQMC"
+          },
+        };
+
+        // Add parks with a class breaks renderer and unique symbols
+        function createFillSymbol(value, color) {
+          return {
+            "value": value,
+            "symbol": {
+              "color": [255, 255, 255, 0],//透明
+              "type": "simple-fill",
+              "style": "solid",
+              "outline": {
+                color: color,
+                width: 2
+              },
+            },
+          };
+        };
+
+        var uniquevalueRenderer = {
+          type: "unique-value",
+          field: "XZQMC",
+          uniqueValueInfos: [
+            createFillSymbol("河口镇", "#9E559C"),
+            createFillSymbol("鹅湖镇", "#A7C636"),
+            createFillSymbol("永平镇", "#149ECE"),
+            createFillSymbol("*", "#000000")
+          ],
+        };
+
+				var myFeatureLayer = new FeatureLayer({
+					url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/ArcGIS/rest/services/铅山县乡镇/FeatureServer/0",
+          renderer: uniquevalueRenderer,
+          labelingInfo: trailheadsLabels,
+				});
+
+        // Create a map frm the referenced webmap item id
+        let webmap = new WebMap({
+          portalItem: {
+            id: "bd10bb233d17435ca7b0e37e2135a7dd"
+          },
+					// layers: myFeatureLayer
+        });
+
+				webmap.add(myFeatureLayer)
+
+        let view = new MapView({
+          container: "viewDiv",
+          map: webmap,
+					center: [117.70,28.31],
+					zoom: 12,
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+    <div id="editorDiv"></div>
+  </body>
+</html>

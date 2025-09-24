@@ -1,0 +1,67 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>加载并切换三维底图</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
+  
+  <script>  
+    require([
+        "esri/Map", 
+        "esri/views/SceneView",
+        "esri/widgets/BasemapToggle",
+        "esri/layers/FeatureLayer",
+    ], function(Map, SceneView, BasemapToggle, FeatureLayer) {
+        
+      var map = new Map({
+        basemap: {
+          portalItem: {id: "52f08e7f7f9947b0a6592a284ce816f8"}
+        },
+        ground: "world-elevation"
+      });
+
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/国土空间规划未定地类/FeatureServer/0",
+        definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+      });
+
+      map.add(myFeatureLayer);
+
+      var view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        camera: {
+          position: {
+            x: 117.70,
+            y: 28.15,
+            z: 10000 // meters
+          },
+          tilt: 60
+        },
+        zoom: 10
+      });
+
+      var basemapToggle = new BasemapToggle({
+        view: view,
+        nextBasemap: "topo-vector"
+      });
+
+      view.ui.add(basemapToggle,"bottom-right");
+      
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>

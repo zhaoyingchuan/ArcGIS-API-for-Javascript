@@ -1,0 +1,60 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>编辑要素</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">  
+  <script src="https://js.arcgis.com/4.17/"></script>
+
+  <script>
+    require([
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Editor",
+    ], function(WebMap, MapView, FeatureLayer, Editor) {
+      
+      var webmap = new WebMap({
+        portalItem: {
+          id: "bd10bb233d17435ca7b0e37e2135a7dd"
+        },
+        // layers: myFeatureLayer
+      });
+
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/添加图片作为附件/FeatureServer/0",
+        //definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+      });
+      webmap.add(myFeatureLayer);
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap,
+        center: [117.70,28.31],
+        zoom: 6,
+      });
+      
+      // Editor widget
+      var editor = new Editor({
+        view: view,
+        // allowedWorkflows: ["update"],
+      });
+
+      // Add widget to the view
+      view.ui.add(editor, "top-right");
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>

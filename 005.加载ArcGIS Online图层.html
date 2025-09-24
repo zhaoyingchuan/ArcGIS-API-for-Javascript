@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>加载ArcGIS Online图层</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+ 
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.17/"></script>
+ 
+    <script>
+      require([
+        "esri/WebMap", 
+        "esri/views/MapView",
+        "esri/widgets/Legend", 
+        "esri/layers/FeatureLayer",
+      ], function(WebMap, MapView, Legend, FeatureLayer) {
+    
+        var webmap = new WebMap({
+          portalItem: {
+            id: "bd10bb233d17435ca7b0e37e2135a7dd"
+          },
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: webmap,
+          center: [117.70, 28.31],
+          zoom: 12,
+          popup: {
+            defaultPopupTemplateEnabled: true
+          },
+        });
+
+        var layer = new FeatureLayer({
+          url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/%E7%9C%81%E5%9F%9F/FeatureServer/0",
+        });
+
+        webmap.add(layer);
+
+        view.when(function () {
+          // get the first layer in the collection of operational layers in the WebMap
+          // when the resources in the MapView have loaded.
+
+          var legend = new Legend({
+            view: view,
+            layerInfos: [
+              {
+                layer: layer,
+                title: "NY Educational Attainment"
+              }
+            ],
+          });
+
+          // Add widget to the bottom right corner of the view
+          view.ui.add(legend, "bottom-right");
+        });
+      });
+    </script>
+  </head>
+ 
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

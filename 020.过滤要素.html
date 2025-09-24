@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>过滤要素</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #seasons-filter {
+      height: 160px;
+      width: 100%;
+      visibility: hidden;
+    }
+
+    .season-item {
+      width: 100%;
+      padding: 10px;
+      text-align: center;
+      vertical-align: baseline;
+      cursor: pointer;
+      height: 40px;
+    }
+
+    .season-item:focus {
+      background-color: rgb(34, 13, 13);
+    }
+
+    .season-item:hover {
+      background-color: dimgrey;
+    }
+
+    #titleDiv {
+      padding: 20px;
+    }
+
+    #titleText {
+      font-size: 20pt;
+      font-weight: 60;
+      padding-bottom: 10px;
+    }
+  </style>
+  
+  <script>
+    require([
+      "esri/views/MapView",
+      "esri/Map",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Expand",
+    ], function (MapView, Map, FeatureLayer, Expand) {
+
+      let floodLayerView;
+
+      // flash flood warnings layer
+      const layer = new FeatureLayer({
+        portalItem: {
+          id: "f9e348953b3848ec8b69964d5bceae02"
+        },
+        outFields: ["SEASON"]//outFields没有起过滤字段的作用
+      });
+
+      const map = new Map({
+        basemap: "gray-vector",
+        layers: [layer],
+      });
+
+      const view = new MapView({
+        map: map,
+        container: "viewDiv",
+        center: [-98, 40],
+        zoom: 4,
+      });
+
+      //取到类名为season-item的4个节点，但是这行代码没有作用
+      const seasonsNodes = document.querySelectorAll(".season-item");
+      //获取到id为seasons-filter的元素
+      const seasonsElement = document.getElementById("seasons-filter");
+
+      //利用冒泡机制为seasonsElement所有的子元素绑定click事件
+      seasonsElement.addEventListener("click", filterBySeason);
+      
+      function filterBySeason(event) {
+        //获取到点击的子元素的data-season属性
+        const selectedSeason = event.target.getAttribute("data-season");
+        //将data-season的属性值拼接到where语句中
+        floodLayerView.filter = {
+          where: "Season = '" + selectedSeason + "'"
+        };
+      }
+
+      view.whenLayerView(layer).then(function (layerView) {
+        //将layer的视图给floodLayerView，类型为FeatureLayerView
+        floodLayerView = layerView;
+
+        // 设置seasons-filter的可见性
+        seasonsElement.style.visibility = "visible";
+        // 创建Expand小部件
+        const seasonsExpand = new Expand({
+          view: view,
+          content: seasonsElement,
+          expandIconClass: "esri-icon-filter",
+          group: "top-left"
+        });
+        //清除where语句，重置视图
+        seasonsExpand.watch("expanded", function () {
+          if (!seasonsExpand.expanded) {
+            floodLayerView.filter = null;
+          }
+        });
+        
+        view.ui.add(seasonsExpand, "top-left");
+        view.ui.add("titleDiv", "top-right");
+      });
+    });
+
+  </script>
+</head>
+
+<body>
+  <div id="seasons-filter" class="esri-widget">
+    <!-- visible-season不知道起什么作用 -->
+    <div class="season-item visible-season" data-season="Winter">Winter</div>
+    <div class="season-item visible-season" data-season="Spring">Spring</div>
+    <div class="season-item visible-season" data-season="Summer">Summer</div>
+    <div class="season-item visible-season" data-season="Fall">Fall</div>
+  </div>
+  <div id="viewDiv"></div>
+  <div id="titleDiv" class="esri-widget">
+    <div id="titleText">Flash Floods by Season</div>
+    <div>Flash Flood Warnings (2002 - 2012)</div>
+  </div>
+</body>
+
+</html>

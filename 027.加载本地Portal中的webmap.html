@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>加载本地Portal中的webmap</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
+
+  <script>
+    require([
+      "esri/WebMap",
+      "esri/views/MapView",
+      "esri/config",
+    ], function (WebMap, MapView, esriConfig) {
+
+      esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
+
+      var webmap = new WebMap({
+        portalItem: {
+          id: "a3bd4859777046208f079d45c7a38842"
+        },
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: webmap,
+      });
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

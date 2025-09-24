@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>在线影像底图</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #titleDiv {
+      font-weight: 400;
+      font-style: normal;
+      font-size: 12px;
+      padding: 5px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/LayerList",
+      "esri/widgets/Legend",
+      "esri/widgets/Expand",
+      "esri/widgets/ScaleBar",
+    ], function (MapView, FeatureLayer, Compass, Legend, Expand, LayerList, ScaleBar, WebTileLayer, Basemap, Map,Locate) {
+
+      var tiledLayer = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=img_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+      });
+
+      var myBasemap = new Basemap({
+        baseLayers: [tiledLayer, tiledLayer_poi],
+      });
+
+      var map = new Map({
+        basemap: myBasemap,
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        //center: [116.329,26.049],//洋地村
+        //center: [116.027, 28.683],//江西师大
+        //当前定位
+        center: [116.027, 28.683],
+        zoom: 16,
+      });
+
+      // //视图缩放到图层
+      // myFeatureLayer.when(function () {
+      //   view.extent = myFeatureLayer.fullExtent;
+      // });
+
+      // var compassWidget = new Compass({
+      //   view: view,
+      // });
+
+      // // Add the Compass widget to the top left corner of the view
+      // view.ui.add(compassWidget, "top-left");
+
+      // const legend = new Expand({
+      //   content: new Legend({
+      //     view: view,
+      //     // style: "card" // other styles include 'classic'
+      //   }),
+      //   view: view,
+      //   expanded: true,
+      // });
+
+      // view.ui.add(legend, "bottom-right");
+
+      // var layerList = new LayerList({
+      //   view: view,
+      // });
+
+      // // Add widget to the top right corner of the view
+      // view.ui.add(layerList, "top-right");
+
+      // var scaleBar = new ScaleBar({
+      //   view: view,
+      //   unit: "dual",
+      // });
+      // // Add widget to the bottom left corner of the view
+      // view.ui.add(scaleBar, "bottom-left");
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

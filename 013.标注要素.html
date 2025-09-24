@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>标注要素</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        background-color: black;
+      }
+    </style>
+
+    <script src="https://js.arcgis.com/4.17/"></script>
+
+    <script>
+      require([
+        "esri/WebMap",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/Search",
+      ], function (WebMap, MapView, FeatureLayer, Search) {
+
+        const labelClass = {
+          // autocasts as new LabelClass()
+          symbol: {
+            type: "text", // autocasts as new TextSymbol()
+            color: "green",
+            font: {
+              // autocast as new Font()
+              family: "Playfair Display",
+              size: 12,
+              weight: "bold"
+            }
+          },
+          labelPlacement: "above-center",
+          labelExpressionInfo: {
+            expression: "$feature.name"
+          }
+        };
+
+        const view = new MapView({
+          container: "viewDiv",
+          map: new WebMap({
+            portalItem: {
+              // autocasts as new PortalItem
+              id: "372b7caa8fe340b0a6300df93ef18a7e"
+            },
+            layers: [
+              new FeatureLayer({
+                url:"https://localhost:6443/arcgis/rest/services/江西省市域/FeatureServer",
+                labelingInfo: [labelClass],
+                // renderer: {
+                //   type: "simple", // autocasts as new SimpleRenderer()
+                //   symbol: {
+                //     type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                //     color: "rgba(0,100,0,0.6)",
+                //     size: 3,
+                //     outline: {
+                //       color: [0, 0, 0, 0.1],
+                //       width: 0.5
+                //     }
+                //   }
+                // }
+              })
+            ]
+          }),
+          center: [-116.925, 34.2501],
+          zoom: 13,
+        });
+
+        // Adds the search widget to the top right corner of the view
+        view.ui.add(
+          new Search({
+            view: view
+          }), "top-right"
+        );
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

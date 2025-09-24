@@ -1,0 +1,198 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>修改宅基地户主姓名</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    #titleDiv {
+      padding: 3;     
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/Basemap",
+      "esri/layers/WebTileLayer",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/Locate",
+      "esri/widgets/Compass",
+      "esri/widgets/Attribution",
+
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Editor",
+    ], function (Map, MapView, Basemap, WebTileLayer, BasemapToggle, Locate, Compass, Attribution, FeatureLayer, Editor) {
+
+      var tiledLayer = new WebTileLayer({
+        urlTemplate:
+          "https://gac-geo.googlecnapps.cn/maps/vt?lyrs=s&x={col}&y={row}&z={level}",
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate:
+          "https://t0.tianditu.gov.cn/DataServer?T=cia_w&x={col}&y={row}&l={level}&tk=85c9d12d5d691d168ba5cb6ecaa749eb",
+      });
+
+      var myBasemap = new Basemap({
+        baseLayers: [tiledLayer, tiledLayer_poi],
+      });
+
+      var map = new Map({
+        basemap: myBasemap,
+      });
+
+      const labelClass = {
+        // autocasts as new LabelClass()
+        symbol: {
+          type: "text", // autocasts as new TextSymbol()
+          color: "black",
+          haloSize: 1,
+          haloColor: "white",
+          font: {
+            // autocast as new Font()
+            family: "Playfair Display",
+            size: 8,
+            weight: "bold"
+          }
+        },
+        labelPlacement: "above-center",
+        labelExpressionInfo: {
+          expression: "$feature.权利人"
+        }
+      };
+
+      var myFeatureLayer = new FeatureLayer({
+        url: "https://services7.arcgis.com/qj4YUKFnqAB79XMb/arcgis/rest/services/%E4%B8%9C%E5%9D%AA%E6%9D%91_%E5%AE%85%E5%9F%BA%E5%9C%B01123/FeatureServer",
+        labelingInfo: [labelClass],
+        //definitionExpression: "一级类 = ' ' Or 一级类 IS NULL Or 二级类 = ' ' Or 二级类 IS NULL Or 三级类 = ' ' Or 三级类 IS NULL"
+      });
+      map.add(myFeatureLayer);
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [114.976, 26.397],
+        zoom: 17,
+      });
+
+      const titleDiv = document.getElementById("titleDiv");
+      view.ui.add(titleDiv, "top-right");
+
+      // var editLayer;
+      // view.popup.autoOpenEnabled = false; //disable popups
+      // editLayer = {
+      //   layer: myFeatureLayer,
+      //   fieldConfig: [
+      //     {
+      //       name: "权利人",
+      //       label: "户主名",
+      //       editable: true
+      //     },
+      //     // {
+      //     //   name: "DLMC",
+      //     //   label: "地类名称",
+      //     //   editable: false
+      //     // },
+      //     // {
+      //     //   name: "一级类",
+      //     //   label: "一级类",
+      //     //   editable: true
+      //     // },
+      //     // {
+      //     //   name: "二级类",
+      //     //   label: "二级类",
+      //     //   editable: true
+      //     // },
+      //     // {
+      //     //   name: "三级类",
+      //     //   label: "三级类",
+      //     //   editable: true
+      //     // },
+      //   ],
+      // };
+
+      // // Editor widget
+      // var editor = new Editor({
+      //   view: view,
+      //   layerInfos: [editLayer],
+      //   allowedWorkflows: ["update"],
+      // });
+
+      // // Add widget to the view
+      // view.ui.add(editor, "top-right");
+
+
+      var locateBtn = new Locate({
+        view: view,
+      });
+
+      view.ui.add(locateBtn, "top-left");
+
+      var compassWidget = new Compass({
+        view: view,
+      });
+
+      view.ui.add(compassWidget, "top-left");
+
+      
+
+      var coordsWidget = document.createElement("div");
+      coordsWidget.id = "coordsWidget";
+      coordsWidget.className = "esri-widget esri-component";
+      coordsWidget.style.padding = "1px 3px 1px";
+      view.ui.add(coordsWidget, "bottom-right");
+
+      function showCoordinates(pt) {
+        var coords = "Lon/Lat " + pt.longitude.toFixed(3) + " " + pt.latitude.toFixed(3) + "<br>Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom.toFixed(1);
+        coordsWidget.innerHTML = coords;
+      }
+
+      view.watch(["stationary"], function () {
+        showCoordinates(view.center);
+      });
+
+      view.on(["pointer-down", "pointer-move"], function (evt) {
+        showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+      });
+
+      // function tryToClickLocateBtn() {
+      //   var locateBtnElement = document.querySelector(".esri-locate");
+      //   if (locateBtnElement) {
+      //     // 找到按钮元素，可以执行点击操作
+      //     locateBtnElement.click();
+      //   } else {
+      //     // 没有找到按钮元素，继续等待
+      //     setTimeout(tryToClickLocateBtn, 1000); // 1秒后再次尝试
+      //   }
+      // }
+      // // 启动等待定时器
+      // tryToClickLocateBtn();
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="titleDiv" class="esri-widget">
+      制作：zyc | 微信公众号：<a class="weixin__link esri-widget__anchor"
+        href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg2MDg2MTY0NA==&scene=124#wechat_redirect"
+        target="_blank" rel="noreferrer">学学GIS</a>
+    </div>
+  </div>
+</body>
+
+</html>

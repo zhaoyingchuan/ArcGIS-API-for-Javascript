@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>标注过滤及格式化</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+ 
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.18/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.18/"></script>
+ 
+    <script>
+      require([
+        "esri/WebMap", 
+        "esri/views/MapView",
+        "esri/widgets/Legend", 
+        "esri/widgets/Expand",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/LayerList",
+      ], function(WebMap, MapView, Legend, Expand, FeatureLayer, LayerList) {
+    
+        var webmap = new WebMap({
+          portalItem: {
+            id: "bd10bb233d17435ca7b0e37e2135a7dd"//天地图影像和天地图标注
+          }
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: webmap,
+          center: [117.70, 28.31],
+          zoom: 12
+        });
+
+        const labelClass = {  // autocasts as new LabelClass()
+          symbol: {
+            type: "text",  // autocasts as new TextSymbol()
+            color: "white",
+            haloColor: "blue",
+            haloSize: 1,
+            font: {  // autocast as new Font()
+              family: "Ubuntu Mono",
+              size: 14,
+              weight: "lighter"
+            }
+          },
+          labelPlacement: "above-right",
+          labelExpressionInfo: {
+            expression: "round(number($feature.Shape__Area)/1000000, 2)"
+          },
+          // maxScale: 0,
+          // minScale: 25000000,
+          where: "Shape__Area>10000"
+        };
+
+        var layer1 = new FeatureLayer({
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/修改后城镇开发边界1/FeatureServer/1",
+          labelingInfo: [labelClass],
+          title: "城镇开发边界（低方案）",
+        });
+
+        var layer2 = new FeatureLayer({
+          url: "https://services6.arcgis.com/hVJzGaciz2BCDgT4/arcgis/rest/services/修改后城镇开发边界2/FeatureServer/1",
+          labelingInfo: [labelClass],
+          title: "城镇开发边界（高方案）",
+        });
+        
+
+        webmap.addMany([layer1,layer2]);
+
+        const legend = new Expand({
+          content: new Legend({
+            view: view,
+            // style: "card" // other styles include 'classic'
+          }),
+          view: view,
+          expanded: true
+        });
+
+        view.ui.add(legend, "bottom-right");
+
+        var layerList = new LayerList({
+            view: view
+          });
+
+        // Add widget to the top right corner of the view
+        view.ui.add(layerList, "top-right");
+      });
+    </script>
+  </head>
+ 
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

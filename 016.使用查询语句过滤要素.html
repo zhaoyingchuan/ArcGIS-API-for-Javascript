@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>使用查询语句过滤图层要素</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+ 
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.17/"></script>
+ 
+    <script>
+      require([
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/layers/WebTileLayer",
+        "esri/layers/FeatureLayer",
+      ], function(Map, MapView,WebTileLayer,FeatureLayer) {
+    
+        var tiledLayer = new WebTileLayer({
+          urlTemplate:
+            "http://mt0.google.cn/vt/lyrs=s&x={col}&y={row}&z={level}"
+        });
+ 
+        var tiledLayer_poi = new WebTileLayer({
+          urlTemplate:
+            "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=5823959c38b2d69b25e84a7482d27e10",
+          subDomains: ["t0", "t1", "t2", "t3","t4", "t5", "t6", "t7"],
+        });
+        
+        var map = new Map({
+          basemap: {
+            baseLayers: [tiledLayer, tiledLayer_poi]
+          }
+        });
+ 
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 13,
+          center: [117.70,28.31] // longitude, latitude
+        });
+
+        var xzxzqLayer = new FeatureLayer({
+          url: "https://services5.arcgis.com/6TqOiOhyqcUv6dB0/arcgis/rest/services/铅山县乡镇/FeatureServer/0",
+          definitionExpression: "XZQMC = '河口镇'"
+        });
+
+        map.add(xzxzqLayer);
+      });
+    </script>
+  </head>
+ 
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

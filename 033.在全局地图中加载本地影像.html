@@ -1,0 +1,50 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>在全局地图中加载本地影像</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
+  
+  <script>  
+    require([
+        "esri/Map", 
+        "esri/views/SceneView",
+        "esri/widgets/BasemapToggle",
+        "esri/layers/FeatureLayer",
+        "esri/layers/TileLayer",
+        "esri/layers/MapImageLayer",
+    ], function(Map, SceneView, BasemapToggle, FeatureLayer, TileLayer, MapImageLayer) {
+        
+      var map = new Map({
+        basemap: "topo-vector",
+        ground: "world-elevation"
+      });
+
+      //Tile Layer 需要针对全球场景采用 Web Mercator 或 WGS84 GCS
+      var layer = new TileLayer({
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/G50H063023_ProjectRaster/MapServer"
+      });
+
+      map.layers.add(layer);
+
+      var view = new SceneView({
+        container: "viewDiv",
+        map: map,
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>

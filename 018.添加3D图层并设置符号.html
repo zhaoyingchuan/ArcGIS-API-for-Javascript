@@ -1,0 +1,84 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>添加3D图层并设置符号</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
+  
+  <script>  
+    require([
+        "esri/Map", 
+        "esri/views/SceneView",
+        "esri/widgets/BasemapToggle",
+				"esri/layers/SceneLayer",
+    ], function(Map, SceneView, BasemapToggle, SceneLayer) {
+        
+      var map = new Map({
+        basemap: {
+          portalItem: {id: "52f08e7f7f9947b0a6592a284ce816f8"}
+        },
+        ground: "world-elevation",
+      });
+
+      var sceneLayer = new SceneLayer({
+				portalItem: {
+					id: "2e0761b9a4274b8db52c4bf34356911e"
+				},
+				popupEnabled: false,
+			});
+			map.add(sceneLayer);
+
+			// Create MeshSymbol3D for symbolizing SceneLayer
+			var symbol = {
+				type: "mesh-3d", // autocasts as new MeshSymbol3D()
+				symbolLayers: [
+					{
+						type: "fill", // autocasts as new FillSymbol3DLayer()
+						// If the value of material is not assigned, the default color will be grey
+						material: {
+							color: [255, 0, 0]
+						}
+					}
+				]
+			};
+			// Add the renderer to sceneLayer
+			sceneLayer.renderer = {
+				type: "simple", // autocasts as new SimpleRenderer()
+				symbol: symbol,
+			};
+
+      var view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        camera: {
+          position: [-74.0338, 40.6913, 707],
+					tilt: 81,
+					heading: 50,
+        },
+        zoom: 10,
+      });
+
+      var basemapToggle = new BasemapToggle({
+        view: view,
+        nextBasemap: "topo-vector",
+      });
+
+      view.ui.add(basemapToggle,"bottom-right");
+      
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>

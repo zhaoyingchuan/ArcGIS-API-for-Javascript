@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>显示经纬度坐标、比例及图像级别</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+ 
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.17/"></script>
+ 
+    <script>
+      require([
+        "esri/WebMap", 
+        "esri/views/MapView",
+        "esri/layers/WebTileLayer",
+        "esri/layers/FeatureLayer",
+        "esri/config",
+      ], function(WebMap, MapView,WebTileLayer,FeatureLayer, esriConfig) {
+    
+        esriConfig.portalUrl = "https://zyc.dongtaiyuming.net/portal";
+
+        var webmap = new WebMap({
+          portalItem: {
+            id: "a3bd4859777046208f079d45c7a38842"
+          }
+        });
+ 
+        var view = new MapView({
+          container: "viewDiv",
+          map: webmap,
+          zoom: 13,
+          center: [117.70,28.31] // longitude, latitude
+        });
+
+        //*** Add div element to show coordates ***//
+        var coordsWidget = document.createElement("div");
+        coordsWidget.id = "coordsWidget";
+        coordsWidget.className = "esri-widget esri-component";
+        coordsWidget.style.padding = "7px 15px 5px";
+        view.ui.add(coordsWidget, "bottom-right");
+
+        //*** Update lat, lon, zoom and scale ***//
+        function showCoordinates(pt) {
+          var coords = "Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) + 
+              " | Scale 1:" + Math.round(view.scale * 1) / 1 +
+              " | Zoom " + view.zoom;
+          coordsWidget.innerHTML = coords;
+        }
+        
+        //*** Add event and show center coordinates after the view is finished moving e.g. zoom, pan ***//
+        view.watch(["stationary"], function() {
+          showCoordinates(view.center);
+        });
+
+        //*** Add event to show mouse coordinates on click and move ***//
+        view.on(["pointer-down","pointer-move"], function(evt) {
+          showCoordinates(view.toMap({ x: evt.x, y: evt.y }));
+        });
+      });
+    </script>
+  </head>
+ 
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

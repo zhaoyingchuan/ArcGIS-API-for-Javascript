@@ -1,0 +1,51 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>加载切片影像</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/Home",
+      "esri/layers/TileLayer",
+    ], function (Map, MapView, Home, TileLayer) {
+      var map = new Map();
+      var view = new MapView({
+        container: "viewDiv",
+        map: map
+      });
+      var homeBtn = new Home({
+        view: view
+      });
+      view.ui.add(homeBtn, "top-left");
+
+      var layer = new TileLayer({
+        url: "https://zyc.dongtaiyuming.net/server/rest/services/Hosted/G50H063023_tif_切片/MapServer"
+      });
+
+      map.layers.add(layer);
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
